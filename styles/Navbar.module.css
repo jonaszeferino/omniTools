@@ -1,0 +1,22 @@
+.navbar {
+  display: flex;
+  background-color: #311150;
+  padding: 20px 10px;
+  margin-top: 0%;
+  text-decoration: none;
+  list-style-type: none;
+}
+
+.navbar a {
+  color: whitesmoke;
+  margin-right: 1em;
+  text-decoration: none;
+  transition: 0.3s;
+  list-style-type: none;
+}
+
+.navbar a:hover {
+  color: rgb(111, 80, 179);
+  text-decoration: none;
+  list-style-type: none;
+}

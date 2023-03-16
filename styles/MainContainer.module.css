@@ -1,0 +1,6 @@
+.container {
+  min-height: 83vh;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 100px; /* altura do footer */
+}
