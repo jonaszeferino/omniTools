@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import ErrorPage from "./error-page";
 import styles from "../styles/Home.module.css";
@@ -12,13 +12,14 @@ import {
   AlertTitle,
   AlertDescription,
   Button,
-  Text,
   FormLabel,
   Input,
   Heading,
   InputGroup,
   InputLeftAddon,
   ChakraProvider,
+  Progress,
+  Flex,
 } from "@chakra-ui/react";
 
 export default function orders() {
@@ -33,29 +34,33 @@ export default function orders() {
   );
 
   const apiCall = (event) => {
-    const url = `https://production-order.omniplat.io/v1/clients/${orderUser}/fulfillments/locations/${orderLocation}/status/WAITING?pageSize=50`;
-    let authorizationValue;
     setIsLoading(true);
+    console.log(isLoading, "Verificar0 " + new Date());
+    const url = `https://production-order.omniplat.io/v1/clients/${orderUser}/fulfillments/locations/${orderLocation}/status/WAITING?pageSize=50`;
+
+    let authorizationValue;
 
     switch (orderUser) {
       case "lepostiche":
         authorizationValue = process.env.NEXT_PUBLIC_LEPOSTICHE;
+
         break;
       case "lebes":
         authorizationValue = process.env.NEXT_PUBLIC_LEBES;
+
         break;
       case "viaveneto":
         authorizationValue = process.env.NEXT_PUBLIC_VIA;
+
         break;
       case "vago":
         authorizationValue = process.env.NEXT_PUBLIC_LEBES;
+
         break;
       default:
         authorizationValue = process.env.NEXT_PUBLIC_LEBES;
     }
-
     console.log("verificara URL:" + url);
-
     fetch(url, {
       headers: new Headers({
         Authorization: authorizationValue,
@@ -66,6 +71,7 @@ export default function orders() {
         if (response.status === 200) {
           setError(false);
 
+          console.log(isLoading, "Verificar3 " + new Date());
           return response.json();
         } else {
           throw new Error("Dados Incorretos");
@@ -75,12 +81,12 @@ export default function orders() {
         (result) => (
           console.log("result: " + result),
           setIsLoading(false),
+          console.log(isLoading, "Verificar4 " + new Date()),
           setOrderStock(result.data),
-          setIsLoading(false),
           setTotalResults(result.total)
         )
       )
-      .catch((error) => setError(true), setIsLoading(false));
+      .catch((error) => setError(true));
   };
   console.log("ordeStock:" + orderStock);
   console.log("ordeStockData:" + orderStock.data);
@@ -101,12 +107,17 @@ export default function orders() {
       try {
         await navigator.clipboard.writeText(text);
         console.log("Copied to clipboard:", text);
-        setIsCopied(true);
       } catch (err) {
         console.error("Failed to copy text: ", err);
       }
     }
   };
+
+  console.log(isLoading, new Date());
+
+  useEffect(() => {
+    console.log("isLoading alterado:", isLoading);
+  }, [isLoading]);
 
   return (
     <>
@@ -207,13 +218,14 @@ export default function orders() {
               </AlertDescription>
             </Alert>
           )}
+          {isLoading ? (
+            <Flex justify="center" align="center" height="50px">
+              <Progress size="xs" isIndeterminate />
+            </Flex>
+          ) : null}
         </div>
-
-        <span>{isLoading ? <div>Carregando...</div> : " "}</span>
       </ChakraProvider>
-      {/* {isError === true ? (
-        <ErrorPage message={`Verifique a grafia`}></ErrorPage>
-      ) : ( */}
+
       <div className={styles.grid}>
         {orderStock.map((reserve) => {
           const isOutdated =
