@@ -92,6 +92,18 @@ export default function orders() {
 
   console.log("csv:", csvData);
 
+  const copyToClipboard = async (text) => {
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(text);
+        console.log("Copied to clipboard:", text);
+        setIsCopied(true);
+      } catch (err) {
+        console.error("Failed to copy text: ", err);
+      }
+    }
+  };
+
   return (
     <>
       <ChakraProvider>
@@ -174,7 +186,13 @@ export default function orders() {
               differenceInDays(new Date(), new Date(reserve.createdAt)) > 5;
             return (
               <div className={styles.card} key={reserve.orderId}>
-                <span>Pedido: {reserve.orderId}</span> <br />
+                <span>Pedido: {reserve.orderId}</span>
+                <ChakraProvider>
+                  <Button onClick={() => copyToClipboard(reserve.orderId)}>
+                    Copiar
+                  </Button>
+                </ChakraProvider>
+                <br />
                 <span>Canal: {reserve.channelId}</span> <br />
                 <span>Location: {reserve.locationId}</span> <br />
                 <span>
