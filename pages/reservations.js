@@ -9,13 +9,14 @@ import {
   AlertTitle,
   AlertDescription,
   Button,
-  Text,
   FormLabel,
   Input,
   Heading,
   InputGroup,
   InputLeftAddon,
   ChakraProvider,
+  Progress,
+  Flex,
 } from "@chakra-ui/react";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
@@ -32,7 +33,7 @@ export default function Reservations() {
   const [clickedOrderId, setClickedOrderId] = useState(null);
 
   const apiCall = (event) => {
-    const url = `https://hub.omniplat.io/v1/clients/${reservationUser}/reservations/unfinished?pageSize=50`;
+    const url = `https://hub.omniplat.io/v1/clients/${reservationUser}/reservations/unfinished?pageSize=100`;
     let authorizationValue;
     setIsLoading(true);
 
@@ -64,13 +65,14 @@ export default function Reservations() {
         if (response.status === 200) {
           return response.json();
         } else {
+          setIsLoading(false);
           throw new Error("Dados Incorretos");
         }
       })
-      .then((result) => setReservationStock(result), setIsLoading(false))
+      .then((result) => setReservationStock(result))
       .catch((error) => {
         setError(true);
-        setIsLoading(false);
+
         console.log("teste" + error.message);
         setMessageError("Ocorreu um erro ao buscar as reservas.");
         setReservationStock([]);
@@ -122,7 +124,6 @@ export default function Reservations() {
 
   function handleCopyClick(orderId) {
     setClickedOrderId(orderId);
-    // Restante do código para copiar o texto
   }
 
   return (
@@ -216,13 +217,13 @@ export default function Reservations() {
             </Alert>
           )}
         </div>
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          {isLoading ? <Progress size="xs" isIndeterminate /> : null}
+        </div>
       </ChakraProvider>
 
       <br />
 
-      <Text fontSize="xl" color="blue500">
-        {isLoading ? <div>Carregando...</div> : " "}
-      </Text>
       <div style={{ maxWidth: "100%" }}>
         {/* {isError === true ? (
           <ErrorPage message={`~ Confira o Texto ~ ${messageError} `}>
