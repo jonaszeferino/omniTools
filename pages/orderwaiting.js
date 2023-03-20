@@ -6,6 +6,16 @@ import ErrorPage from "./error-page";
 import styles from "../styles/Home.module.css";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
+import {
+  Button,
+  Text,
+  FormLabel,
+  Input,
+  Heading,
+  InputGroup,
+  InputLeftAddon,
+  ChakraProvider,
+} from "@chakra-ui/react";
 
 export default function orders() {
   let [orderStock, setOrderStock] = useState([]);
@@ -83,37 +93,78 @@ export default function orders() {
   console.log("csv:", csvData);
 
   return (
-    <div>
-      <h3 className={styles.title}>Pedidos Waiting</h3>
-      <span>**com alerta para os parados a mais de 5 dias**</span>
-      <h2>
-        <br />
-        <label type="text">
-          Client:
-          <input
-            className={styles.card}
-            required={true}
-            type="text"
-            value={orderUser}
-            onChange={(event) => setOrderUser(event.target.value)}
-          ></input>
-        </label>
-        <label type="text">
-          LocationID:
-          <input
-            className={styles.card}
-            required={true}
-            type="text"
-            value={orderLocation}
-            onChange={(event) => setOrderLocationId(event.target.value)}
-          ></input>
-        </label>
+    <>
+      <ChakraProvider>
+        <Heading as="h1" size="xl" textAlign="center">
+          Pedidos Waiting
+        </Heading>
+        <Heading as="h3" size="xs" textAlign="center">
+          **com alerta para os parados a mais de 5 dias**
+        </Heading>
 
-        <button className={styles.card} onClick={apiCall}>
-          Verificar
-        </button>
-      </h2>
-      <span>{isLoading ? <div>Carregando...</div> : " "}</span>
+        <br />
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <FormLabel type="text">
+            <InputGroup size="md" mb={5}>
+              <InputLeftAddon size="md" children="clientId:" />
+              <Input
+                size="md"
+                value={orderUser}
+                onChange={(event) => setOrderUser(event.target.value)}
+              ></Input>
+              <InputLeftAddon size="md" children="locationId:" />
+              <Input
+                size="md"
+                value={orderLocation}
+                onChange={(event) => setOrderLocationId(event.target.value)}
+              ></Input>
+            </InputGroup>
+          </FormLabel>
+        </div>
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <Button
+            padding={5}
+            rounded={8}
+            size="lg"
+            mx="auto"
+            colorScheme="purple"
+            onClick={apiCall}
+          >
+            Verificar{" "}
+          </Button>
+          {csvData.length > 0 ? (
+            <CSVLink
+              data={csvData}
+              headers={[
+                "DataPedido",
+                "Cliente",
+                "Chanal",
+                "Filial",
+                "Sku",
+                "Pedido",
+                "Quantidade",
+                "DiasParado",
+              ]}
+              separator={";"}
+              filename={`pedidos_pendentes_${orderUser}_${dateFile}`}
+            >
+              <Button
+                padding={5}
+                rounded={8}
+                size="lg"
+                mx="auto"
+                colorScheme="purple"
+                my={4}
+                ml={4}
+              >
+                Exportar para CSV
+              </Button>
+            </CSVLink>
+          ) : null}
+        </div>
+
+        <span>{isLoading ? <div>Carregando...</div> : " "}</span>
+      </ChakraProvider>
       {isError === true ? (
         <ErrorPage message={`Verifique a grafia`}></ErrorPage>
       ) : (
@@ -153,23 +204,6 @@ export default function orders() {
           })}
         </div>
       )}
-      {csvData && (
-        <CSVLink
-          style={{
-            backgroundColor: "gray",
-            borderBlockColor: "black",
-            padding: "1rem",
-            borderRadius: "1rem",
-            borderBottomStyle: "groove",
-          }}
-          data={csvData}
-          headers={["Pedido", "Filial", "Canal", "DataPedido", "DiasParado"]}
-          separator={";"}
-          filename={`pedidos_waiting_${orderUser}_${dateFile}`}
-        >
-          Exportar para CSV
-        </CSVLink>
-      )}
-    </div>
+    </>
   );
 }
