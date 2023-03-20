@@ -4,6 +4,10 @@ import styles from "../styles/Home.module.css";
 import ErrorPage from "./error-page";
 
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
   Button,
   Text,
   FormLabel,
@@ -130,6 +134,7 @@ export default function Reservations() {
         <Heading as="h3" size="xs" textAlign="center">
           **Com alerta para reservas pendentes a mais de 10 dias**
         </Heading>
+
         <br />
 
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
@@ -156,6 +161,7 @@ export default function Reservations() {
           >
             Verificar{" "}
           </Button>
+
           {data.length > 0 ? (
             <CSVLink
               data={data}
@@ -186,6 +192,30 @@ export default function Reservations() {
             </CSVLink>
           ) : null}
         </div>
+        <br />
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          {isError && (
+            <Alert
+              status="error"
+              variant="subtle"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
+              height="200px"
+              rounded="md"
+              type="left-accent"
+            >
+              <AlertIcon boxSize="40px" mr={0} />
+              <AlertTitle mt={4} mb={1} fontSize="lg">
+                Algo de Errado!
+              </AlertTitle>
+              <AlertDescription maxWidth="sm">
+                Verifique se o clienteId está correto ou existe
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
       </ChakraProvider>
 
       <br />
@@ -194,62 +224,59 @@ export default function Reservations() {
         {isLoading ? <div>Carregando...</div> : " "}
       </Text>
       <div style={{ maxWidth: "100%" }}>
-        {isError === true ? (
+        {/* {isError === true ? (
           <ErrorPage message={`~ Confira o Texto ~ ${messageError} `}>
             {" "}
           </ErrorPage>
-        ) : (
-          <div
-            className={styles.grid}
-            style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
-          >
-            {reservationStock.map((reserve) => {
-              const isOutdated =
-                differenceInDays(new Date(), new Date(reserve.createdAt)) > 10;
-              return (
-                <div className={styles.card} key={reserve.id}>
-                  <span>Pedido: {reserve.orderId}</span>{" "}
-                  <ChakraProvider>
-                    <Button onClick={() => copyToClipboard(reserve.orderId)}>
-                      Copiar
-                    </Button>
-                  </ChakraProvider>
-                  <br />
-                  <span>Cliente: {reserve.clientId}</span> <br />
-                  <span>Canal: {reserve.channelId}</span> <br />
-                  <span>Location: {reserve.locationId}</span> <br />
-                  <span>Sku: {reserve.skuId}</span> <br />
-                  <span>Quantidade: {reserve.quantity}</span> <br />
-                  <span>
-                    Data:{" "}
-                    {format(new Date(reserve.createdAt), "dd/MM/yyyy HH:mm:ss")}
+        ) : ( */}
+        <div
+          className={styles.grid}
+          style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
+        >
+          {reservationStock.map((reserve) => {
+            const isOutdated =
+              differenceInDays(new Date(), new Date(reserve.createdAt)) > 10;
+            return (
+              <div className={styles.card} key={reserve.id}>
+                <span>Pedido: {reserve.orderId}</span>{" "}
+                <ChakraProvider>
+                  <Button onClick={() => copyToClipboard(reserve.orderId)}>
+                    Copiar
+                  </Button>
+                </ChakraProvider>
+                <br />
+                <span>Cliente: {reserve.clientId}</span> <br />
+                <span>Canal: {reserve.channelId}</span> <br />
+                <span>Location: {reserve.locationId}</span> <br />
+                <span>Sku: {reserve.skuId}</span> <br />
+                <span>Quantidade: {reserve.quantity}</span> <br />
+                <span>
+                  Data:{" "}
+                  {format(new Date(reserve.createdAt), "dd/MM/yyyy HH:mm:ss")}
+                </span>
+                <br />
+                <span>
+                  Dias Nesse Status:{" "}
+                  <strong>
+                    {" "}
+                    {differenceInDays(new Date(), new Date(reserve.createdAt))}
+                  </strong>
+                </span>
+                {"  "}-
+                {isOutdated && (
+                  <span style={{ color: "red", font: "bold" }}>
+                    {`Reserva parada a ${differenceInDays(
+                      new Date(),
+                      new Date(reserve.createdAt)
+                    )} dias`}
                   </span>
-                  <br />
-                  <span>
-                    Dias Nesse Status:{" "}
-                    <strong>
-                      {" "}
-                      {differenceInDays(
-                        new Date(),
-                        new Date(reserve.createdAt)
-                      )}
-                    </strong>
-                  </span>
-                  {"  "}-
-                  {isOutdated && (
-                    <span style={{ color: "red", font: "bold" }}>
-                      {`Reserva parada a ${differenceInDays(
-                        new Date(),
-                        new Date(reserve.createdAt)
-                      )} dias`}
-                    </span>
-                  )}
-                  <br />
-                </div>
-              );
-            })}
-          </div>
-        )}
+                )}
+                <br />
+              </div>
+            );
+          })}
+        </div>
+        {/* )} */}
       </div>
     </>
   );

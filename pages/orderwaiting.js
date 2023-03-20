@@ -7,6 +7,10 @@ import styles from "../styles/Home.module.css";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
   Button,
   Text,
   FormLabel,
@@ -178,55 +182,79 @@ export default function orders() {
             </CSVLink>
           ) : null}
         </div>
+        <br />
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          {isError && (
+            <Alert
+              status="error"
+              variant="subtle"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
+              height="200px"
+              rounded="md"
+              type="left-accent"
+            >
+              <AlertIcon boxSize="40px" mr={0} />
+              <AlertTitle mt={4} mb={1} fontSize="lg">
+                Algo de Errado!
+              </AlertTitle>
+              <AlertDescription maxWidth="sm">
+                Verifique se o clienteId está correto ou existe
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
 
         <span>{isLoading ? <div>Carregando...</div> : " "}</span>
       </ChakraProvider>
-      {isError === true ? (
+      {/* {isError === true ? (
         <ErrorPage message={`Verifique a grafia`}></ErrorPage>
-      ) : (
-        <div className={styles.grid}>
-          {orderStock.map((reserve) => {
-            const isOutdated =
-              differenceInDays(new Date(), new Date(reserve.createdAt)) > 5;
-            return (
-              <div className={styles.card} key={reserve.orderId}>
-                <span>Pedido: {reserve.orderId}</span>
-                <ChakraProvider>
-                  <Button onClick={() => copyToClipboard(reserve.orderId)}>
-                    Copiar
-                  </Button>
-                </ChakraProvider>
-                <br />
-                <span>ClientId: {reserve.clientId}</span> <br />
-                <span>Canal: {reserve.channelId}</span> <br />
-                <span>Location: {reserve.locationId}</span> <br />
-                <span>
-                  Data do Pedido:{" "}
-                  {format(new Date(reserve.createdAt), "dd/MM/yyyy HH:mm:ss")}
+      ) : ( */}
+      <div className={styles.grid}>
+        {orderStock.map((reserve) => {
+          const isOutdated =
+            differenceInDays(new Date(), new Date(reserve.createdAt)) > 5;
+          return (
+            <div className={styles.card} key={reserve.orderId}>
+              <span>Pedido: {reserve.orderId}</span>
+              <ChakraProvider>
+                <Button onClick={() => copyToClipboard(reserve.orderId)}>
+                  Copiar
+                </Button>
+              </ChakraProvider>
+              <br />
+              <span>ClientId: {reserve.clientId}</span> <br />
+              <span>Canal: {reserve.channelId}</span> <br />
+              <span>Location: {reserve.locationId}</span> <br />
+              <span>
+                Data do Pedido:{" "}
+                {format(new Date(reserve.createdAt), "dd/MM/yyyy HH:mm:ss")}
+              </span>
+              <br />
+              <span>
+                Dias Nesse Status:{" "}
+                <strong>
+                  {" "}
+                  {differenceInDays(new Date(), new Date(reserve.createdAt))}
+                </strong>
+              </span>
+              {"  "}-
+              {isOutdated && (
+                <span style={{ color: "red", font: "bold" }}>
+                  {`Pedido nesse status ${differenceInDays(
+                    new Date(),
+                    new Date(reserve.createdAt)
+                  )} dias`}
                 </span>
-                <br />
-                <span>
-                  Dias Nesse Status:{" "}
-                  <strong>
-                    {" "}
-                    {differenceInDays(new Date(), new Date(reserve.createdAt))}
-                  </strong>
-                </span>
-                {"  "}-
-                {isOutdated && (
-                  <span style={{ color: "red", font: "bold" }}>
-                    {`Pedido nesse status ${differenceInDays(
-                      new Date(),
-                      new Date(reserve.createdAt)
-                    )} dias`}
-                  </span>
-                )}
-                <br />
-              </div>
-            );
-          })}
-        </div>
-      )}
+              )}
+              <br />
+            </div>
+          );
+        })}
+      </div>
+      {/* )} */}
     </>
   );
 }
