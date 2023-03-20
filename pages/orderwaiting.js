@@ -197,6 +197,7 @@ export default function orders() {
                   </Button>
                 </ChakraProvider>
                 <br />
+                <span>ClientId: {reserve.clientId}</span> <br />
                 <span>Canal: {reserve.channelId}</span> <br />
                 <span>Location: {reserve.locationId}</span> <br />
                 <span>
