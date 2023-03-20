@@ -1,6 +1,18 @@
+/* eslint-disable react/no-children-prop */
 import { useState } from "react";
 import styles from "../styles/Home.module.css";
 import ErrorPage from "./error-page";
+
+import {
+  Button,
+  Text,
+  FormLabel,
+  Input,
+  Heading,
+  InputGroup,
+  InputLeftAddon,
+  ChakraProvider,
+} from "@chakra-ui/react";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
 
@@ -9,10 +21,11 @@ export default function Reservations() {
   let [reservationUser, setReservationUser] = useState();
   let [reservationBasic, setReservationBasic] = useState();
   let [messageError, setMessageError] = useState();
-
   let [isError, setError] = useState(false);
-
   let [isLoading, setIsLoading] = useState(false);
+  let [isCopied, setIsCopied] = useState(false);
+
+  const [clickedOrderId, setClickedOrderId] = useState(null);
 
   const apiCall = (event) => {
     const url = `https://hub.omniplat.io/v1/clients/${reservationUser}/reservations/unfinished?pageSize=50`;
@@ -91,102 +104,155 @@ export default function Reservations() {
     .replace(/\//g, " ");
   const dateFile = formattedDate.replace(/[/: ]/g, "_");
 
-  return (
-    <div>
-      <h3 className={styles.title}>Reservas Não Finalizadas</h3>
-      <span>**Com alerta para reservas pendentes a mais de 10 dias**</span>
-      <h2 className={styles.grid}>
-        {" "}
-        <br />
-        <label type="text">
-          Client:
-          <input
-            className={styles.card}
-            required={true}
-            type="text"
-            value={reservationUser}
-            onChange={(event) => setReservationUser(event.target.value)}
-          ></input>
-        </label>
-        <button className={styles.card} onClick={apiCall}>
-          Verificar
-        </button>
-      </h2>
+  const copyToClipboard = async (text) => {
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(text);
+        console.log("Copied to clipboard:", text);
+        setIsCopied(true);
+      } catch (err) {
+        console.error("Failed to copy text: ", err);
+      }
+    }
+  };
 
-      <span>{isLoading ? <div>Carregando...</div> : " "}</span>
+  setTimeout(() => {
+    setIsCopied(false);
+  }, 10000);
+
+  function handleCopyClick(orderId) {
+    setClickedOrderId(orderId);
+    // Restante do código para copiar o texto
+  }
+
+  return (
+    <>
+      <ChakraProvider>
+        <Heading as="h1" size="xl" textAlign="center">
+          Reservas Não Finalizadas
+        </Heading>
+        <Heading as="h3" size="xs" textAlign="center">
+          **Com alerta para reservas pendentes a mais de 10 dias**
+        </Heading>
+        <br />
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <FormLabel type="text">
+            <InputGroup size="md" mb={5}>
+              <InputLeftAddon size="md" children="clientId:" />
+              <Input
+                size="md"
+                value={reservationUser}
+                onChange={(event) => setReservationUser(event.target.value)}
+              ></Input>
+            </InputGroup>
+          </FormLabel>
+        </div>
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <Button
+            padding={5}
+            rounded={8}
+            size="lg"
+            mx="auto"
+            colorScheme="purple"
+            onClick={apiCall}
+          >
+            Verificar{" "}
+          </Button>
+          {data.length > 0 ? (
+            <CSVLink
+              data={data}
+              headers={[
+                "DataPedido",
+                "Cliente",
+                "Chanal",
+                "Filial",
+                "Sku",
+                "Pedido",
+                "Quantidade",
+                "DiasParado",
+              ]}
+              separator={";"}
+              filename={`reservas_pendentes_${reservationUser}_${dateFile}`}
+            >
+              <Button
+                padding={5}
+                rounded={8}
+                size="lg"
+                mx="auto"
+                colorScheme="purple"
+                my={4}
+                ml={4}
+              >
+                Exportar para CSV
+              </Button>
+            </CSVLink>
+          ) : null}
+        </div>
+      </ChakraProvider>
 
       <br />
 
-      {isError === true ? (
-        <ErrorPage message={`~Confira o Texto~ Erro: ${messageError} `}>
-          {" "}
-        </ErrorPage>
-      ) : (
-        <div className={styles.grid}>
-          {reservationStock.map((reserve) => {
-            const isOutdated =
-              differenceInDays(new Date(), new Date(reserve.createdAt)) > 10;
-            return (
-              <div className={styles.card} key={reserve.id}>
-                <span>Cliente: {reserve.clientId}</span> <br />
-                <span>Canal: {reserve.channelId}</span> <br />
-                <span>Location: {reserve.locationId}</span> <br />
-                <span>Sku: {reserve.skuId}</span> <br />
-                <span>Pedido: {reserve.orderId}</span> <br />
-                <span>Quantidade: {reserve.quantity}</span> <br />
-                <span>
-                  Data:{" "}
-                  {format(new Date(reserve.createdAt), "dd/MM/yyyy HH:mm:ss")}
-                </span>
-                <br />
-                <span>
-                  Dias Nesse Status:{" "}
-                  <strong>
-                    {" "}
-                    {differenceInDays(new Date(), new Date(reserve.createdAt))}
-                  </strong>
-                </span>
-                {"  "}-
-                {isOutdated && (
-                  <span style={{ color: "red", font: "bold" }}>
-                    {`Reserva parada a ${differenceInDays(
-                      new Date(),
-                      new Date(reserve.createdAt)
-                    )} dias`}
+      <Text fontSize="xl" color="blue500">
+        {isLoading ? <div>Carregando...</div> : " "}
+      </Text>
+      <div style={{ maxWidth: "100%" }}>
+        {isError === true ? (
+          <ErrorPage message={`~ Confira o Texto ~ ${messageError} `}>
+            {" "}
+          </ErrorPage>
+        ) : (
+          <div
+            className={styles.grid}
+            style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
+          >
+            {reservationStock.map((reserve) => {
+              const isOutdated =
+                differenceInDays(new Date(), new Date(reserve.createdAt)) > 10;
+              return (
+                <div className={styles.card} key={reserve.id}>
+                  <span>Pedido: {reserve.orderId}</span>{" "}
+                  <ChakraProvider>
+                    <Button onClick={() => copyToClipboard(reserve.orderId)}>
+                      Copiar
+                    </Button>
+                  </ChakraProvider>
+                  <br />
+                  <span>Cliente: {reserve.clientId}</span> <br />
+                  <span>Canal: {reserve.channelId}</span> <br />
+                  <span>Location: {reserve.locationId}</span> <br />
+                  <span>Sku: {reserve.skuId}</span> <br />
+                  <span>Quantidade: {reserve.quantity}</span> <br />
+                  <span>
+                    Data:{" "}
+                    {format(new Date(reserve.createdAt), "dd/MM/yyyy HH:mm:ss")}
                   </span>
-                )}
-                <br />
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {data.length > 0 ? (
-        <CSVLink
-          style={{
-            backgroundColor: "gray",
-            borderBlockColor: "black",
-            padding: "1rem",
-            borderRadius: "1rem",
-            borderBottomStyle: "groove",
-          }}
-          data={data}
-          headers={[
-            "DataPedido",
-            "Cliente",
-            "Chanal",
-            "Filial",
-            "Sku",
-            "Pedido",
-            "Quantidade",
-            "DiasParado",
-          ]}
-          separator={";"}
-          filename={`reservas_pendentes_${dateFile}`}
-        >
-          Exportar para CSV
-        </CSVLink>
-      ) : null}
-    </div>
+                  <br />
+                  <span>
+                    Dias Nesse Status:{" "}
+                    <strong>
+                      {" "}
+                      {differenceInDays(
+                        new Date(),
+                        new Date(reserve.createdAt)
+                      )}
+                    </strong>
+                  </span>
+                  {"  "}-
+                  {isOutdated && (
+                    <span style={{ color: "red", font: "bold" }}>
+                      {`Reserva parada a ${differenceInDays(
+                        new Date(),
+                        new Date(reserve.createdAt)
+                      )} dias`}
+                    </span>
+                  )}
+                  <br />
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
