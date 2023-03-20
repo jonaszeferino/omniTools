@@ -217,6 +217,7 @@ export default function Reservations() {
             </Alert>
           )}
         </div>
+        <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
         </div>
