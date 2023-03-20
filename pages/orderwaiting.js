@@ -201,7 +201,9 @@ export default function orders() {
                 Algo de Errado!
               </AlertTitle>
               <AlertDescription maxWidth="sm">
-                Verifique se o clienteId está correto ou existe
+                Verifique se o clienteId está correto ou existe. O locationId
+                não é validado, ou seja, se colocar algo que não existe ou
+                errado, simplesmente não trará resutado.
               </AlertDescription>
             </Alert>
           )}
