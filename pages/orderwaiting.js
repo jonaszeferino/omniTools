@@ -36,7 +36,7 @@ export default function orders() {
   const apiCall = (event) => {
     setIsLoading(true);
     console.log(isLoading, "Verificar0 " + new Date());
-    const url = `https://production-order.omniplat.io/v1/clients/${orderUser}/fulfillments/locations/${orderLocation}/status/WAITING?pageSize=50`;
+    const url = `https://production-order.omniplat.io/v1/clients/${orderUser}/fulfillments/locations/${orderLocation}/status/WAITING?pageSize=100`;
 
     let authorizationValue;
 
@@ -71,7 +71,6 @@ export default function orders() {
         if (response.status === 200) {
           setError(false);
 
-          console.log(isLoading, "Verificar3 " + new Date());
           return response.json();
         } else {
           setIsLoading(false);
@@ -231,7 +230,7 @@ export default function orders() {
             differenceInDays(new Date(), new Date(reserve.createdAt)) > 5;
           return (
             <div className={styles.card} key={reserve.orderId}>
-              <span>Pedido: {reserve.orderId}</span>
+              <span>Pedido: {reserve.orderId}</span>{" "}
               <ChakraProvider>
                 <Button onClick={() => copyToClipboard(reserve.orderId)}>
                   Copiar
