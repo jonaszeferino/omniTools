@@ -116,15 +116,17 @@ export default function orders() {
 
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <FormLabel type="text">
+          <FormLabel htmlFor="clientId">
             <InputGroup size="md" mb={5}>
-              <InputLeftAddon size="md" children="clientId:" />
+              <InputLeftAddon size="md">ClientId:</InputLeftAddon>
               <Input
                 size="md"
+                id="clientId"
                 value={orderUser}
                 onChange={(event) => setOrderUser(event.target.value)}
               ></Input>
-              <InputLeftAddon size="md" children="locationId:" />
+              <InputLeftAddon size="md">LocationID:</InputLeftAddon>
+
               <Input
                 size="md"
                 value={orderLocation}
@@ -133,6 +135,7 @@ export default function orders() {
             </InputGroup>
           </FormLabel>
         </div>
+
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <Button
             padding={5}
@@ -144,6 +147,7 @@ export default function orders() {
           >
             Verificar{" "}
           </Button>
+
           {csvData.length > 0 ? (
             <CSVLink
               data={csvData}

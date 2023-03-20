@@ -116,10 +116,6 @@ export default function Reservations() {
     }
   };
 
-  setTimeout(() => {
-    setIsCopied(false);
-  }, 10000);
-
   function handleCopyClick(orderId) {
     setClickedOrderId(orderId);
     // Restante do código para copiar o texto
@@ -135,10 +131,11 @@ export default function Reservations() {
           **Com alerta para reservas pendentes a mais de 10 dias**
         </Heading>
         <br />
+
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel type="text">
             <InputGroup size="md" mb={5}>
-              <InputLeftAddon size="md" children="clientId:" />
+              <InputLeftAddon size="md">ClientId:</InputLeftAddon>
               <Input
                 size="md"
                 value={reservationUser}
@@ -147,6 +144,7 @@ export default function Reservations() {
             </InputGroup>
           </FormLabel>
         </div>
+
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <Button
             padding={5}
