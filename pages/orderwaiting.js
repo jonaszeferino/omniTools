@@ -74,6 +74,7 @@ export default function orders() {
           console.log(isLoading, "Verificar3 " + new Date());
           return response.json();
         } else {
+          setIsLoading(false);
           throw new Error("Dados Incorretos");
         }
       })
@@ -192,6 +193,9 @@ export default function orders() {
               </Button>
             </CSVLink>
           ) : null}
+          <br />
+
+          {isLoading ? <Progress size="xs" isIndeterminate /> : null}
         </div>
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
@@ -218,11 +222,6 @@ export default function orders() {
               </AlertDescription>
             </Alert>
           )}
-          {isLoading ? (
-            <Flex justify="center" align="center" height="50px">
-              <Progress size="xs" isIndeterminate />
-            </Flex>
-          ) : null}
         </div>
       </ChakraProvider>
 
