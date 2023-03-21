@@ -90,10 +90,13 @@ export default function orders() {
   };
   console.log("ordeStock:" + orderStock);
   console.log("ordeStockData:" + orderStock.data);
+
   const csvData = orderStock.map((orders) => [
+    orders.clientId,
     orders.orderId,
     orders.locationId,
     orders.channelId,
+
     orders.createdAt
       ? format(new Date(orders.createdAt), "dd/MM/yyyy HH:mm:ss")
       : "",
@@ -112,8 +115,6 @@ export default function orders() {
       }
     }
   };
-
-  console.log(isLoading, new Date());
 
   useEffect(() => {
     console.log("isLoading alterado:", isLoading);
@@ -167,13 +168,12 @@ export default function orders() {
             <CSVLink
               data={csvData}
               headers={[
-                "DataPedido",
                 "Cliente",
-                "Chanal",
-                "Filial",
-                "Sku",
                 "Pedido",
-                "Quantidade",
+                "Filial",
+                "Canal",
+
+                "Data",
                 "DiasParado",
               ]}
               separator={";"}
