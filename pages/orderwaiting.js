@@ -103,8 +103,6 @@ export default function orders() {
     differenceInDays(new Date(), new Date(orders.createdAt)),
   ]);
 
-  console.log("csv:", csvData);
-
   const copyToClipboard = async (text) => {
     if (navigator.clipboard) {
       try {
@@ -172,7 +170,6 @@ export default function orders() {
                 "Pedido",
                 "Filial",
                 "Canal",
-
                 "Data",
                 "DiasParado",
               ]}
