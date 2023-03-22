@@ -26,6 +26,7 @@ export default function orders() {
   let [orderStock, setOrderStock] = useState([]);
   let [orderUser, setOrderUser] = useState();
   let [orderLocation, setOrderLocationId] = useState();
+  let [orderLocationId, setOrderLocationIdFrom] = useState();
   let [isError, setError] = useState(null);
   let [totalResults, setTotalResults] = useState();
   let [isLoading, setIsLoading] = useState(false);
@@ -35,13 +36,8 @@ export default function orders() {
 
   const apiCall = (event) => {
     setIsLoading(true);
-    setOrderStock(
-      []
-    ); /*coloquei isso pq tava ficando sujeira quando mudava o lojista*/
     console.log(isLoading, "Verificar0 " + new Date());
     const url = `https://production-order.omniplat.io/v1/clients/${orderUser}/fulfillments/locations/${orderLocation}/status/WAITING?pageSize=100`;
-
-    const urlString = `https://production-order.omniplat.io/v1/clients/${orderUser}/locations`;
 
     let authorizationValue;
 
@@ -120,7 +116,45 @@ export default function orders() {
   };
 
   useEffect(() => {
-    console.log("isLoading alterado:", isLoading);
+    const urlString = `https://production-order.omniplat.io/v1/clients/${orderUser}/locations`;
+    let authorizationValue;
+
+    switch (orderUser) {
+      case "lepostiche":
+        authorizationValue = process.env.NEXT_PUBLIC_LEPOSTICHE;
+
+        break;
+      case "lebes":
+        authorizationValue = process.env.NEXT_PUBLIC_LEBES;
+
+        break;
+      case "viaveneto":
+        authorizationValue = process.env.NEXT_PUBLIC_VIA;
+
+        break;
+      case "vago":
+        authorizationValue = process.env.NEXT_PUBLIC_LEBES;
+
+        break;
+      default:
+        authorizationValue = process.env.NEXT_PUBLIC_LEBES;
+    }
+    fetch(urlString, {
+      headers: new Headers({
+        Authorization: authorizationValue,
+        "Content-Type": "application/json",
+      }),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setError(false);
+          return response.json();
+        } else {
+          throw new Error("Dados Incorretos");
+        }
+      })
+      .then((result) => setSearchMovies(result.results))
+      .catch((error) => setError(true));
   }, [isLoading]);
 
   return (
@@ -195,7 +229,7 @@ export default function orders() {
             </CSVLink>
           ) : null}
           <br />
-          <br />
+
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
         </div>
         <br />
@@ -264,6 +298,23 @@ export default function orders() {
                 </span>
               )}
               <br />
+              <label type="text">
+                LocationID Select
+                <select
+                  className={styles.card}
+                  required={true}
+                  value={orderLocation}
+                  onChange={(event) =>
+                    setOrderLocationIdFrom(event.target.value)
+                  }
+                >
+                  {orderStock.map((location) => (
+                    <option value={location.id} key={location.id}>
+                      {location.id}
+                    </option>
+                  ))}
+                </select>
+              </label>
             </div>
           );
         })}

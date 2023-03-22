@@ -1,7 +1,6 @@
 /* eslint-disable react/no-children-prop */
 import { useState } from "react";
 import styles from "../styles/Home.module.css";
-import ErrorPage from "./error-page";
 
 import {
   Alert,

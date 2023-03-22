@@ -131,6 +131,21 @@ export default function orders() {
           ></input>
         </label>
         <br />
+        <label type="text">
+          LocationID Select
+          <select
+            className={styles.card}
+            required={true}
+            value={orderLocation}
+            onChange={(event) => setOrderLocationId(event.target.value)}
+          >
+            {orderLocations.map((location) => (
+              <option value={location.id} key={location.id}>
+                {location.id}
+              </option>
+            ))}
+          </select>
+        </label>
         <button className={styles.card} onClick={apiCall2}>
           Verificar Locations
         </button>
