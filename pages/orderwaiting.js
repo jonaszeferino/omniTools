@@ -19,7 +19,6 @@ import {
   InputLeftAddon,
   ChakraProvider,
   Progress,
-  Flex,
 } from "@chakra-ui/react";
 
 export default function orders() {
