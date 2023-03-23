@@ -261,11 +261,11 @@ export default function orders() {
                 <VictoryBar
                   style={{ data: { fill: "tomato", width: 25 } }}
                   data={[
-                    { x: "> 5 dias", y: between5And10DaysData },
-                    { x: "> 10 dias", y: between11And20DaysData },
-                    { x: "> 20 dias", y: between21And30DaysData },
-                    { x: "> 30 dias", y: between31And60DaysData },
-                    { x: "> 60 dias", y: greaterThan60DaysData },
+                    { x: "5 a 10", y: between5And10DaysData },
+                    { x: "11 a 20", y: between11And20DaysData },
+                    { x: "21 a 30", y: between21And30DaysData },
+                    { x: "31 a 60", y: between31And60DaysData },
+                    { x: "61 dias", y: greaterThan60DaysData },
                   ]}
                   x="x"
                   y="y"
