@@ -150,6 +150,7 @@ export default function orders() {
 
     return [
       createdAt,
+
       isGreaterThan5Days,
       isGreaterThan10Days,
       isGreaterThan20Days,
@@ -276,17 +277,44 @@ export default function orders() {
           {csvData.length > 0 ? (
             <div style={{ maxWidth: "600px", margin: "0 auto" }}>
               <h1>Pedidos no Status Waiting - "Em Espera" </h1>
-              <span>Total de Registros em Espera {orderStockLength}</span>
+              <span>
+                Total de Registros em Espera:
+                <strong> {orderStockLength}</strong>{" "}
+              </span>
               <br />
-              <span>De 5 a 10 dias: {between5And10DaysData}</span>
+              <span>
+                Menos de 5 dias {" OK "}:
+                <strong>
+                  {" "}
+                  {orderStockLength -
+                    between5And10DaysData -
+                    between11And20DaysData -
+                    between21And30DaysData -
+                    between31And60DaysData -
+                    greaterThan60DaysData}
+                </strong>
+              </span>
               <br />
-              <span>De 11 a 20 dias: {between11And20DaysData}</span>
+
+              <span>
+                De 5 a 10 dias: <strong> {between5And10DaysData}</strong>
+              </span>
               <br />
-              <span>De 21 a 30 dias: {between21And30DaysData}</span>
+              <span>
+                De 11 a 20 dias: <strong> {between11And20DaysData}</strong>
+              </span>
               <br />
-              <span>De 31 a 60 dias: {between31And60DaysData}</span>
+              <span>
+                De 21 a 30 dias:<strong> {between21And30DaysData}</strong>
+              </span>
               <br />
-              <span>Mais de 61 dias: {greaterThan60DaysData}</span>
+              <span>
+                De 31 a 60 dias:<strong> {between31And60DaysData}</strong>
+              </span>
+              <br />
+              <span>
+                Mais de 61 dias: <strong> {greaterThan60DaysData}</strong>
+              </span>
               <br />
             </div>
           ) : null}
