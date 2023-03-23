@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react/no-unescaped-entities */
 
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from "victory";
 import { useState, useEffect } from "react";
