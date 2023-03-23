@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from "victory";
 import { useState, useEffect } from "react";
 import React from "react";
 import ErrorPage from "./error-page";
@@ -19,26 +20,28 @@ import {
   InputLeftAddon,
   ChakraProvider,
   Progress,
-  Flex,
 } from "@chakra-ui/react";
 
 export default function orders() {
   let [orderStock, setOrderStock] = useState([]);
   let [orderUser, setOrderUser] = useState();
   let [orderLocation, setOrderLocationId] = useState();
-  let [orderLocationId, setOrderLocationIdFrom] = useState();
   let [isError, setError] = useState(null);
   let [totalResults, setTotalResults] = useState();
   let [isLoading, setIsLoading] = useState(false);
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
-  let [locations, setLocations] = useState([]);
 
   const apiCall = (event) => {
     setIsLoading(true);
+    setOrderStock(
+      []
+    ); /*coloquei isso pq tava ficando sujeira quando mudava o lojista*/
     console.log(isLoading, "Verificar0 " + new Date());
     const url = `https://production-order.omniplat.io/v1/clients/${orderUser}/fulfillments/locations/${orderLocation}/status/WAITING?pageSize=100`;
+
+    const urlString = `https://production-order.omniplat.io/v1/clients/${orderUser}/locations`;
 
     let authorizationValue;
 
@@ -116,49 +119,58 @@ export default function orders() {
     }
   };
 
-  const apiCall2 = (event) => {
-    const urlString = `https://production-order.omniplat.io/v1/clients/${orderUser}/locations`;
-    let authorizationValue;
+  useEffect(() => {
+    console.log("isLoading alterado:", isLoading);
+  }, [isLoading]);
 
-    switch (orderUser) {
-      case "lepostiche":
-        authorizationValue = process.env.NEXT_PUBLIC_LEPOSTICHE;
+  // graphics
 
-        break;
-      case "lebes":
-        authorizationValue = process.env.NEXT_PUBLIC_LEBES;
+  const DAYS_5 = 5;
+  const DAYS_10 = 10;
+  const DAYS_20 = 20;
+  const DAYS_30 = 30;
+  const DAYS_60 = 60;
 
-        break;
-      case "viaveneto":
-        authorizationValue = process.env.NEXT_PUBLIC_VIA;
+  const orderStockLength = orderStock.length;
 
-        break;
-      case "vago":
-        authorizationValue = process.env.NEXT_PUBLIC_LEBES;
+  const graphicData = orderStock.map((orders) => {
+    const createdAt = orders.createdAt
+      ? format(new Date(orders.createdAt), "dd/MM/yyyy HH:mm:ss")
+      : "";
 
-        break;
-      default:
-        authorizationValue = process.env.NEXT_PUBLIC_LEBES;
-    }
-    fetch(urlString, {
-      headers: new Headers({
-        Authorization: authorizationValue,
-        "Content-Type": "application/json",
-      }),
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          setError(false);
-          return response.json();
-        } else {
-          throw new Error("Dados Incorretos");
-        }
-      })
-      .then((result) => setLocations(result))
-      .catch((error) => setError(true));
-  };
+    const daysSinceCreation = differenceInDays(
+      new Date(),
+      new Date(orders.createdAt)
+    );
+    const isGreaterThan5Days = daysSinceCreation > DAYS_5;
+    const isGreaterThan10Days = daysSinceCreation > DAYS_10;
+    const isGreaterThan20Days = daysSinceCreation > DAYS_20;
+    const isGreaterThan30Days = daysSinceCreation > DAYS_30;
+    const isGreaterThan60Days = daysSinceCreation > DAYS_60;
 
-  console.log("locations: ", locations);
+    return [
+      createdAt,
+      isGreaterThan5Days,
+      isGreaterThan10Days,
+      isGreaterThan20Days,
+      isGreaterThan30Days,
+      isGreaterThan60Days,
+    ];
+  });
+
+  const between5And10DaysData = graphicData.filter(
+    (data) => data[1] && !data[2]
+  ).length;
+  const between11And20DaysData = graphicData.filter(
+    (data) => data[2] && !data[3]
+  ).length;
+  const between21And30DaysData = graphicData.filter(
+    (data) => data[3] && !data[4]
+  ).length;
+  const between31And60DaysData = graphicData.filter(
+    (data) => data[4] && !data[5]
+  ).length;
+  const greaterThan60DaysData = graphicData.filter((data) => data[5]).length;
 
   return (
     <>
@@ -179,7 +191,7 @@ export default function orders() {
                 size="md"
                 id="clientId"
                 value={orderUser}
-                onBlur={(event) => setOrderUser(event.target.value)}
+                onChange={(event) => setOrderUser(event.target.value)}
               ></Input>
               <InputLeftAddon size="md">LocationID:</InputLeftAddon>
 
@@ -192,22 +204,6 @@ export default function orders() {
           </FormLabel>
         </div>
 
-        <label type="text">
-          LocationID Select
-          <select
-            className={styles.card}
-            required={true}
-            value={orderLocation}
-            onChange={(event) => setLocations(event.target.value)}
-          >
-            {locations.map((location) => (
-              <option value={location.id} key={location.id}>
-                {location.id}
-              </option>
-            ))}
-          </select>
-        </label>
-
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <Button
             padding={5}
@@ -218,17 +214,8 @@ export default function orders() {
             onClick={apiCall}
           >
             Verificar{" "}
-          </Button>{" "}
-          <Button
-            padding={5}
-            rounded={8}
-            size="lg"
-            mx="auto"
-            colorScheme="purple"
-            onClick={apiCall2}
-          >
-            Verificar Filiais{" "}
           </Button>
+
           {csvData.length > 0 ? (
             <CSVLink
               data={csvData}
@@ -255,6 +242,53 @@ export default function orders() {
                 Exportar para CSV
               </Button>
             </CSVLink>
+          ) : null}
+          <br />
+          <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+            {csvData.length > 0 ? (
+              <VictoryChart theme={VictoryTheme.vintage}>
+                <VictoryAxis />
+                <VictoryAxis
+                  dependentAxis
+                  style={{
+                    tickLabels: {
+                      fill: "black",
+                      fontSize: 8,
+                    },
+                  }}
+                />
+                <VictoryBar
+                  style={{ data: { fill: "tomato", width: 25 } }}
+                  data={[
+                    { x: "> 5 dias", y: between5And10DaysData },
+                    { x: "> 10 dias", y: between11And20DaysData },
+                    { x: "> 20 dias", y: between21And30DaysData },
+                    { x: "> 30 dias", y: between31And60DaysData },
+                    { x: "> 60 dias", y: greaterThan60DaysData },
+                  ]}
+                  x="x"
+                  y="y"
+                />
+              </VictoryChart>
+            ) : null}
+          </div>
+
+          {csvData.length > 0 ? (
+            <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+              <h1>Pedidos no Status Waiting - "Em Espera" </h1>
+              <span>Total de Registros em Espera {orderStockLength}</span>
+              <br />
+              <span>De 5 a 10 dias: {between5And10DaysData}</span>
+              <br />
+              <span>De 11 a 20 dias: {between11And20DaysData}</span>
+              <br />
+              <span>De 21 a 30 dias: {between21And30DaysData}</span>
+              <br />
+              <span>De 31 a 60 dias: {between31And60DaysData}</span>
+              <br />
+              <span>Mais de 61 dias: {greaterThan60DaysData}</span>
+              <br />
+            </div>
           ) : null}
           <br />
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
@@ -328,10 +362,6 @@ export default function orders() {
             </div>
           );
         })}
-      </div>
-
-      <div className={styles.card} key={location.id}>
-        <span>Pedido: {location.id}</span>{" "}
       </div>
       {/* )} */}
     </>
