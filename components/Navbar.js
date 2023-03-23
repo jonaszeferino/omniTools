@@ -10,7 +10,7 @@ export default function navbar() {
         </Link>
       </li>
       <li>
-        <Link href="/orderwaiting">
+        <Link href="/orderwaitinggraphic">
           <a>Pedidos Pendentes</a>
         </Link>
         <ul></ul>

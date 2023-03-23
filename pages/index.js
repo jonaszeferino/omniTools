@@ -11,7 +11,7 @@ export default function Home() {
         </Head>
         <h1>Omni Tools</h1>
         <br />
-        <Link href="/orderwaiting">
+        <Link href="/orderwaitinggraphic">
           <a>Pedidos Em Espera</a>
         </Link>
         <br />
