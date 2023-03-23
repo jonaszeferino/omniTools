@@ -4,7 +4,6 @@
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from "victory";
 import { useState, useEffect } from "react";
 import React from "react";
-import ErrorPage from "./error-page";
 import styles from "../styles/Home.module.css";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
@@ -183,7 +182,6 @@ export default function orders() {
         <Heading as="h3" size="xs" textAlign="center">
           **com alerta para os parados a mais de 5 dias**
         </Heading>
-
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel htmlFor="clientId">
@@ -195,8 +193,7 @@ export default function orders() {
                 value={orderUser}
                 onChange={(event) => setOrderUser(event.target.value)}
               ></Input>
-              <InputLeftAddon size="md">LocationID:</InputLeftAddon>
-
+              <InputLeftAddon size="md">LocationID:</InputLeftAddon>{" "}
               <Input
                 size="md"
                 value={orderLocation}
@@ -205,7 +202,6 @@ export default function orders() {
             </InputGroup>
           </FormLabel>
         </div>
-
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <Button
             padding={5}
