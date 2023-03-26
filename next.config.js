@@ -1,24 +1,3 @@
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   reactStrictMode: true,
-//   swcMinify: true,
-// };
-
-// module.exports = nextConfig;
-
-// module.exports = {
-//   images: {
-//     remotePatterns: [
-//       {
-//         protocol: "https",
-//         hostname: "image.tmdb.org",
-//         port: "",
-//         pathname: "*",
-//       },
-//     ],
-//   },
-// };
-
 module.exports = {
   images: {
     domains: [
@@ -31,6 +10,8 @@ module.exports = {
   experimental: {
     forceSwcTransforms: true,
     newNextLinkBehavior: false,
+    topLevelAwait: true,
+    esmExternals: true,
   },
 };
 
