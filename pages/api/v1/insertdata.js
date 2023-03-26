@@ -1,8 +1,7 @@
-import mysql from "mysql2/promise";
-import { getConnection } from "../connectiondb";
+import { connectionRdsMySql } from "../../../components/connectiondb";
 
 export default async function handler(req, res) {
-  const connection = await getConnection();
+  const connection = await connectionRdsMySql();
 
   try {
     const { username, password, email, full_name } = req.body;
