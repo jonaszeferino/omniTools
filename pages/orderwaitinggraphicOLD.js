@@ -20,12 +20,6 @@ import {
   InputLeftAddon,
   ChakraProvider,
   Progress,
-  StatGroup,
-  Stat,
-  StatNumber,
-  StatHelpText,
-  StatLabel,
-  StatArrow,
 } from "@chakra-ui/react";
 
 export default function orders() {
@@ -179,26 +173,6 @@ export default function orders() {
   ).length;
   const greaterThan60DaysData = graphicData.filter((data) => data[5]).length;
 
-  //Pedidos OK:
-
-  let totalOrders = orderStockLength;
-  let totalOk =
-    orderStockLength -
-    between5And10DaysData -
-    between11And20DaysData -
-    between21And30DaysData -
-    between31And60DaysData -
-    greaterThan60DaysData;
-  let totalAlert =
-    between5And10DaysData +
-    between11And20DaysData +
-    between21And30DaysData +
-    between31And60DaysData +
-    greaterThan60DaysData;
-
-  let orderPercentOk = (totalOk * 100) / totalOrders;
-  let orderPercentAlert = (totalAlert * 100) / totalOrders;
-
   return (
     <>
       <ChakraProvider>
@@ -268,43 +242,6 @@ export default function orders() {
             </CSVLink>
           ) : null}
           <br />
-
-          <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-            {csvData.length > 0 ? (
-              <StatGroup>
-                <Stat>
-                  <StatLabel>Pedidos OK</StatLabel>
-                  <StatNumber>
-                    {orderStockLength -
-                      between5And10DaysData -
-                      between11And20DaysData -
-                      between21And30DaysData -
-                      between31And60DaysData -
-                      greaterThan60DaysData}
-                  </StatNumber>
-                  <StatHelpText>
-                    <StatArrow type="increase" />
-                    {orderPercentOk.toFixed(2)}%
-                  </StatHelpText>
-                </Stat>
-
-                <Stat>
-                  <StatLabel>Pedido em Alerta</StatLabel>
-                  <StatNumber>
-                    {between5And10DaysData +
-                      between11And20DaysData +
-                      between21And30DaysData +
-                      between31And60DaysData +
-                      greaterThan60DaysData}
-                  </StatNumber>
-                  <StatHelpText>
-                    <StatArrow type="decrease" />
-                    {orderPercentAlert.toFixed(2)}%
-                  </StatHelpText>
-                </Stat>
-              </StatGroup>
-            ) : null}
-          </div>
           <div style={{ maxWidth: "600px", margin: "0 auto" }}>
             {csvData.length > 0 ? (
               <VictoryChart theme={VictoryTheme.vintage}>

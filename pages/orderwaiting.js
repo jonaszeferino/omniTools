@@ -19,6 +19,10 @@ import {
   InputLeftAddon,
   ChakraProvider,
   Progress,
+  StatGroup,
+  Stat,
+  StatNumber,
+  StatHelpText,
 } from "@chakra-ui/react";
 
 export default function orders() {
@@ -153,6 +157,26 @@ export default function orders() {
             </InputGroup>
           </FormLabel>
         </div>
+
+        <StatGroup>
+          <Stat>
+            <StatLabel>Sent</StatLabel>
+            <StatNumber>345,670</StatNumber>
+            <StatHelpText>
+              <StatArrow type="increase" />
+              23.36%
+            </StatHelpText>
+          </Stat>
+
+          <Stat>
+            <StatLabel>Clicked</StatLabel>
+            <StatNumber>45</StatNumber>
+            <StatHelpText>
+              <StatArrow type="decrease" />
+              9.05%
+            </StatHelpText>
+          </Stat>
+        </StatGroup>
 
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <Button
