@@ -45,7 +45,7 @@ export default function orders() {
       []
     ); /*coloquei isso pq tava ficando sujeira quando mudava o lojista*/
     console.log(isLoading, "Verificar0 " + new Date());
-    const url = `https://production-order.omniplat.io/v1/clients/${orderUser}/fulfillments/locations/${orderLocation}/status/WAITING?pageSize=100`;
+    const url = `https://production-order.omniplat.io/v1/clients/${orderUser}/fulfillments/locations/${orderLocation}/status/WAITING?pageSize=300`;
 
     const urlString = `https://production-order.omniplat.io/v1/clients/${orderUser}/locations`;
 
@@ -182,6 +182,7 @@ export default function orders() {
   //Pedidos OK:
 
   let totalOrders = orderStockLength;
+
   let totalOk =
     orderStockLength -
     between5And10DaysData -
@@ -189,6 +190,7 @@ export default function orders() {
     between21And30DaysData -
     between31And60DaysData -
     greaterThan60DaysData;
+
   let totalAlert =
     between5And10DaysData +
     between11And20DaysData +
