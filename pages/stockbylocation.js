@@ -20,7 +20,7 @@ import {
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
 
-export default function stocks() {
+export default function Stocks() {
   let [stock, setStock] = useState([]);
   let [stockUser, setStockUser] = useState();
   let [stockChannel, setStockChannel] = useState();
