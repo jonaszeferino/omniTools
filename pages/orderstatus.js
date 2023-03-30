@@ -5,6 +5,11 @@ import React from "react";
 import styles from "../styles/Home.module.css";
 import { format, differenceInDays } from "date-fns";
 import Link from "next/link";
+import { StatGroup,
+  Stat,
+  StatNumber,
+  StatHelpText,
+   } from "chakra";
 
 export default function orders() {
   let [orderStock, setOrderStock] = useState([]);
@@ -79,6 +84,8 @@ export default function orders() {
         </button>
       </h2>
 
+
+   
       <ul>
         {orderStock.map((orders) => {
           const isOutdated =
