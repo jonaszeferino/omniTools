@@ -14,7 +14,7 @@ export default function Stocks() {
   const [stock, setStock] = useState([]);
   const [stockUser, setStockUser] = useState("lepostiche");
   const [stockChannel, setStockChannel] = useState("site");
-  const [stockLocation, setStockLocation] = useState(19410);
+  const [stockLocation, setStockLocation] = useState(190410);
 
   const apiCall = async () => {
     try {

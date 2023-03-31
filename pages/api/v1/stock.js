@@ -2,17 +2,16 @@ export default async (req, res) => {
   let authorizationValue;
 
   const { location, channel, user } = req.body;
-
-  const locationId = req.body.location;
-  const channelId = req.body.channel;
-  const userId = req.body.user;
+  const newLocation = location;
+  const newChannel = channel;
+  const newUser = user;
 
   console.log("stockApi0", req.body);
-  // console.log("stockApi1", locationId);
-  // console.log("stockApi2", channelId);
-  // console.log("stockApi3", userId);
+  console.log("stockApi1", newLocation);
+  console.log("stockApi2", newChannel);
+  console.log("stockApi3", newUser);
 
-  switch (userId) {
+  switch (newUser) {
     case "lepostiche":
       authorizationValue = process.env.NEXT_PUBLIC_LEPOSTICHE;
       // authorizationValue =
@@ -32,9 +31,9 @@ export default async (req, res) => {
   }
 
   try {
-    // console.log("stockApi4", req.body);
+    console.log("stockApi4", req.body);
 
-    const url = `https://production-inventory.omniplat.io/v1/clients/${userId}/stocks?&channelId=${channelId}&stock&locationId=${locationId}&page=1&perpage=500`;
+    const url = `https://production-inventory.omniplat.io/v1/clients/${newUser}/stocks?&channelId=${newChannel}&stock&locationId=${newLocation}&page=1&perpage=500`;
     const response = await fetch(url, {
       headers: new Headers({
         Authorization: authorizationValue,
@@ -44,8 +43,8 @@ export default async (req, res) => {
 
     const result = await response.json();
     res.status(200).json(result);
-
-    // console.log("stockApi6", url);
+    console.log("stockApi5", result);
+    console.log("stockApi6", url);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Ocorreu um erro ao buscar os estoques." });
