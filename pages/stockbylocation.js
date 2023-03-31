@@ -1,12 +1,6 @@
-import { useState } from "react";
 import styles from "../styles/Home.module.css";
-import axios from "axios";
-
+import { useState } from "react";
 import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
   Button,
   FormLabel,
   Input,
@@ -14,73 +8,46 @@ import {
   InputGroup,
   InputLeftAddon,
   ChakraProvider,
-  Progress,
-  Flex,
 } from "@chakra-ui/react";
-import { format, differenceInDays } from "date-fns";
 
 export default function Stocks() {
   const [stock, setStock] = useState([]);
-  const [stockUser, setStockUser] = useState();
-  const [stockChannel, setStockChannel] = useState();
-  const [stockLocation, setStockLocation] = useState();
-
-  const [isError, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [stockUser, setStockUser] = useState("lepostiche");
+  const [stockChannel, setStockChannel] = useState("site");
+  const [stockLocation, setStockLocation] = useState(19410);
 
   const apiCall = async () => {
-    setIsLoading(true);
     try {
-      const result = await axios.get("/api/v1/stocks", {
-        params: {
-          stockUser: stockUser,
-          stockChannel: stockChannel,
-          stockLocation: stockLocation,
+      const response = await fetch("/api/v1/stock", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          location: stockLocation,
+          channel: stockChannel,
+          user: stockUser,
+        }),
       });
-      setStock(result.data);
-      setIsLoading(false);
+
+      const data = await response.json();
+      setStock(data);
+      // console.log("client", data);
+      return data;
     } catch (error) {
       console.error(error);
-      setError(true);
-      setIsLoading(false);
     }
   };
 
-  let stockCards = null;
-
-  if (isLoading) {
-    stockCards = (
-      <Flex justify="center" align="center" height="300px">
-        <Progress size="lg" isIndeterminate />
-      </Flex>
-    );
-  } else if (isError) {
-    stockCards = (
-      <Alert status="error">
-        <AlertIcon />
-        <AlertTitle mr={2}>Erro ao buscar estoque!</AlertTitle>
-        <AlertDescription>
-          Ocorreu um erro ao buscar o estoque. Por favor, tente novamente mais
-          tarde.
-        </AlertDescription>
-      </Alert>
-    );
-  } else if (stock.length > 0) {
-    stockCards = (
-      <div className={styles.grid}>
-        {stock.map((stockView) => (
-          <div className={styles.card} key={stockView.id}>
-            <span>Pedido: {stockView.orderId}</span>{" "}
-            <span>Cliente: {stockView.clientId}</span> <br />
-            <span>Location: {stockView.locationId}</span> <br />
-            <span>Sku: {stockView.skuId}</span> <br />
-            <span>Quantidade: {stockView.balance}</span> <br />
-          </div>
-        ))}
-      </div>
-    );
-  }
+  // console.log("aqui", stock);
+  console.log(
+    "aqui",
+    JSON.stringify({
+      location: stockLocation,
+      channel: stockChannel,
+      user: stockUser,
+    })
+  );
 
   return (
     <>
@@ -140,6 +107,13 @@ export default function Stocks() {
           </Button>
         </div>
         <br />
+        {/* <span>Cliente: {stockUser}</span>
+        <br />
+        <span>Canal: {stockChannel}</span>
+        <br />
+        <span>Filial: {stockLocation}</span> */}
+        <br />
+        <br />
 
         <div style={{ maxWidth: "100%" }}>
           <div
@@ -148,11 +122,11 @@ export default function Stocks() {
           >
             {stock.map((stockView) => (
               <div className={styles.card} key={stockView.id}>
-                <span>Pedido: {stockView.orderId}</span>{" "}
-                <span>Cliente: {stockView.clientId}</span> <br />
-                <span>Location: {stockView.locationId}</span> <br />
-                <span>Sku: {stockView.skuId}</span> <br />
-                <span>Quantidade: {stockView.balance}</span> <br />
+                <span>SkuId: {stockView.skuId}</span> <br />
+                <span>Balanço: {stockView.balance}</span> <br />
+                <span>Qtd Total: {stockView.totalQuantity}</span> <br />
+                <span>Reservados: {stockView.reservedQuantity}</span> <br />
+                <span>Disponiveis: {stockView.availableQuantity}</span> <br />
               </div>
             ))}
           </div>
