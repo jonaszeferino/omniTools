@@ -6,16 +6,9 @@ export default async (req, res) => {
   const newChannel = channel;
   const newUser = user;
 
-  console.log("stockApi0", req.body);
-  console.log("stockApi1", newLocation);
-  console.log("stockApi2", newChannel);
-  console.log("stockApi3", newUser);
-
   switch (newUser) {
     case "lepostiche":
       authorizationValue = process.env.NEXT_PUBLIC_LEPOSTICHE;
-      // authorizationValue =
-      //   "Basic bGVwb3N0aWNoZTpmMWY0ZTMwYWNlZjY0YmQwZDM0NmIwNTBlNzMyODllNw==";
       break;
     case "lebes":
       authorizationValue = process.env.NEXT_PUBLIC_LEBES;

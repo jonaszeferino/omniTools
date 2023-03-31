@@ -25,11 +25,11 @@ export default function navbar() {
           <a>Cotação</a>
         </Link>
       </li>
-      {/* <li>
-        <Link href="/commercequeries">
-          <a>Queries Commerce</a>
+      <li>
+        <Link href="/stockbylocation">
+          <a>Estoque por Filial</a>
         </Link>
-      </li> */}
+      </li>
     </ul>
   );
 }

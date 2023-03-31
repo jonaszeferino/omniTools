@@ -23,6 +23,10 @@ export default function Home() {
           <a>Como funciona a Cotação</a>
         </Link>
         <br />
+        <Link href="/stockbylocation">
+          <a>Estoque por filial</a>
+        </Link>
+        <br />
       </div>
     </div>
   );

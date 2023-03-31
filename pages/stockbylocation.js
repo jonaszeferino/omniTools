@@ -1,4 +1,5 @@
 import styles from "../styles/Home.module.css";
+import { format, differenceInDays } from "date-fns";
 import { useState } from "react";
 import {
   Button,
@@ -9,14 +10,19 @@ import {
   InputLeftAddon,
   ChakraProvider,
 } from "@chakra-ui/react";
+import { CSVLink } from "react-csv";
 
 export default function Stocks() {
-  const [stock, setStock] = useState([]);
-  const [stockUser, setStockUser] = useState("lepostiche");
-  const [stockChannel, setStockChannel] = useState("site");
-  const [stockLocation, setStockLocation] = useState(190410);
+  let [stock, setStock] = useState([]);
+  let [stockUser, setStockUser] = useState("lepostiche");
+  let [stockChannel, setStockChannel] = useState("site");
+  let [stockLocation, setStockLocation] = useState(190410);
+  let [dateFile, setDateFile] = useState(
+    format(new Date(), "dd_MM_yyyy_HH_mm_ss")
+  );
 
   const apiCall = async () => {
+    setDateFile(dateFile);
     try {
       const response = await fetch("/api/v1/stock", {
         method: "POST",
@@ -39,15 +45,27 @@ export default function Stocks() {
     }
   };
 
+  const csvData = stock.map((stockCsv) => [
+    stockCsv.clientId,
+    stockCsv.locationId,
+    stockCsv.updatedAt,
+    stockCsv.skuId,
+    stockCsv.balance,
+    stockCsv.totalQuantity,
+    stockCsv.reservedQuantity,
+    stockCsv.availableQuantity,
+    format(new Date(), "dd/MM/yyyy HH:mm:ss"),
+  ]);
+
   // console.log("aqui", stock);
-  console.log(
-    "aqui",
-    JSON.stringify({
-      location: stockLocation,
-      channel: stockChannel,
-      user: stockUser,
-    })
-  );
+  // console.log(
+  //   "aqui",
+  //   JSON.stringify({
+  //     location: stockLocation,
+  //     channel: stockChannel,
+  //     user: stockUser,
+  //   })
+  // );
 
   return (
     <>
@@ -58,9 +76,7 @@ export default function Stocks() {
         <Heading as="h3" size="xs" textAlign="center">
           Stock by locationId
         </Heading>
-
         <br />
-
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel type="text">
             <InputGroup size="md" mb={5}>
@@ -93,7 +109,6 @@ export default function Stocks() {
             </InputGroup>
           </FormLabel>
         </div>
-
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <Button
             padding={5}
@@ -105,16 +120,42 @@ export default function Stocks() {
           >
             Verificar{" "}
           </Button>
+          {csvData.length > 0 ? (
+            <CSVLink
+              data={csvData}
+              headers={[
+                "cliente",
+                "filial",
+                "ultimaModificação",
+                "sku",
+                "balanço",
+                "total",
+                "reservado",
+                "disponivel",
+                "dataDaConsulta",
+              ]}
+              separator={";"}
+              filename={`estoque_${stockUser}_${dateFile}`}
+            >
+              <Button
+                padding={5}
+                rounded={8}
+                size="lg"
+                mx="auto"
+                colorScheme="purple"
+                my={4}
+                ml={4}
+              >
+                Exportar para CSV
+              </Button>
+            </CSVLink>
+          ) : null}
         </div>
-        <br />
-        {/* <span>Cliente: {stockUser}</span>
-        <br />
-        <span>Canal: {stockChannel}</span>
-        <br />
-        <span>Filial: {stockLocation}</span> */}
-        <br />
-        <br />
 
+        <br />
+        <br />
+        <br />
+        <br />
         <div style={{ maxWidth: "100%" }}>
           <div
             className={styles.grid}
