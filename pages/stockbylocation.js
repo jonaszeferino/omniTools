@@ -9,6 +9,7 @@ import {
   InputGroup,
   InputLeftAddon,
   ChakraProvider,
+  Progress,
 } from "@chakra-ui/react";
 import { CSVLink } from "react-csv";
 
@@ -17,11 +18,15 @@ export default function Stocks() {
   let [stockUser, setStockUser] = useState("lepostiche");
   let [stockChannel, setStockChannel] = useState("site");
   let [stockLocation, setStockLocation] = useState(190410);
+  let [isLoading, setIsLoading] = useState(false);
+  let [isError, setError] = useState(null);
+
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
 
   const apiCall = async () => {
+    setIsLoading(true);
     setDateFile(dateFile);
     try {
       const response = await fetch("/api/v1/stock", {
@@ -38,6 +43,8 @@ export default function Stocks() {
 
       const data = await response.json();
       setStock(data);
+
+      setIsLoading(false);
       // console.log("client", data);
       return data;
     } catch (error) {
@@ -150,6 +157,16 @@ export default function Stocks() {
               </Button>
             </CSVLink>
           ) : null}
+          <br />
+          {csvData.length > 0 ? (
+            <h1>
+              <strong>Cliente: </strong>
+              {stockUser} <strong>Canal: </strong> {stockChannel}{" "}
+              <strong>Filial: </strong>
+              {stockLocation}{" "}
+            </h1>
+          ) : null}
+          {isLoading ? <Progress size="xs" isIndeterminate /> : null}
         </div>
 
         <br />
