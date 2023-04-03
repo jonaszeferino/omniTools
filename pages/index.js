@@ -27,6 +27,10 @@ export default function Home() {
           <a>Estoque por filial</a>
         </Link>
         <br />
+        <Link href="/stockOnCommerce">
+          <a>Estoque No Linx Commerce</a>
+        </Link>
+        <br />
       </div>
     </div>
   );

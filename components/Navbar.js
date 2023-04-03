@@ -30,6 +30,11 @@ export default function navbar() {
           <a>Estoque por Filial</a>
         </Link>
       </li>
+      <li>
+        <Link href="/stockOnCommerce">
+          <a>Estoque No Linx Commerce</a>
+        </Link>
+      </li>
     </ul>
   );
 }
