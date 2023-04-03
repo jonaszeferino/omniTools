@@ -6,23 +6,6 @@ export default async (req, res) => {
   let authorizationValue =
     "Basic bGVwb3N0aWNoZTpmMWY0ZTMwYWNlZjY0YmQwZDM0NmIwNTBlNzMyODllNw==";
 
-  // switch (user) {
-  //   case "lepostiche":
-  //     authorizationValue = process.env.NEXT_PUBLIC_LEPOSTICHE;
-  //     break;
-  //   case "lebes":
-  //     authorizationValue = process.env.NEXT_PUBLIC_LEBES;
-  //     break;
-  //   case "viaveneto":
-  //     authorizationValue = process.env.NEXT_PUBLIC_VIA;
-  //     break;
-  //   case "vago":
-  //     authorizationValue = process.env.NEXT_PUBLIC_LEBES;
-  //     break;
-  //   default:
-  //     authorizationValue = process.env.NEXT_PUBLIC_LEBES;
-  // }
-
   try {
     const response = await fetch(url, {
       headers: new Headers({
