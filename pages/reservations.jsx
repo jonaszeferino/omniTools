@@ -16,6 +16,7 @@ import {
   ChakraProvider,
   Progress,
   Flex,
+  Table, Thead, Tbody, Tr, Th, Td, TableCaption
 } from "@chakra-ui/react";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
@@ -234,48 +235,56 @@ export default function Reservations() {
           className={styles.grid}
           style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
         >
-          {reservationStock.map((reserve) => {
-            const isOutdated =
-              differenceInDays(new Date(), new Date(reserve.createdAt)) > 10;
-            return (
-              <div className={styles.card} key={reserve.id}>
-                <span>Pedido: {reserve.orderId}</span>{" "}
-                <ChakraProvider>
-                  <Button onClick={() => copyToClipboard(reserve.orderId)}>
-                    Copiar
-                  </Button>
-                </ChakraProvider>
-                <br />
-                <span>Cliente: {reserve.clientId}</span> <br />
-                <span>Canal: {reserve.channelId}</span> <br />
-                <span>Location: {reserve.locationId}</span> <br />
-                <span>Sku: {reserve.skuId}</span> <br />
-                <span>Quantidade: {reserve.quantity}</span> <br />
-                <span>
-                  Data:{" "}
-                  {format(new Date(reserve.createdAt), "dd/MM/yyyy HH:mm:ss")}
-                </span>
-                <br />
-                <span>
-                  Dias Nesse Status:{" "}
-                  <strong>
-                    {" "}
-                    {differenceInDays(new Date(), new Date(reserve.createdAt))}
-                  </strong>
-                </span>
-                {"  "}-
-                {isOutdated && (
-                  <span style={{ color: "red", font: "bold" }}>
-                    {`Reserva parada a ${differenceInDays(
-                      new Date(),
-                      new Date(reserve.createdAt)
-                    )} dias`}
-                  </span>
-                )}
-                <br />
-              </div>
-            );
-          })}
+<ChakraProvider>
+  <Table variant='striped' colorScheme='purple' size='sm' maxW='700px'>
+    <TableCaption>Reservas</TableCaption>
+    <Thead>
+      <Tr>
+        <Th>Pedido</Th>
+        <Th>Cliente</Th>
+        <Th>Canal</Th>
+        <Th>Location</Th>
+        <Th>Sku</Th>
+        <Th>Quantidade</Th>
+        <Th>Data</Th>
+        <Th>Dias Nesse Status</Th>
+        <Th></Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      {reservationStock.map((reserve) => {
+        const isOutdated =
+          differenceInDays(new Date(), new Date(reserve.createdAt)) > 10;
+        return (
+          <Tr key={reserve.id}>
+            <Td>{reserve.orderId}</Td>
+            <Td>{reserve.clientId}</Td>
+            <Td>{reserve.channelId}</Td>
+            <Td>{reserve.locationId}</Td>
+            <Td>{reserve.skuId}</Td>
+            <Td>{reserve.quantity}</Td>
+            <Td>
+              {format(new Date(reserve.createdAt), "dd/MM/yyyy HH:mm:ss")}
+            </Td>
+            <Td>
+              {differenceInDays(new Date(), new Date(reserve.createdAt))}{" "}
+              {isOutdated && (
+                <span style={{ color: "red", font: "bold" }}>Atraso</span>
+              )}
+            </Td>
+            <Td>
+              <ChakraProvider>
+                <Button onClick={() => copyToClipboard(reserve.orderId)}>
+                  Copiar
+                </Button>
+              </ChakraProvider>
+            </Td>
+          </Tr>
+        );
+      })}
+    </Tbody>
+  </Table>
+</ChakraProvider>
         </div>
         {/* )} */}
       </div>

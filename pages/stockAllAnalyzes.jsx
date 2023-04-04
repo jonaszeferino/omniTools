@@ -6,7 +6,7 @@ import {
   Heading,
   ChakraProvider,
   Progress,
-  Table, Thead, Tbody, Tr, Th, Td
+  Table, Thead, Tbody, Tr, Th, Td, TableCaption 
   } from "@chakra-ui/react";
 
 
@@ -70,13 +70,14 @@ export default function Stocks() {
             
             style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
           >
-  <Table>
+  <Table variant='striped' colorScheme='purple' size='sm' maxW='400px'>
+  <TableCaption>Resultados de análise</TableCaption>
   <Thead>
     <Tr>
-    <Th>plataforma</Th>
+      <Th>Plataforma</Th>
       <Th>Nome do teste</Th>
       <Th>Cliente</Th>
-      <Th>Data</Th>
+      <Th minWidth="50px">Data</Th>
     </Tr>
   </Thead>
   <Tbody>
@@ -85,17 +86,11 @@ export default function Stocks() {
         <Td>OMS</Td>
         <Td>{analyzesStockView.view_name}</Td>
         <Td>{analyzesStockView.clientId_oms}</Td>
-        <Td>{format(new Date(analyzesStockView.created_date), "dd-MM-yyyy")}</Td>
+        <Td minW="50px">{format(new Date(analyzesStockView.created_date), "dd-MM-yyyy")}</Td>
       </Tr>
     ))}
   </Tbody>
 </Table>
-
-
-
-
-
-
 
           </div>
         </div>

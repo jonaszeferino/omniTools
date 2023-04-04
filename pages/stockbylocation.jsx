@@ -10,6 +10,7 @@ import {
   InputLeftAddon,
   ChakraProvider,
   Progress,
+  Table, Thead, Tbody, Tr, Th, Td, TableCaption 
 } from "@chakra-ui/react";
 import { CSVLink } from "react-csv";
 
@@ -178,15 +179,29 @@ export default function Stocks() {
             className={styles.grid}
             style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
           >
-            {stock.map((stockView) => (
-              <div className={styles.card} key={stockView.id}>
-                <span>SkuId: {stockView.skuId}</span> <br />
-                <span>Balanço: {stockView.balance}</span> <br />
-                <span>Qtd Total: {stockView.totalQuantity}</span> <br />
-                <span>Reservados: {stockView.reservedQuantity}</span> <br />
-                <span>Disponiveis: {stockView.availableQuantity}</span> <br />
-              </div>
-            ))}
+<Table variant='striped' colorScheme='purple' size='sm' maxW='400px'>
+  <TableCaption>Resultados de estoque</TableCaption>
+  <Thead>
+    <Tr>
+      <Th>SkuId</Th>
+      <Th>Balanço</Th>
+      <Th>Qtd Total</Th>
+      <Th>Reservados</Th>
+      <Th>Disponíveis</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+    {stock.map((stockView) => (
+      <Tr key={stockView.id}>
+        <Td>{stockView.skuId}</Td>
+        <Td>{stockView.balance}</Td>
+        <Td>{stockView.totalQuantity}</Td>
+        <Td>{stockView.reservedQuantity}</Td>
+        <Td>{stockView.availableQuantity}</Td>
+      </Tr>
+    ))}
+  </Tbody>
+</Table>
           </div>
         </div>
       </ChakraProvider>
