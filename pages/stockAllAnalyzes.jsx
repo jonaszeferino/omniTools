@@ -6,6 +6,7 @@ import {
   Heading,
   ChakraProvider,
   Progress,
+  Table, Thead, Tbody, Tr, Th, Td
   } from "@chakra-ui/react";
 
 
@@ -66,18 +67,36 @@ export default function Stocks() {
         <br />
         <div style={{ maxWidth: "100%" }}>
           <div
-            className={styles.grid}
+            
             style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
           >
-            {analyzes.map((analyzesStockView) => (
+  <Table>
+  <Thead>
+    <Tr>
+    <Th>plataforma</Th>
+      <Th>Nome do teste</Th>
+      <Th>Cliente</Th>
+      <Th>Data</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+    {analyzes.map((analyzesStockView) => (
+      <Tr key={analyzesStockView.clientId_oms}>
+        <Td>OMS</Td>
+        <Td>{analyzesStockView.view_name}</Td>
+        <Td>{analyzesStockView.clientId_oms}</Td>
+        <Td>{format(new Date(analyzesStockView.created_date), "dd-MM-yyyy")}</Td>
+      </Tr>
+    ))}
+  </Tbody>
+</Table>
 
-              <div className={styles.card} key={analyzesStockView.clientId_oms}>
-                <span>Analise: {analyzesStockView.view_name}</span> <br />
-                <span>Cliente: {analyzesStockView.clientId_oms}</span> <br />
-                <span>Data: {format(new Date(analyzesStockView.created_date), "dd-MM-yyyy")}</span> <br />
-               <br />
-              </div>
-            ))}
+
+
+
+
+
+
           </div>
         </div>
       </ChakraProvider>
