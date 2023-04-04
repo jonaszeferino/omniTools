@@ -11,6 +11,8 @@ import {
   InputLeftAddon,
   ChakraProvider,
   Progress,
+  Alert,
+  AlertIcon
   
 } from "@chakra-ui/react";
 import { CSVLink } from "react-csv";
@@ -21,6 +23,7 @@ export default function Stocks() {
   let [stockChannel, setStockChannel] = useState("site");
   let [stockVerication, setStockVerification] = useState("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
   let [isLoading, setIsLoading] = useState(false);
+  let [isSave, setIsSave] = useState(false);
   let [message, setMessage] = useState(false);
   let [isError, setError] = useState(null);
   let [dateFile, setDateFile] = useState(
@@ -43,6 +46,7 @@ export default function Stocks() {
       const data = await response.json();
       setStock(data);
       setIsLoading(false);
+      
       return data;
     } catch (error) {
       console.error(error);
@@ -91,9 +95,11 @@ export default function Stocks() {
         if (response.ok) {
           setMessage("Dados inseridos com sucesso!");
           setIsLoading(false);
+          setIsSave(true);
         } else {
           setMessage("Erro ao inserir dados");
           setIsLoading(false);
+
         }
       })
       .catch((error) => {
@@ -197,6 +203,19 @@ export default function Stocks() {
             ></Input>
           </InputGroup>
         </FormLabel>
+       
+         {isLoading ?<Alert status='info'>
+    <AlertIcon />
+    Aguarde enquanto os dados são salvos...
+  </Alert>
+: null}
+        {isSave ? 
+        <Alert status='success'>
+          <AlertIcon />
+          Analise Salva no banco com Sucesso!
+              </Alert>
+        : null}
+
         </>
           ) : null}
           <br />

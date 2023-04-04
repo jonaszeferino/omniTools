@@ -36,11 +36,8 @@ export default function navbar() {
           <a>Estoque Canal OMS</a>
         </Link>
       </li>
-
-      
-      
-
-   <li>   <Link href="/stockAllAnalyzes">
+        <li>
+          <Link href="/stockAllAnalyzes">
           <a>Analises</a>
         </Link>
         </li>
