@@ -154,6 +154,8 @@ export default function Stocks() {
           >
             Verificar{" "}
           </Button>
+  
+          
           {csvData.length > 0 ? (
             <CSVLink
               data={csvData}
@@ -172,12 +174,29 @@ export default function Stocks() {
               >
                 Exportar para CSV
               </Button>
+
             </CSVLink>
+          ) : null}
+          {csvData.length > 0 ? (
+                  <Button
+            margin={2}
+            padding={5}
+            rounded={8}
+            size="lg"
+            mx="auto"
+            my={4}
+            ml={4}
+            colorScheme="purple"
+            onClick={() => insertStockData(dataToSend)}
+          >
+            Inserir Dados{" "}
+          </Button>
           ) : null}
           <br />
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
-          
-         <button onClick={() => insertStockData(dataToSend)}>Inserir Dados</button>
+
+    
+         
 
         </div>
 
