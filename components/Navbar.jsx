@@ -11,31 +11,46 @@ export default function navbar() {
       </li>
       <li>
         <Link href="/orderwaitinggraphic">
-          <a>Pedidos Pendentes</a>
+          <a>Pedidos Pendentes OMS</a>
         </Link>
         <ul></ul>
       </li>
       <li>
         <Link href="/reservations">
-          <a>Reservas</a>
+          <a>Reservas OMS</a>
         </Link>
       </li>
-      <li>
-        <Link href="/quotation">
-          <a>Cotação</a>
-        </Link>
-      </li>
+  
       <li>
         <Link href="/stockbylocation">
-          <a>Estoque por Filial</a>
+          <a>Estoque Filial OMS</a>
         </Link>
       </li>
       <li>
         <Link href="/stockOnCommerce">
-          <a>Estoque No Linx Commerce</a>
+          <a>Estoque Canal Commerce</a>
+        </Link>
+      </li>
+      <li>
+        <Link href="/stockOnOmsChannel">
+          <a>Estoque Canal OMS</a>
+        </Link>
+      </li>
+
+      
+      
+
+   <li>   <Link href="/stockAllAnalyzes">
+          <a>Analises</a>
+        </Link>
+        </li>
+        <li>
+        <Link href="/quotation">
+          <a>Cotação</a>
         </Link>
       </li>
     </ul>
+   
   );
 }
 

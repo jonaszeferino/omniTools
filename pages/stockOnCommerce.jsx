@@ -1,6 +1,6 @@
 import styles from "../styles/Home.module.css";
 import { format, differenceInDays } from "date-fns";
-import WalkthroughPopover from "./infosStockCommerce";
+import WalkthroughPopover from "./infos/infosStockCommerce";
 import { useState } from "react";
 import {
   Button,

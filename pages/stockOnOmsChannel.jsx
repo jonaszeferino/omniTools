@@ -1,6 +1,6 @@
 import styles from "../styles/Home.module.css";
 import { format } from "date-fns";
-import WalkthroughPopover from "./infosStockCommerce";
+import WalkthroughPopover from "./infos/infosStockCommerce";
 import { useState } from "react";
 import {
   Button,
@@ -19,6 +19,7 @@ export default function Stocks() {
   let [stock, setStock] = useState([]);
   let [stockUser, setStockUser] = useState("lepostiche");
   let [stockChannel, setStockChannel] = useState("site");
+  let [stockVerication, setStockVerification] = useState("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
   let [isLoading, setIsLoading] = useState(false);
   let [message, setMessage] = useState(false);
   let [isError, setError] = useState(null);
@@ -29,7 +30,7 @@ export default function Stocks() {
     setIsLoading(true);
     setDateFile(dateFile);
     try {
-      const response = await fetch("/api/v1/stockChannel", {
+      const response = await fetch("/api/v1/getStockFromChannelOms", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,35 +69,31 @@ export default function Stocks() {
       updatedAt: item.updatedAt,
       enabled: item.enabled,
       view_id: "item.view_id",
-      view_name: "item.view_name",
-      sku_id: item.skuId,
-      created_at: item.updatedAt
+      view_name: stockVerication,
+      sku_id: item.skuId     
      
 
     }))
   };
-
-
-  const insertStockData = () => {
-    
-    const url = "http://localhost:3000/api/v1/insertStockFromOms";
+ const insertStockData = () => {
+    setIsLoading(true);
+    const url = "http://localhost:3000/api/v1/postStockFromOms";
     const options = {
-      
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(dataToSend),
-                    
     };
-    console.log("aqui1",options.body)
-  
+      
     fetch(url, options)
       .then((response) => {
         if (response.ok) {
           setMessage("Dados inseridos com sucesso!");
+          setIsLoading(false);
         } else {
           setMessage("Erro ao inserir dados");
+          setIsLoading(false);
         }
       })
       .catch((error) => {
@@ -104,9 +101,6 @@ export default function Stocks() {
         console.log("ver1",error)
       });
   };
-
-
-  
   return (
     <>
       <ChakraProvider>
@@ -178,6 +172,7 @@ export default function Stocks() {
             </CSVLink>
           ) : null}
           {csvData.length > 0 ? (
+            <>
                   <Button
             margin={2}
             padding={5}
@@ -191,6 +186,18 @@ export default function Stocks() {
           >
             Inserir Dados{" "}
           </Button>
+          <FormLabel type="text">
+          <InputGroup size="md" mb={5}>
+            <InputLeftAddon size="md">Analise</InputLeftAddon>
+            <Input
+              size="md"
+              id="test1"
+              value={stockVerication}
+              onChange={(event) => setStockVerification(event.target.value)}
+            ></Input>
+          </InputGroup>
+        </FormLabel>
+        </>
           ) : null}
           <br />
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}

@@ -31,6 +31,10 @@ export default function Home() {
           <a>Estoque No Linx Commerce</a>
         </Link>
         <br />
+        <Link href="/stockAllAnalyzes">
+          <a>Analises</a>
+        </Link>
+        <br />
       </div>
     </div>
   );

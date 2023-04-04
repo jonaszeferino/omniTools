@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     const { stockData } = req.body;
 
     const query =
-      "INSERT INTO stock_channel_oms (clientId_oms, locationId, stockType, totalQuantity, balance, updatedAt, enabled, view_id, view_name, sku_id, created_at ) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
+      "INSERT INTO stock_channel_oms (clientId_oms, locationId, stockType, totalQuantity, balance, updatedAt, enabled, view_id, view_name, sku_id ) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?)";
 
     for (const stock of stockData) {
       const values = [
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
         stock.view_id,
         stock.view_name,
         stock.sku_id,
-        stock.created_at
+        
       ];
 
       const [result] = await connection.execute(query, values);
