@@ -23,6 +23,7 @@ export default function Stocks() {
   let [stockChannel, setStockChannel] = useState("2");
   let [isLoading, setIsLoading] = useState(false);
   let [isError, setError] = useState(null);
+  let [message,setMessage] = useState();
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
@@ -58,7 +59,52 @@ export default function Stocks() {
     stockCsv.availability,
   ]);
 
-  return (
+  const dataToSend = {
+    stockData: stock.map(item => ({
+      ProductID: item.ProductID,
+      clientIdCommerce: "teste",
+      OutStockHandlingDays: item.OutStockHandlingDays,
+      totalQuantity: item.StockOnHand,
+      balance: item.StockBalance,
+      updatedAt: item.LastUpdate,
+      enabled: item.StockOnHand,
+      StockReserved: item.StockReserved,
+      WarehouseID: item.WarehouseID,
+      WarehouseName: item.WarehouseName,
+      availability:  item.availability    
+      }))
+  };
+
+  const insertStockData = () => {
+    setIsLoading(true);
+    const url = "http://localhost:3000/api/v1/postStockFromCommerce";
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSend),
+    };
+      
+    fetch(url, options)
+      .then((response) => {
+        if (response.ok) {
+          setMessage("Dados inseridos com sucesso!");
+          setIsLoading(false);
+          setIsSave(true);
+        } else {
+          setMessage("Erro ao inserir dados");
+          setIsLoading(false);
+
+        }
+      })
+      .catch((error) => {
+        setMessage("Erro ao inserir dados: " + error);
+        console.log("ver1",error)
+      });
+  };
+  
+return (
     <>
       <ChakraProvider>
         <Heading as="h1" size="xl" textAlign="center">
@@ -120,6 +166,7 @@ export default function Stocks() {
             Verificar{" "}
           </Button>
           {csvData.length > 0 ? (
+            <>
             <CSVLink
               data={csvData}
               headers={["Estoque", "ProductID", "Balanço", "Disponibilidade"]}
@@ -138,9 +185,25 @@ export default function Stocks() {
                 Exportar para CSV
               </Button>
             </CSVLink>
+               <Button
+               margin={2}
+               padding={5}
+               rounded={8}
+               size="lg"
+               mx="auto"
+               my={4}
+               ml={4}
+               colorScheme="purple"
+               onClick={() => insertStockData(dataToSend)}
+             >
+               Inserir Dados{" "}
+             </Button>
+             </>
           ) : null}
+          
           <br />
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
+       
         </div>
 
         <br />

@@ -188,6 +188,7 @@ export default function Stocks() {
       <Th>Qtd Total</Th>
       <Th>Reservados</Th>
       <Th>Disponíveis</Th>
+      <Th>Filial</Th>
     </Tr>
   </Thead>
   <Tbody>
@@ -198,6 +199,7 @@ export default function Stocks() {
         <Td>{stockView.totalQuantity}</Td>
         <Td>{stockView.reservedQuantity}</Td>
         <Td>{stockView.availableQuantity}</Td>
+        <Td>{stockView.locationId}</Td>
       </Tr>
     ))}
   </Tbody>

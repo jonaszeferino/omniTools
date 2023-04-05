@@ -216,25 +216,19 @@ export default function Stocks() {
           Analise Salva no banco com Sucesso!
               </Alert>
         : null}
-
         </>
           ) : null}
           <br />
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
-
-    
-         
-
-        </div>
-
-        <br />
+         </div>
+       <br />
         <div style={{ maxWidth: "100%" }}>
           <div
             className={styles.grid}
             style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
           >
             <Table variant='striped' colorScheme='purple' size='sm' maxW='500px'>
-  <TableCaption>Resultados de estoque</TableCaption>
+    <TableCaption>Resultados de estoque</TableCaption>
   <Thead>
     <Tr>
       <Th>Cliente</Th>

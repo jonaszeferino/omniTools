@@ -17,8 +17,6 @@ export default async (req, res) => {
     } else {
       whereClause = `WarehouseId == ${newChannel}`;
     }
-    //let whereTeste = `WarehouseId == 2 && availability == "I" `;
-    //const url = `https://lebes.layer.core.dcg.com.br/v1/Inventory/API.svc/web/SearchInventorySKU`;
     const url = `https://${newUser}.layer.core.dcg.com.br/v1/Inventory/API.svc/web/SearchInventorySKU`;
     const response = await fetch(url, {
       headers: new Headers({

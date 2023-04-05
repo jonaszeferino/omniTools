@@ -7,20 +7,21 @@ export default async function handler(req, res) {
     const { stockData } = req.body;
 
     const query =
-      "INSERT INTO stock_channel_oms (clientId_oms, locationId, stockType, totalQuantity, balance, updatedAt, enabled, view_id, view_name, sku_id ) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?)";
+      "INSERT INTO stock_channel_commerce (clientIdCommerce,ProductID,sku,OutStockHandlingDays,totalQuantity,StockBalance,StockReserved,WarehouseID,WarehouseName,availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     for (const stock of stockData) {
       const values = [
-        stock.clientId_oms,
-        stock.locationId,
-        stock.stockType,
+        stock.clientIdCommerce,
+        stock.ProductID,
+        stock.sku,
+        stock.OutStockHandlingDays,
         stock.totalQuantity,
-        stock.balance,
-        stock.updatedAt,
-        stock.enabled,
-        stock.view_id,
-        stock.view_name,
-        stock.sku_id,
+        stock.StockBalance,
+        stock.StockReserved,
+        stock.WarehouseID,
+        stock.WarehouseName,
+        stock.availability,
+        
         
       ];
 
@@ -35,47 +36,6 @@ export default async function handler(req, res) {
   }
 }
 
-
-// import { connectionRdsMySql } from "../../../components/connectiondb";
-// export default async function handler(req, res) {
-//   const connection = await connectionRdsMySql();
-//   try {
-//     const {  
-//       clientId_oms,
-//       locationId,
-//       stockType,
-//       totalQuantity,
-//       balance,
-//       updatedAt,
-//       enabled,
-//       view_id,
-//       view_name,
-//       sku_id,
-//       created_at } = req.body;
-
-//     const query =
-//       "INSERT INTO stock_channel_oms (clientId_oms, locationId, stockType, totalQuantity, balance, updatedAt, enabled, view_id, view_name, sku_id, created_at ) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
-//     const values = [
-//       clientId_oms,
-//       locationId,
-//       stockType,
-//       totalQuantity,
-//       balance,
-//       updatedAt,
-//       enabled,
-//       view_id,
-//       view_name,
-//       sku_id,
-//       created_at];
-
-//     const [result] = await connection.execute(query, values);
-//     connection.end();
-
-//     res.status(200).json({ message: "Dados inseridos com sucesso." });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// }
 
 
 
