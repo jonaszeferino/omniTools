@@ -66,16 +66,16 @@ export default function Stocks() {
 
   const dataToSend = {
     stockData: stock.map(item => ({
-      clientId_oms: item.clientId,
+      clientIdOms: item.clientId,
       locationId: item.locationId,
       stockType: item.stockType,
       totalQuantity: item.totalQuantity,
       balance: item.balance,
       updatedAt: item.updatedAt,
       enabled: item.enabled,
-      view_id: "item.view_id",
-      view_name: stockVerication,
-      sku_id: item.skuId     
+      viewId: "item.view_id",
+      viewName: stockVerication,
+      skuId: item.skuId     
      
 
     }))

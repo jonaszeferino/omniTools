@@ -7,20 +7,20 @@ export default async function handler(req, res) {
     const { stockData } = req.body;
 
     const query =
-      "INSERT INTO stock_channel_oms (clientId_oms, locationId, stockType, totalQuantity, balance, updatedAt, enabled, view_id, view_name, sku_id ) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?)";
+      "INSERT INTO stock_channel_oms (clientIdOms, locationId, stockType, totalQuantity, balance, updatedAt, enabled, viewId, viewName, skuId ) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?)";
 
     for (const stock of stockData) {
       const values = [
-        stock.clientId_oms,
+        stock.clientIdOms,
         stock.locationId,
         stock.stockType,
         stock.totalQuantity,
         stock.balance,
         stock.updatedAt,
         stock.enabled,
-        stock.view_id,
-        stock.view_name,
-        stock.sku_id,
+        stock.viewId,
+        stock.viewName,
+        stock.skuId,
         
       ];
 

@@ -32,6 +32,7 @@
     "react-excel-workbook": "^0.0.4",
     "react-paginate": "^8.1.4",
     "sql-formatter": "^12.1.4",
+    "tls": "^0.0.1",
     "victory": "^36.6.8",
     "xlsx": "^0.18.5"
   },

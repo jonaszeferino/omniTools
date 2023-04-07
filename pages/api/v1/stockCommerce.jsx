@@ -1,11 +1,11 @@
 export default async (req, res) => {
-  const { channel, user, availability } = req.body;
-  // const newChannel = channel;
-  // const newSku = sku;
-  // let newAvailability = "I";
+   const { channel, user, availability } = req.body;
+  // const newChannel = "site";
+  // const newUser = "leposticheoms";
+  // const newAvailability = "I";
+  // let newSku = 20624;
   let newUser = user;
   let newChannel = channel;
-  let newSku = 20624;
   let newAvailability = availability;
 
   try {
@@ -20,7 +20,6 @@ export default async (req, res) => {
     const url = `https://${newUser}.layer.core.dcg.com.br/v1/Inventory/API.svc/web/SearchInventorySKU`;
     const response = await fetch(url, {
       headers: new Headers({
-        // BasicAuthorization: process.env.NEXT_PUBLIC_COMMERCE,
         Authorization: process.env.NEXT_PUBLIC_COMMERCE,
         "Content-Type": "application/json",
         "access-control-allow-origin": "*",

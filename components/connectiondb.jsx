@@ -1,11 +1,11 @@
 import mysql from "mysql2/promise";
 
 const dbConfig = {
-  host: "omnitools.cluster-cnc10a6gbp2t.us-east-2.rds.amazonaws.com",
+  host: "sql10.freemysqlhosting.net",
   port: "3306",
-  user: "admin",
+  user: "sql10611850",
   password: process.env.NEXT_PUBLIC_RDS_MY_SQL,
-  database: "omnitools",
+  database: "sql10611850",
   connectionLimit: 10,
   queueLimit: 0,
 };
@@ -14,3 +14,6 @@ export async function connectionRdsMySql() {
   const connection = await mysql.createConnection(dbConfig);
   return connection;
 }
+
+// dataBase location - limite 5mb
+//https://www.freemysqlhosting.net/account/ 
