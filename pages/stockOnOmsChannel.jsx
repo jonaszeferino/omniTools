@@ -30,6 +30,7 @@ export default function Stocks() {
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
+  
     const apiCall = async () => {
     setIsLoading(true);
     setDateFile(dateFile);
@@ -108,6 +109,17 @@ export default function Stocks() {
         console.log("ver1",error)
       });
   };
+
+  const Clean = () => {
+    setMessage(null);
+    setIsSave(false);
+    setStockChannel(stockChannel);
+    setStockUser(stockUser);
+    setStockVerification("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
+    setStock([]);
+    setDateFile(format(new Date(), "dd_MM_yyyy_HH_mm_ss"));
+  }
+
   return (
     <>
       <ChakraProvider>
@@ -151,7 +163,7 @@ export default function Stocks() {
             size="lg"
             mx="auto"
             colorScheme="purple"
-            onClick={apiCall}
+            onClick={() =>{Clean(),apiCall()}}
           >
             Verificar{" "}
           </Button>
@@ -214,6 +226,7 @@ export default function Stocks() {
         <Alert status='success'>
           <AlertIcon />
           Analise Salva no banco com Sucesso!
+          {message}
               </Alert>
         : null}
         </>

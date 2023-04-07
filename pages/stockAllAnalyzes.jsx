@@ -77,16 +77,16 @@ export default function Stocks() {
       <Th>Plataforma</Th>
       <Th>Nome do teste</Th>
       <Th>Cliente</Th>
-      <Th minWidth="50px">Data</Th>
+      <Th>Data</Th>
     </Tr>
   </Thead>
   <Tbody>
     {analyzes.map((analyzesStockView) => (
-      <Tr key={analyzesStockView.clientId_oms}>
+      <Tr key={analyzesStockView.clientIdOms}>
         <Td>OMS</Td>
-        <Td>{analyzesStockView.view_name}</Td>
-        <Td>{analyzesStockView.clientId_oms}</Td>
-        <Td minW="50px">{format(new Date(analyzesStockView.created_date), "dd-MM-yyyy")}</Td>
+        <Td>{analyzesStockView.viewName}</Td>
+        <Td>{analyzesStockView.clientIdOms}</Td>
+        <Td>{format(new Date(analyzesStockView.createdDate), "dd/MM/yyyy")}</Td>
       </Tr>
     ))}
   </Tbody>
