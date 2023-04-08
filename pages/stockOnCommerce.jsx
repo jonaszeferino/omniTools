@@ -24,6 +24,7 @@ export default function Stocks() {
   let [isLoading, setIsLoading] = useState(false);
   let [isError, setError] = useState(null);
   let [message,setMessage] = useState();
+  let [dateNow, setDatenow] = useState(new Date());
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
@@ -32,7 +33,7 @@ export default function Stocks() {
     setIsLoading(true);
     setDateFile(dateFile);
     try {
-      const response = await fetch("/api/v1/stockCommerce", {
+      const response = await fetch("/api/v1/getStockCommerce", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +61,7 @@ export default function Stocks() {
   ]);
 
   const dataToSend = {
-    stockData: stock.map(item => ({
+    stockData: stock.map((item) => ({
       ProductID: item.ProductID,
       clientIdCommerce: "teste",
       OutStockHandlingDays: item.OutStockHandlingDays,
@@ -71,9 +72,10 @@ export default function Stocks() {
       StockReserved: item.StockReserved,
       WarehouseID: item.WarehouseID,
       WarehouseName: item.WarehouseName,
-      availability:  item.availability    
-      }))
-  };
+      availability: item.availability,
+      createdDate: dateNow,
+    })),
+  }
 
   const insertStockData = () => {
     setIsLoading(true);
