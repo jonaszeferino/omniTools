@@ -27,6 +27,8 @@ export default function Stocks() {
   let [isSave, setIsSave] = useState(false);
   let [message, setMessage] = useState(false);
   let [isError, setError] = useState(null);
+  let [dateNow, setDatenow] = useState(new Date());
+
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
@@ -76,7 +78,8 @@ export default function Stocks() {
       enabled: item.enabled,
       viewId: "item.view_id",
       viewName: stockVerication,
-      skuId: item.skuId     
+      skuId: item.skuId,    
+      createdDate: dateNow,  
      
 
     }))
@@ -118,6 +121,7 @@ export default function Stocks() {
     setStockVerification("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
     setStock([]);
     setDateFile(format(new Date(), "dd_MM_yyyy_HH_mm_ss"));
+    setIsSave(false);
   }
 
   return (
@@ -201,7 +205,7 @@ export default function Stocks() {
             my={4}
             ml={4}
             colorScheme="purple"
-            onClick={() => insertStockData(dataToSend)}
+            onClick={() =>{setIsSave(false),insertStockData(dataToSend)}}
           >
             Inserir Dados{" "}
           </Button>

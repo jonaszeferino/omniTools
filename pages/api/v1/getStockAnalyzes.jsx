@@ -4,7 +4,9 @@ export default async function handler(req, res) {
   const connection = await connectionRdsMySql();
 
   try {
-    const query = "SELECT DISTINCT viewName, clientIdOms, DATE(CreatedDate) as createdDate FROM stock_channel_oms";
+    const query = "SELECT DISTINCT viewName, clientIdOms, DATE_FORMAT(CreatedDate, '%Y-%m-%d %H:%i') as createdDate FROM stock_channel_oms ORDER BY createdDate DESC LIMIT 30;"
+                  //"SELECT DISTINCT viewName, clientIdOms, DATE(CreatedDate) as createdDate FROM stock_channel_oms ORDER BY createdDate DESC LIMIT 30;";
+
     console.log('aqui', query)
     const values = [];
     const [data] = await connection.execute(query, values);
