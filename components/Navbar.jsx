@@ -20,15 +20,14 @@ export default function Navbar() {
   return (
     <div className={styles.sidebar}>
       <ul>
-        <li>
-        <br/>
-          <Link href="/">
-            <a><strong>Home</strong></a>
-          </Link>
-          <br/>
-          
-          <br/>
-        </li>
+      <li style={{ backgroundColor: "#280A3C", color: "white" }}>
+  <br />
+  <Link href="/">
+    <a><strong>Home</strong></a>
+  </Link>
+  <br />
+  <br />
+</li>
         <div onClick={handleCommerceLinksClick} className={styles.category}>
           <span className={isCommerceLinksOpen ? styles.arrowUp : styles.arrowDown} />
           <strong>Commerce</strong>

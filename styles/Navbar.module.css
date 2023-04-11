@@ -55,15 +55,22 @@
 
 .sidebar {
   position: fixed;
-  background-color: #b17ce7;
+  /* background-color: #b17ce7; */
+  background-color: #411e5a;
+  color: rgb(147, 147, 147);
   left: 0;
   top: 0;
   height: 100%;
   width: 200px;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.sidebar div:hover {
+  color: white;
+}
+.sidebar a:hover {
+  color: white;
 }
 
 .button {
