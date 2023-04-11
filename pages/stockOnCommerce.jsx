@@ -1,12 +1,14 @@
 import styles from "../styles/Home.module.css";
 import { format, differenceInDays } from "date-fns";
 import WalkthroughPopover from "./infos/infosStockCommerce";
+import Topbar from "../components/Topbar";
+import TopbarBelow from "../components/TopbarBelow";
+
 import { useState } from "react";
 import {
   Button,
   FormLabel,
   Input,
-  Heading,
   InputGroup,
   InputLeftAddon,
   ChakraProvider,
@@ -109,12 +111,9 @@ export default function Stocks() {
 return (
     <>
       <ChakraProvider>
-        <Heading as="h1" size="xl" textAlign="center">
-          Estoque por Canal - Linx Commerce
-        </Heading>
-        <Heading as="h3" size="xs" textAlign="center">
-          Stock by Channel
-        </Heading>
+      <Topbar title="Estoque por Canal - Linx Commerce" />
+      <TopbarBelow />
+                  
 
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>

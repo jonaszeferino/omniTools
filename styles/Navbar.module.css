@@ -1,23 +1,83 @@
-.navbar {
+.topbar {
   display: flex;
-  /* background-color: #311150; */
-  background-color: #b17ce7;
-  padding: 20px 10px;
-  margin-top: 0%;
-  text-decoration: none;
-  list-style-type: none;
+  justify-content: space-between; /* adicionado para alinhar o login à direita */
+  align-items: center; /* adicionado para centralizar verticalmente */
+  background-color: #fefefe;
+  padding: 2px; /* reduzido o valor do padding */
 }
 
-.navbar a {
+.topbar a {
   color: whitesmoke;
-  margin-right: 1em;
+  margin-right: 0.5em;
   text-decoration: none;
   transition: 0.3s;
-  list-style-type: none;
 }
 
-.navbar a:hover {
-  color: rgb(111, 80, 179);
+.topbar a:hover {
+  /* color: rgb(111, 80, 179); */
+  color: #fff;
   text-decoration: none;
-  list-style-type: none;
+}
+
+.title-container {
+  border-bottom: 1px solid black;
+  font-size: 18px;
+}
+
+.login {
+  display: flex;
+  align-items: center;
+}
+
+.login input[type="text"],
+.login input[type="password"] {
+  margin-right: 2px;
+  padding: 2px;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.login button {
+  padding: 2px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.topBarBelow {
+  background-image: linear-gradient(to bottom, #d5d5d5, #e5e2e2b0);
+  height: 45px;
+}
+
+/*Teste SideBar*/
+
+.sidebar {
+  position: fixed;
+  background-color: #b17ce7;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 200px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.button {
+  padding: 5px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.login {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }

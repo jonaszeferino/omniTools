@@ -1,6 +1,9 @@
 /* eslint-disable react/no-children-prop */
 import { useState } from "react";
 import styles from "../styles/Home.module.css";
+import Topbar from "../components/Topbar";
+import TopbarBelow from "../components/TopbarBelow";
+
 
 import {
   Alert,
@@ -128,12 +131,8 @@ export default function Reservations() {
   return (
     <>
       <ChakraProvider>
-        <Heading as="h1" size="xl" textAlign="center">
-          Reservas Não Finalizadas
-        </Heading>
-        <Heading as="h3" size="xs" textAlign="center">
-          **Com alerta para reservas pendentes a mais de 10 dias**
-        </Heading>
+      <Topbar title="Reservas Não finalizadas " />
+      <TopbarBelow />
 
         <br />
 

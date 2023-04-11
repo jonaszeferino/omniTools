@@ -28,6 +28,9 @@ import {
   StatArrow,
   Table, Thead, Tbody, Tr, Th, Td, TableCaption 
 } from "@chakra-ui/react";
+import Topbar from "../components/Topbar";
+import TopbarBelow from "../components/TopbarBelow";
+
 
 export default function orders() {
   let [orderStock, setOrderStock] = useState([]);
@@ -205,12 +208,8 @@ export default function orders() {
   return (
     <>
       <ChakraProvider>
-        <Heading as="h1" size="xl" textAlign="center">
-          Pedidos Waiting
-        </Heading>
-        <Heading as="h3" size="xs" textAlign="center">
-          **com alerta para os parados a mais de 5 dias**
-        </Heading>
+      <Topbar title="Pedidos Pendentes " />
+      <TopbarBelow />
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel htmlFor="clientId">

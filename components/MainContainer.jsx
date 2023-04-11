@@ -1,6 +1,7 @@
 import { Box, Container } from "@chakra-ui/react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import Topbar from "./Topbar";
 
 export default function MainContainer({ children }) {
   return (
@@ -9,7 +10,7 @@ export default function MainContainer({ children }) {
       <Container maxW="xl" mx="auto" px={4} py={8} mb={100}>
         {children}
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 }

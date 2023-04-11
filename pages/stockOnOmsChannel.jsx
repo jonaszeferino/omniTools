@@ -17,6 +17,9 @@ import {
   
 } from "@chakra-ui/react";
 import { CSVLink } from "react-csv";
+import Topbar from "../components/Topbar";
+import TopbarBelow from "../components/TopbarBelow";
+
 
 export default function Stocks() {
   let [stock, setStock] = useState([]);
@@ -127,13 +130,10 @@ export default function Stocks() {
   return (
     <>
       <ChakraProvider>
-        <Heading as="h1" size="xl" textAlign="center">
-          Estoque por Canal - OMS 
-        </Heading>
-        <Heading as="h3" size="xs" textAlign="center">
-          Stock by Channel
-        </Heading>
-
+      <Topbar title="Estoque por Canal - OMS " />
+      <TopbarBelow />
+                  
+    
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel type="text">

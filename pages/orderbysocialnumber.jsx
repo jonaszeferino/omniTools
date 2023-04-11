@@ -3,6 +3,9 @@ import styles from "../styles/Home.module.css";
 import ErrorPage from "./error-page";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
+import Topbar from "../components/Topbar";
+import TopbarBelow from "../components/TopbarBelow";
+
 
 export default function Reservations() {
   let [reservationStock, setReservationStock] = useState([]);

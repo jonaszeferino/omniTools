@@ -9,6 +9,9 @@ import {
   Progress,
   Table, Thead, Tbody, Tr, Th, Td, TableCaption, Checkbox, Flex, Box
 } from "@chakra-ui/react";
+import Topbar from "../components/Topbar";
+import TopbarBelow from "../components/TopbarBelow";
+
 
 
 export default function Stocks() {
@@ -52,9 +55,8 @@ export default function Stocks() {
   return (
     <>
       <ChakraProvider>
-        <Heading as="h1" size="xl" textAlign="center">
-          Analises
-        </Heading>
+      <Topbar title="Analises " />
+      <TopbarBelow />
         <Heading as="h1" size="m" textAlign="center">
           ⚠️ 🚧 Em construção 🚧 ⚠️
         </Heading>
@@ -79,7 +81,7 @@ export default function Stocks() {
         <div style={{ maxWidth: "100%" }}>
           <div
 
-            style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
+            style={{ width: "100%", marginLeft: "250px", marginRight: "auto" }}
           >
             <Table variant='striped' colorScheme='purple' size='sm' maxW='400px'>
               <TableCaption>Resultado Dos Últimos 30 Registros</TableCaption>

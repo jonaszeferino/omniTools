@@ -6,6 +6,9 @@ import ErrorPage from "./error-page";
 import styles from "../styles/Home.module.css";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
+import Topbar from "../components/Topbar";
+import TopbarBelow from "../components/TopbarBelow";
+
 
 export default function orders() {
   let [orderLocations, setOrdersLocations] = useState([]);
@@ -106,7 +109,8 @@ export default function orders() {
 
   return (
     <div>
-      <h3 className={styles.title}>Total de Pedidos Por Locations</h3>
+     <Topbar title="Pedidos Por Filial " />
+      <TopbarBelow />
       <span></span>
       <h2>
         <br />

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styles from "../styles/Home.module.css";
+import Topbar from "../components/Topbar";
+import TopbarBelow from "../components/TopbarBelow";
+
 
 const Quotation = () => {
   //fundamentais para o primeiro calculo
