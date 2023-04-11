@@ -1,8 +1,18 @@
+import { useState } from "react";
 import Link from "next/link";
 import styles from "../styles/Navbar.module.css";
 
-
 export default function Navbar() {
+  const [isOtherLinksOpen, setIsOtherLinksOpen] = useState(false);
+  const [isOMSLinksOpen, setIsOMSLinksOpen] = useState(false);
+
+  const handleOtherLinksClick = () => {
+    setIsOtherLinksOpen(!isOtherLinksOpen);
+  };
+  const handleOMSLinksClick = () => {
+    setIsOMSLinksOpen(!isOMSLinksOpen);
+  };
+
   return (
     <div className={styles.sidebar}>
       <ul>
@@ -21,7 +31,7 @@ export default function Navbar() {
             <a>Reservas OMS</a>
           </Link>
         </li>
-  
+
         <li>
           <Link href="/stockbylocation">
             <a>Estoque Filial OMS</a>
@@ -38,9 +48,26 @@ export default function Navbar() {
           </Link>
         </li>
         <li>
-          <Link href="/stockAllAnalyzes">
-            <a>Analises</a>
-          </Link>
+          <div onClick={handleOMSLinksClick} className={styles.category}>
+          <span className={isOMSLinksOpen ? styles.arrowUp : styles.arrowDown} />
+        OMS    
+        </div>
+      
+          <div onClick={handleOtherLinksClick} className={styles.category}>
+            Outros
+            <span className={isOtherLinksOpen ? styles.arrowUp : styles.arrowDown} />
+          </div>
+          
+          {isOtherLinksOpen && (
+            <ul className={styles.otherLinks}>
+
+              <li>
+                <Link href="/stockAllAnalyzes">
+                  <a>Analises</a>
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
         <li>
           <Link href="/quotation">
@@ -54,5 +81,7 @@ export default function Navbar() {
         <button>Entrar</button>
       </div> */}
     </div>
+
+
   );
 }
