@@ -8,21 +8,22 @@ export default async function handler(req, res) {
     console.log(stockData);
     
     const query =
-      "INSERT INTO stock_channel_commerce (clientIdCommerce,ProductID,sku,OutStockHandlingDays,totalQuantity,StockBalance,StockReserved,WarehouseID,WarehouseName,availability,createdDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+      "INSERT INTO stock_channel_commerce (clientIdCommerce,ProductID,sku,OutStockHandlingDays,totalQuantity,StockBalance,StockReserved,WarehouseID,WarehouseName,availability,createdDate,viewName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
 
     for (const stock of stockData) {
       const values = [
-        stock.clientIdCommerce,
-        stock.ProductID,
-        stock.sku,
-        stock.OutStockHandlingDays,
-        stock.totalQuantity,
-        stock.StockBalance,
-        stock.StockReserved,
-        stock.WarehouseID,
-        stock.WarehouseName,
-        stock.availability,
-        stock.createdDate,
+        stock.clientIdCommerce ? stock.clientIdCommerce : null,
+        stock.ProductID ? stock.ProductID : null,
+        stock.sku ? stock.sku : null,
+        stock.OutStockHandlingDays ? stock.OutStockHandlingDays : 0,
+        stock.totalQuantity ? stock.totalQuantity : 0,
+        stock.StockBalance ? stock.StockBalance : 0,
+        stock.StockReserved ? stock.StockReserved : 0,
+        stock.WarehouseID ? stock.WarehouseID :  null,
+        stock.WarehouseName ? stock.WarehouseName : null,
+        stock.availability ? stock.availability : 0,
+        stock.createdDate ? stock.createdDate : null,
+        stock.viewName ? stock.viewName : null,
             ];
 
       const [result] = await connection.execute(query, values);

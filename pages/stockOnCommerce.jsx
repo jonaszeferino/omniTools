@@ -30,6 +30,7 @@ export default function Stocks() {
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
+  let [stockVerication, setStockVerification] = useState("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
 
   const apiCall = async () => {
     setIsLoading(true);
@@ -65,10 +66,10 @@ export default function Stocks() {
   const dataToSend = {
     stockData: stock.map((item) => ({
       ProductID: item.ProductID,
-      clientIdCommerce: "teste",
+      clientIdCommerce: stockUser,
       OutStockHandlingDays: item.OutStockHandlingDays,
       totalQuantity: item.StockOnHand,
-      balance: item.StockBalance,
+      StockBalance: item.StockBalance,
       updatedAt: item.LastUpdate,
       enabled: item.StockOnHand,
       StockReserved: item.StockReserved,
@@ -76,6 +77,7 @@ export default function Stocks() {
       WarehouseName: item.WarehouseName,
       availability: item.availability,
       createdDate: dateNow,
+      viewName: stockVerication,
     })),
   }
 
@@ -199,6 +201,17 @@ return (
              >
                Inserir Dados{" "}
              </Button>
+             <FormLabel type="text">
+          <InputGroup size="md" mb={5}>
+            <InputLeftAddon size="md">Analise</InputLeftAddon>
+            <Input
+              size="md"
+              id="test1"
+              value={stockVerication}
+              onChange={(event) => setStockVerification(event.target.value)}
+            ></Input>
+          </InputGroup>
+        </FormLabel>
              </>
           ) : null}
           

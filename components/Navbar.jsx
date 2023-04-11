@@ -17,7 +17,6 @@ export default function Navbar() {
   const handleCommerceLinksClick = () => {
     setIsCommerceLinksOpen(!isCommerceLinksOpen);
   };
-
   return (
     <div className={styles.sidebar} style={{listStyleType: "none"}}>
     <ul>
