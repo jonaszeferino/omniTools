@@ -5,6 +5,7 @@ import styles from "../styles/Navbar.module.css";
 export default function Navbar() {
   const [isOtherLinksOpen, setIsOtherLinksOpen] = useState(false);
   const [isOMSLinksOpen, setIsOMSLinksOpen] = useState(false);
+  const [isCommerceLinksOpen, setIsCommerceLinksOpen] = useState(false);
 
   const handleOtherLinksClick = () => {
     setIsOtherLinksOpen(!isOtherLinksOpen);
@@ -12,74 +13,91 @@ export default function Navbar() {
   const handleOMSLinksClick = () => {
     setIsOMSLinksOpen(!isOMSLinksOpen);
   };
+  const handleCommerceLinksClick = () => {
+    setIsCommerceLinksOpen(!isCommerceLinksOpen);
+  };
 
   return (
     <div className={styles.sidebar}>
       <ul>
         <li>
+        <br/>
           <Link href="/">
-            <a>Home</a>
+            <a><strong>Home</strong></a>
           </Link>
+          <br/>
+          
+          <br/>
         </li>
-        <li>
-          <Link href="/orderwaitinggraphic">
-            <a>Pedidos Pendentes OMS</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/reservations">
-            <a>Reservas OMS</a>
-          </Link>
-        </li>
-
-        <li>
-          <Link href="/stockbylocation">
-            <a>Estoque Filial OMS</a>
-          </Link>
-        </li>
-        <li>
+        <div onClick={handleCommerceLinksClick} className={styles.category}>
+          <span className={isCommerceLinksOpen ? styles.arrowUp : styles.arrowDown} />
+          <strong>Commerce</strong>
+        </div>
+        {isCommerceLinksOpen && (
+           <ul className={styles.otherLinks}>
+   <li>
           <Link href="/stockOnCommerce">
-            <a>Estoque Canal Commerce</a>
+            <a>→ Estoque Canal</a>
           </Link>
         </li>
-        <li>
-          <Link href="/stockOnOmsChannel">
-            <a>Estoque Canal OMS</a>
-          </Link>
-        </li>
+         </ul>
+                )}
+
+     {/* Link GLobal OMS funcionando ok, usar mesma lógica acima */}    
         <li>
           <div onClick={handleOMSLinksClick} className={styles.category}>
           <span className={isOMSLinksOpen ? styles.arrowUp : styles.arrowDown} />
-        OMS    
+          <strong>OMS</strong>   
         </div>
-      
-          <div onClick={handleOtherLinksClick} className={styles.category}>
-            Outros
-            <span className={isOtherLinksOpen ? styles.arrowUp : styles.arrowDown} />
-          </div>
-          
-          {isOtherLinksOpen && (
-            <ul className={styles.otherLinks}>
-
-              <li>
-                <Link href="/stockAllAnalyzes">
-                  <a>Analises</a>
-                </Link>
-              </li>
-            </ul>
-          )}
-        </li>
-        <li>
-          <Link href="/quotation">
-            <a>Cotação</a>
+        {isOMSLinksOpen && (
+           <ul className={styles.otherLinks}>
+             <li>
+          <Link href="/orderwaitinggraphic">
+            <a>→Pedidos Pendentes</a>
           </Link>
         </li>
-      </ul>
-      {/* <div className={styles.login}>
-        <input type="text" placeholder="Usuário" />
-        <input type="password" placeholder="Senha" />
-        <button>Entrar</button>
-      </div> */}
+       
+           <li>
+             <Link href="/stockOnOmsChannel">
+               <a>→Estoque por Canal</a>
+             </Link>
+           </li>
+           <li>
+             <Link href="/stockbylocation">
+               <a>→Estoque por Filial</a>
+             </Link>
+           </li>
+           <li>
+          <Link href="/reservations">
+            <a>→Reservas Pendentes</a>
+          </Link>
+        </li>
+         </ul>
+                )}
+      
+     
+         {/* Link GLobal Outros funcionando ok, usar mesma lógica acima */}
+          <div onClick={handleOtherLinksClick} className={styles.category}>
+            <strong>Outros</strong>
+          <span className={isOtherLinksOpen ? styles.arrowUp : styles.arrowDown} />
+          </div>
+
+          {isOtherLinksOpen && (
+           <ul className={styles.otherLinks}>
+           <li>
+             <Link href="/stockAllAnalyzes">
+               <a>→Analises</a>
+             </Link>
+           </li>
+           <li>
+             <Link href="/quotation">
+               <a>→Cotação</a>
+             </Link>
+           </li>
+         </ul>
+                )}
+            </li>
+         </ul>
     </div>
 
 
