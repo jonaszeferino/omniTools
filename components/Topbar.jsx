@@ -18,7 +18,7 @@ export default function Topbar({ title, subTitle }) {
       <div className={styles.login}>
         <input type="text" placeholder="Usuário" />
         <input type="password" placeholder="Senha" />
-        <button className={styles.button}>Entrar</button>
+        <button styles={{backgroundColor: "purple"}}>Entrar</button>
         
       </div>
       

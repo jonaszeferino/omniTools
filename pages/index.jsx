@@ -1,39 +1,22 @@
-import Link from "next/link";
-import Head from "next/head";
+
+import { ChakraProvider } from "@chakra-ui/react";
+import Topbar from "../components/Topbar";
+import TopbarBelow from "../components/TopbarBelow";
+
 export default function Home() {
   return (
     <div>
-      <div style={{ margin: "auto" }}>
-        <Head>
-          <title>Home</title>
-          <meta name="keywords" content=""></meta>
-          <meta name="description" content=""></meta>
-        </Head>
-        <h1>Omni Tools</h1>
-        <br />
-        <Link href="/orderwaitinggraphic">
-          <a>Pedidos Em Espera</a>
-        </Link>
-        <br />
-        <Link href="/reservations">
-          <a>Reservas Em Aberto</a>
-        </Link>
-        <br />
-        <Link href="/quotation">
-          <a>Como funciona a Cotação</a>
-        </Link>
-        <br />
-        <Link href="/stockbylocation">
-          <a>Estoque por filial</a>
-        </Link>
-        <br />
-        <Link href="/stockOnCommerce">
-          <a>Estoque No Linx Commerce</a>
-        </Link>
-        <br />
-        <Link href="/stockAllAnalyzes">
-          <a>Analises</a>
-        </Link>
+      <div>
+
+        <Topbar title="Home " />
+      <TopbarBelow subTitle="Teste" />
+      
+      
+      
+      <ChakraProvider>
+      </ChakraProvider>
+
+
         <br />
       </div>
     </div>

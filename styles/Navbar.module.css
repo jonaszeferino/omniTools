@@ -4,6 +4,7 @@
   align-items: center; /* adicionado para centralizar verticalmente */
   background-color: #fefefe;
   padding: 2px; /* reduzido o valor do padding */
+  list-style-type: none !important;
 }
 
 .topbar a {
@@ -11,22 +12,26 @@
   margin-right: 0.5em;
   text-decoration: none;
   transition: 0.3s;
+  list-style-type: none !important;
 }
 
 .topbar a:hover {
   /* color: rgb(111, 80, 179); */
   color: #fff;
   text-decoration: none;
+  list-style-type: none !important;
 }
 
 .title-container {
   border-bottom: 1px solid black;
   font-size: 18px;
+  list-style-type: none !important;
 }
 
 .login {
   display: flex;
   align-items: center;
+  list-style-type: none !important;
 }
 
 .login input[type="text"],
@@ -36,6 +41,7 @@
   border-radius: 2px;
   border: 1px solid #ccc;
   width: 100%;
+  list-style-type: none !important;
 }
 
 .login button {
@@ -45,19 +51,21 @@
   border: none;
   border-radius: 2px;
   cursor: pointer;
+  list-style-type: none !important;
 }
 .topBarBelow {
   background-image: linear-gradient(to bottom, #d5d5d5, #e5e2e2b0);
   height: 45px;
+  color: black;
 }
 
 /*Teste SideBar*/
 
 .sidebar {
   position: fixed;
-  /* background-color: #b17ce7; */
   background-color: #411e5a;
   color: rgb(147, 147, 147);
+  margin-left: 0%;
   left: 0;
   top: 0;
   height: 100%;
@@ -65,6 +73,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  text-align: left;
 }
 .sidebar div:hover {
   color: white;
@@ -87,4 +96,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+
+.logoContainer {
+  position: absolute;
+  bottom: 0;
+  left: auto;
+  right: auto;
+  margin: auto;
+  text-align: center;
+  align-items: center;
 }
