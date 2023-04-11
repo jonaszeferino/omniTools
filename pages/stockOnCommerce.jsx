@@ -207,6 +207,7 @@ return (
             <Input
               size="md"
               id="test1"
+              maxLength={55}
               value={stockVerication}
               onChange={(event) => setStockVerification(event.target.value)}
             ></Input>

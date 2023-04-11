@@ -213,6 +213,7 @@ export default function Stocks() {
           <InputGroup size="md" mb={5}>
             <InputLeftAddon size="md">Analise</InputLeftAddon>
             <Input
+            maxLength={55}
               size="md"
               id="test1"
               value={stockVerication}
