@@ -107,3 +107,7 @@
   text-align: center;
   align-items: center;
 }
+
+.category {
+  cursor: pointer;
+}

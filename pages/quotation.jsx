@@ -2,6 +2,17 @@ import React, { useState } from "react";
 import styles from "../styles/Home.module.css";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
+import {
+  Button,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  ChakraProvider,
+  Progress,
+  Select,
+  Table, Thead, Tbody, Tr, Th, Td, TableCaption 
+} from "@chakra-ui/react";
 
 
 const Quotation = () => {
@@ -142,9 +153,15 @@ const Quotation = () => {
   };
 
   return (
-    <div>
-      <h1 style={{ color: "red" }}>⚠️ 🚧 Under Constrution 🚧 ⚠️</h1>
-      <h3>
+    <div style={{ maxWidth: "100%", marginLeft: "200px" }}>
+<ChakraProvider>
+<Topbar title="⚠️ 🚧 Under Constrution 🚧 ⚠️" />
+      <TopbarBelow />
+
+      
+      
+     
+      <h3  >
         Demonstração dos Cálculos da Cotação no OMS - Divido em 5 Partes -
       </h3>
       <h4>
@@ -487,6 +504,7 @@ const Quotation = () => {
       <button className={styles.card} onClick={clean}>
         Limpar dados
       </button>
+      </ChakraProvider>
     </div>
   );
 };
