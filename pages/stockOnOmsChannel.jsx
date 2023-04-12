@@ -89,7 +89,8 @@ export default function Stocks() {
   };
  const insertStockData = () => {
     setIsLoading(true);
-    const url = "http://localhost:3000/api/v1/postStockFromOms";
+  //const url = "http://localhost:3000/api/v1/postStockFromOms";
+    const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromOms"
     const options = {
       method: "POST",
       headers: {
