@@ -19,7 +19,7 @@ import {
   ChakraProvider,
   Progress,
   Flex,
-  Table, Thead, Tbody, Tr, Th, Td, TableCaption
+  Table, Thead, Tbody, Tr, Th, Td, TableCaption, Stack,Badge 
 } from "@chakra-ui/react";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
@@ -268,7 +268,11 @@ export default function Reservations() {
             <Td>
               {differenceInDays(new Date(), new Date(reserve.createdAt))}{" "}
               {isOutdated && (
-                <span style={{ color: "red", font: "bold" }}>Atraso</span>
+
+               <Stack direction='row'>
+                  <Badge colorScheme='red'>Alerta</Badge>
+               </Stack>
+        
               )}
             </Td>
             <Td>

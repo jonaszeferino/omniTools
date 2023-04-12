@@ -14,7 +14,7 @@ import {
   ChakraProvider,
   Progress,
   Select,
-  Table, Thead, Tbody, Tr, Th, Td, TableCaption 
+  Table, Thead, Tbody, Tr, Th, Td, TableCaption, Alert, AlertIcon 
 } from "@chakra-ui/react";
 import { CSVLink } from "react-csv";
 
@@ -31,6 +31,9 @@ export default function Stocks() {
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
   let [stockVerication, setStockVerification] = useState("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
+  let [isSave, setIsSave] = useState(false);
+  let [showAlert, setShowAlert] = useState(false);
+
 
   const apiCall = async () => {
     setIsLoading(true);
@@ -83,6 +86,7 @@ export default function Stocks() {
 
   const insertStockData = () => {
     setIsLoading(true);
+    setShowAlert(true);
     const url = "http://localhost:3000/api/v1/postStockFromCommerce";
     const options = {
       method: "POST",
@@ -98,6 +102,7 @@ export default function Stocks() {
           setMessage("Dados inseridos com sucesso!");
           setIsLoading(false);
           setIsSave(true);
+          setShowAlert(false);
         } else {
           setMessage("Erro ao inserir dados");
           setIsLoading(false);
@@ -109,6 +114,18 @@ export default function Stocks() {
         console.log("ver1",error)
       });
   };
+
+  const Clean = () => {
+    setMessage(null);
+    setIsSave(false);
+    setStockChannel(stockChannel);
+    setStockUser(stockUser);
+    setStockVerification("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
+    setStock([]);
+    setDateFile(format(new Date(), "dd_MM_yyyy_HH_mm_ss"));
+    setIsSave(false);
+    setShowAlert(false);
+  }
   
 return (
     <>
@@ -164,7 +181,7 @@ return (
             size="lg"
             mx="auto"
             colorScheme="purple"
-            onClick={apiCall}
+            onClick={() =>{Clean(),apiCall()}}
           >
             Verificar{" "}
           </Button>
@@ -215,6 +232,20 @@ return (
         </FormLabel>
              </>
           ) : null}
+         
+         
+     {showAlert ?<Alert status='info'>
+    <AlertIcon />
+    Aguarde enquanto os dados são salvos...
+  </Alert>
+: null}
+        {isSave ? 
+        <Alert status='success'>
+          <AlertIcon />
+          Analise Salva no banco com Sucesso!
+          {message}
+              </Alert>
+        : null}
           
           <br />
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}

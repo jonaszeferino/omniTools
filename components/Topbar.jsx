@@ -11,8 +11,8 @@ export default function Topbar({ title, subTitle }) {
           </Link>
         </li>
       </ul>
-      <div className={styles.titleContainer}>
-        <h1><strong>{title}</strong></h1>
+      <div >
+        <h1 styles={{ fontWeight: 'bold', fontSize: '3rem' }}><strong>{title}</strong></h1>
         <h2>{subTitle}</h2>
       </div>
       <div className={styles.login}>

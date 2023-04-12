@@ -26,7 +26,7 @@ import {
   StatHelpText,
   StatLabel,
   StatArrow,
-  Table, Thead, Tbody, Tr, Th, Td, TableCaption 
+  Table, Thead, Tbody, Tr, Th, Td, TableCaption , Badge, Stack
 } from "@chakra-ui/react";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
@@ -443,7 +443,9 @@ export default function orders() {
           <Td>
             {differenceInDays(new Date(), new Date(reserve.createdAt))}{" "}
             {isOutdated && (
-              <span style={{ color: "red", font: "bold" }}>Atraso</span>
+                             <Stack direction='row'>
+                             <Badge colorScheme='red'>Alerta</Badge>
+                          </Stack>
             )}
           </Td>
           <Td>
