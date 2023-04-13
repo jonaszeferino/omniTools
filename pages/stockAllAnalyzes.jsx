@@ -153,7 +153,7 @@ export default function Stocks() {
                      maxW="400px"
                   >
                      <TableCaption>
-                        Resultado Dos Últimos 30 Analise OMS
+                        Resultado Das Últimas 30 Analises de Estoque No OMS
                      </TableCaption>
                      <Thead>
                         <Tr>
@@ -198,7 +198,7 @@ export default function Stocks() {
                      maxW="400px"
                   >
                      <TableCaption>
-                        Resultado Dos Últimos 30 Analise Commerce
+                     Resultado Das Últimas 30 Analises de Estoque No Commerce
                      </TableCaption>
                      <Thead>
                         <Tr>
