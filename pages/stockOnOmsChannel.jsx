@@ -13,19 +13,25 @@ import {
   Progress,
   Alert,
   AlertIcon,
-  Table, Thead, Tbody, Tr, Th, Td, TableCaption
-  
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
 } from "@chakra-ui/react";
 import { CSVLink } from "react-csv";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
 
-
 export default function Stocks() {
   let [stock, setStock] = useState([]);
   let [stockUser, setStockUser] = useState("lepostiche");
   let [stockChannel, setStockChannel] = useState("site");
-  let [stockVerication, setStockVerification] = useState("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
+  let [stockVerication, setStockVerification] = useState(
+    "Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados"
+  );
   let [isLoading, setIsLoading] = useState(false);
   let [isSave, setIsSave] = useState(false);
   let [message, setMessage] = useState(false);
@@ -35,8 +41,8 @@ export default function Stocks() {
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
-  
-    const apiCall = async () => {
+
+  const apiCall = async () => {
     setIsLoading(true);
     setDateFile(dateFile);
     try {
@@ -48,12 +54,12 @@ export default function Stocks() {
         body: JSON.stringify({
           channel: stockChannel,
           user: stockUser,
-          }),
+        }),
       });
       const data = await response.json();
       setStock(data);
       setIsLoading(false);
-      
+
       return data;
     } catch (error) {
       console.error(error);
@@ -65,13 +71,13 @@ export default function Stocks() {
     stockCsv.locationId,
     stockCsv.skuId,
     stockCsv.totalQuantity,
-    stockCsv.balance
+    stockCsv.balance,
   ]);
 
   //stockDataInsert
 
   const dataToSend = {
-    stockData: stock.map(item => ({
+    stockData: stock.map((item) => ({
       clientIdOms: item.clientId,
       locationId: item.locationId,
       stockType: item.stockType,
@@ -81,16 +87,14 @@ export default function Stocks() {
       enabled: item.enabled,
       viewId: "item.view_id",
       viewName: stockVerication,
-      skuId: item.skuId,    
-      createdDate: dateNow,  
-     
-
-    }))
+      skuId: item.skuId,
+      createdDate: dateNow,
+    })),
   };
- const insertStockData = () => {
+  const insertStockData = () => {
     setIsLoading(true);
-  //const url = "http://localhost:3000/api/v1/postStockFromOms";
-    const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromOms"
+    const url = "http://localhost:3000/api/v1/postStockFromOms";
+    //const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromOms";
     const options = {
       method: "POST",
       headers: {
@@ -98,7 +102,7 @@ export default function Stocks() {
       },
       body: JSON.stringify(dataToSend),
     };
-      
+
     fetch(url, options)
       .then((response) => {
         if (response.ok) {
@@ -108,12 +112,11 @@ export default function Stocks() {
         } else {
           setMessage("Erro ao inserir dados");
           setIsLoading(false);
-
         }
       })
       .catch((error) => {
         setMessage("Erro ao inserir dados: " + error);
-        console.log("ver1",error)
+        console.log("ver1", error);
       });
   };
 
@@ -122,19 +125,20 @@ export default function Stocks() {
     setIsSave(false);
     setStockChannel(stockChannel);
     setStockUser(stockUser);
-    setStockVerification("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
+    setStockVerification(
+      "Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados"
+    );
     setStock([]);
     setDateFile(format(new Date(), "dd_MM_yyyy_HH_mm_ss"));
     setIsSave(false);
-  }
+  };
 
   return (
     <>
       <ChakraProvider>
-      <Topbar title="Estoque por Canal - OMS " />
-      <TopbarBelow />
-                  
-    
+        <Topbar title="Estoque por Canal - OMS " />
+        <TopbarBelow />
+
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel type="text">
@@ -168,12 +172,13 @@ export default function Stocks() {
             size="lg"
             mx="auto"
             colorScheme="purple"
-            onClick={() =>{Clean(),apiCall()}}
+            onClick={() => {
+              Clean(), apiCall();
+            }}
           >
             Verificar{" "}
           </Button>
-  
-          
+
           {csvData.length > 0 ? (
             <CSVLink
               data={csvData}
@@ -192,87 +197,96 @@ export default function Stocks() {
               >
                 Exportar para CSV
               </Button>
-
             </CSVLink>
           ) : null}
           {csvData.length > 0 ? (
             <>
-                  <Button
-            margin={2}
-            padding={5}
-            rounded={8}
-            size="lg"
-            mx="auto"
-            my={4}
-            ml={4}
-            colorScheme="purple"
-            onClick={() =>{setIsSave(false),insertStockData(dataToSend)}}
-          >
-            Inserir Dados{" "}
-          </Button>
-          <FormLabel type="text">
-          <InputGroup size="md" mb={5}>
-            <InputLeftAddon size="md">Analise</InputLeftAddon>
-            <Input
-            maxLength={55}
-              size="md"
-              id="test1"
-              value={stockVerication}
-              onChange={(event) => setStockVerification(event.target.value)}
-            ></Input>
-          </InputGroup>
-        </FormLabel>
-       
-         {isLoading ?<Alert status='info'>
-    <AlertIcon />
-    Aguarde enquanto os dados são salvos...
-  </Alert>
-: null}
-        {isSave ? 
-        <Alert status='success'>
-          <AlertIcon />
-          Analise Salva no banco com Sucesso!
-          {message}
-              </Alert>
-        : null}
-        </>
+              <Button
+                margin={2}
+                padding={5}
+                rounded={8}
+                size="lg"
+                mx="auto"
+                my={4}
+                ml={4}
+                colorScheme="purple"
+                onClick={() => {
+                  setIsSave(false), insertStockData(dataToSend);
+                }}
+              >
+                Inserir Dados{" "}
+              </Button>
+              <FormLabel type="text">
+                <InputGroup size="md" mb={5}>
+                  <InputLeftAddon size="md">Analise</InputLeftAddon>
+                  <Input
+                    maxLength={55}
+                    size="md"
+                    id="test1"
+                    value={stockVerication}
+                    onChange={(event) =>
+                      setStockVerification(event.target.value)
+                    }
+                  ></Input>
+                </InputGroup>
+              </FormLabel>
+
+              {isLoading ? (
+                <Alert status="info">
+                  <AlertIcon />
+                  Aguarde enquanto os dados são salvos...
+                </Alert>
+              ) : null}
+              {isSave ? (
+                <Alert status="success">
+                  <AlertIcon />
+                  Analise Salva no banco com Sucesso!
+                  {message}
+                </Alert>
+              ) : null}
+            </>
           ) : null}
           <br />
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
-         </div>
-       <br />
+        </div>
+        <br />
         <div style={{ maxWidth: "100%" }}>
           <div
             className={styles.grid}
             style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
           >
-            <Table variant='striped' colorScheme='purple' size='sm' maxW='500px'>
-    <TableCaption>Resultados de estoque</TableCaption>
-  <Thead>
-    <Tr>
-      <Th>Cliente</Th>
-      <Th>Tipo</Th>
-      <Th>Total</Th>
-      <Th>Balanço</Th>
-      <Th>Data</Th>
-      
-      <Th>Sku</Th>
-    </Tr>
-  </Thead>
-  <Tbody>
-    {stock.map((stockView) => (
-      <Tr key={stockView.skuId}>
-        <Td>{stockView.clientId}</Td>
-        <Td>{stockView.stockType}</Td>
-        <Td>{stockView.totalQuantity}</Td>
-        <Td>{stockView.balance}</Td>
-        <Td>{stockView.updatedAt}</Td>
-        
-        <Td>{stockView.skuId}</Td>
-      </Tr>
-    ))}
-  </Tbody>
-</Table>
+            <Table
+              variant="striped"
+              colorScheme="purple"
+              size="sm"
+              maxW="500px"
+            >
+              <TableCaption>Resultados de estoque</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Cliente</Th>
+                  <Th>Tipo</Th>
+                  <Th>Total</Th>
+                  <Th>Balanço</Th>
+                  <Th>Data</Th>
+
+                  <Th>Sku</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {stock.map((stockView) => (
+                  <Tr key={stockView.skuId}>
+                    <Td>{stockView.clientId}</Td>
+                    <Td>{stockView.stockType}</Td>
+                    <Td>{stockView.totalQuantity}</Td>
+                    <Td>{stockView.balance}</Td>
+                    <Td>{stockView.updatedAt}</Td>
+
+                    <Td>{stockView.skuId}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
           </div>
         </div>
       </ChakraProvider>

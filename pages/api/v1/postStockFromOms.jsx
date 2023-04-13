@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     console.log(stockData);
 
     const query =
-      "INSERT INTO stock_channel_oms (clientIdOms, locationId, stockType, totalQuantity, balance, updatedAt, enabled, viewId, viewName, skuId, createdDate ) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
+      "INSERT INTO omnitools.stock_channel_oms (clientIdOms, locationId, stockType, totalQuantity, balance, updatedAt, enabled, viewId, viewName, skuId, createdDate ) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
 
     for (const stock of stockData) {
       const values = [
@@ -32,8 +32,10 @@ export default async function handler(req, res) {
     connection.end();
 
     res.status(200).json({ message: "Dados inseridos com sucesso." });
+    console.log(res.status())
   } catch (error) {
     res.status(500).json({ error: error.message });
+    console.log(error.message)
   }
 }
 

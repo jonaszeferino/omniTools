@@ -20,7 +20,9 @@ import {
   Box,
   Wrap,
   WrapItem,
-  useToast 
+  useToast,
+  Stack
+
 } from "@chakra-ui/react";
 
 export default function Home() {
@@ -45,24 +47,20 @@ export default function Home() {
           Ferramentas de análise e desempenho Omni Channel
           
         </p>
-        <Wrap>
-      {variants.map((variant, i) => (
-        <WrapItem key={i}>
-          <Button
-            onClick={() =>
-              toast({
-                title: variant,
-                variant: variant,
-                isClosable: true,
-                style: { backgroundColor: "green.500" } 
-              })
-            }
-          >
-           {variant}
-          </Button>
-        </WrapItem>
-      ))}
-    </Wrap>
+        <Stack direction='row' spacing={4} align='center'>
+  <Button colorScheme='teal' variant='outline'>
+    Estoque
+  </Button>
+  <Button colorScheme='teal' variant='outline'>
+    Reservas
+  </Button>
+  <Button colorScheme='teal' variant='outline'>
+    Pedidos
+  </Button>
+  <Button colorScheme='teal' variant='outline'>
+    Análises
+  </Button>
+</Stack>
 
 
       </main>
