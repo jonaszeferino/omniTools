@@ -1,38 +1,37 @@
 export default async (req, res) => {
-  const { channel, user, availability } = req.body;
- // const newChannel = "site";
- const newUser = "leposticheoms";
- // const newAvailability = "I";
- // let newSku = 20624;
- //let newUser = user;
- let newChannel = channel;
- let newAvailability = availability;
- let arraySku = ["4054222003431","4019440002431","4019824005111"]
+ const { skus, userCommerce } = req.body;
+ let newUser = userCommerce;
+ let arraySku = skus
+ console.log(arraySku);
+ console.log(newUser);
+ let test = "4000211001441"
+  //${newUser}
 
  try {
-   console.log("stockApi1", req.body);
-
-     const url = `https://${newUser}.layer.core.dcg.com.br/v1/Catalog/API.svc/web/GetSKUsByIntegrationID`;
+   const url = `https://${newUser}.layer.core.dcg.com.br/v1/Catalog/API.svc/web/GetSKUsByIntegrationID`;
+   const body = JSON.stringify(arraySku);
+   
+   console.log("body", body);
+   
    const response = await fetch(url, {
      headers: new Headers({
        Authorization: process.env.NEXT_PUBLIC_COMMERCE,
        "Content-Type": "application/json",
-       "access-control-allow-origin": "*",
        Accept: "application/json",
      }),
      
-     body: JSON.stringify(arraySku),
+     body: body,
      method: "POST",
      
    });
 
    const result = await response.json();
    res.status(200).json(result);
-   console.log("stockApi2", result);
-   console.log("stockApi3", url);
+   console.log(result);
+   console.log(url);
  } catch (error) {
    console.error(error);
-   res.status(500).json({ message: "Ocorreu um erro ao buscar os estoques." });
+   res.status(500).json({ message: "Ocorreu um erro ao buscar os SKUS" });
  }
 };
 

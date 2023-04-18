@@ -1,10 +1,12 @@
 import { connectionRdsMySql } from "../../../components/connectiondb";
 
 export default async function handler(req, res) {
+  const { userOms } = req.body;
   const connection = await connectionRdsMySql();
 
+  //let userOms = 'lepostiche'
   try {
-    const query = "SELECT DISTINCT skuOms, clientNameOms  FROM sku_mapping"
+    const query = `SELECT DISTINCT skuOms FROM sku_mapping where clientNameOms = '${userOms}'`
                   
 
     console.log('aqui', query)

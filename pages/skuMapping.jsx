@@ -1,5 +1,4 @@
 import styles from "../styles/Home.module.css";
-import { format, differenceInDays } from "date-fns";
 import WalkthroughPopover from "./infos/infosStockCommerce";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
@@ -13,120 +12,96 @@ import {
   InputLeftAddon,
   ChakraProvider,
   Progress,
-  Select,
-  Table, Thead, Tbody, Tr, Th, Td, TableCaption, Alert, AlertIcon 
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
-import { CSVLink } from "react-csv";
 
 export default function Stocks() {
-  let [stock, setStock] = useState([]);
-  let [stockUserOms, setStockUserOms] = useState("leposticheoms");
-  let [stockUserCommerce, setStockUserCommerce] = useState("lepostiche");
-  let [stockAvailability, setStockAvailability] = useState();
-  let [stockChannel, setStockChannel] = useState("2");
+  let [skus, setSkus] = useState([]);
+  let [stockUserOms, setStockUserOms] = useState("lepostiche");
+  let [userCommerce, setskuUserCommerce] = useState("leposticheoms");
+  let [selectedSkus, setSelectedSkus] = useState([]);
+
+  let [skusFromCommerce, setSkusFromCommerce] = useState([]);
+
   let [isLoading, setIsLoading] = useState(false);
-  let [isError, setError] = useState(null);
-  let [message,setMessage] = useState();
-  let [dateNow, setDatenow] = useState(new Date());
-  let [dateFile, setDateFile] = useState(
-    format(new Date(), "dd_MM_yyyy_HH_mm_ss")
-  );
- 
+  let [message, setMessage] = useState();
   let [isSave, setIsSave] = useState(false);
   let [showAlert, setShowAlert] = useState(false);
-
-
+  
+  // Passo 1 - Veirifica na tabela de mapping os Skus dinstintos do OMS
   const apiCall = async () => {
     setIsLoading(true);
-    setDateFile(dateFile);
+    
     try {
-      const response = await fetch("getOmsSkusFromMapping", {
+      const response = await fetch("/api/v1/getOmsSkusFromMapping", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          channel: stockChannel,
-          user: stockUser,
-          availability: stockAvailability,
+          userOms: stockUserOms,
         }),
       });
       const data = await response.json();
-      setStock(data.Result);
-      setIsLoading(false);
+      setSkus(data.results);
+      console.log(data.results);
+
+    setIsLoading(false);
+
       return data;
     } catch (error) {
       console.error(error);
     }
   };
-{/* <>
-  // const dataToSend = {
-  //   stockData: stock.map((item) => ({
-  //     ProductID: item.ProductID,
-  //     clientIdCommerce: stockUser,
-  //     OutStockHandlingDays: item.OutStockHandlingDays,
-  //     totalQuantity: item.StockOnHand,
-  //     StockBalance: item.StockBalance,
-  //     updatedAt: item.LastUpdate,
-  //     enabled: item.StockOnHand,
-  //     StockReserved: item.StockReserved,
-  //     WarehouseID: item.WarehouseID,
-  //     WarehouseName: item.WarehouseName,
-  //     availability: item.availability,
-  //     createdDate: dateNow,
-  //     viewName: stockVerication,
-  //   })),
-  // }
 
-  // const insertStockData = () => {
-  //   setIsLoading(true);
-  //   setShowAlert(true);
-  //   //const url = "http://localhost:3000/api/v1/postStockFromCommerce";
-  //   const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromCommerce"
-  //   const options = {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(dataToSend),
-  //   };
-      
-  //   fetch(url, options)
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         setMessage("Dados inseridos com sucesso!");
-  //         setIsLoading(false);
-  //         setIsSave(true);
-  //         setShowAlert(false);
-  //       } else {
-  //         setMessage("Erro ao inserir dados");
-  //         setIsLoading(false);
+  const handleStep1Click = () => {
+    const newSelectedSkus = skus.map((sku) => sku.skuOms);
+    setSelectedSkus(newSelectedSkus);
+  };
+  console.log(selectedSkus);
 
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       setMessage("Erro ao inserir dados: " + error);
-  //       console.log("ver1",error)
-  //     });
-  // };
+  // Acima temos a chamada nos SKUS qeu o OMS analisou, e um array com estes SKUs
+  // Agora aqui abaixo o segundo passo onde vamos consultar os SKUs do Array de Cima no commerce pra saber qual o ProductId
 
-  // const Clean = () => {
-  //   setMessage(null);
-  //   setIsSave(false);
-  //   setStockChannel(stockChannel);
-  //   setStockUser(stockUser);
-  //   setStockVerification("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
-  //   setStock([]);
-  //   setDateFile(format(new Date(), "dd_MM_yyyy_HH_mm_ss"));
-  //   setIsSave(false);
-  //   setShowAlert(false);
-  // }
-  </> */}
-return (
+  const apiCall2 = async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/v1/getSkusFromCommerce", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          skus: selectedSkus,
+          userCommerce: userCommerce,
+        }),
+      });
+      const data = await response.json();
+      setSkusFromCommerce(data);
+      setIsLoading(false);
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  console.log("recebido", skusFromCommerce);
+
+  return (
     <>
       <ChakraProvider>
-      <Topbar title="Ferramenta de Depara dos SKUS" />
-      <TopbarBelow />
+        <Topbar title="Ferramenta de Depara dos SKUS" />
+        <TopbarBelow />
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel type="text">
@@ -146,12 +121,12 @@ return (
               <Input
                 size="md"
                 id="test1"
-                value={stockUserCommerce}
-                onChange={(event) => setStockUserCommerce(event.target.value)}
+                value={userCommerce}
+                onChange={(event) => setskuUserCommerce(event.target.value)}
               ></Input>
             </InputGroup>
           </FormLabel>
-          
+
           <WalkthroughPopover />
         </div>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
@@ -161,26 +136,42 @@ return (
             size="lg"
             mx="auto"
             colorScheme="purple"
-            onClick={() =>{apiCall()}}
+            onClick={() => {
+              apiCall();
+              handleStep1Click();
+            }}
           >
             Passo 1{" "}
           </Button>
-     {showAlert ?<Alert status='info'>
-    <AlertIcon />
-    Aguarde enquanto os dados são salvos...
-  </Alert>
-: null}
-        {isSave ? 
-        <Alert status='success'>
-          <AlertIcon />
-          Analise Salva no banco com Sucesso!
-          {message}
-              </Alert>
-        : null}
-          
+          <Button
+            padding={5}
+            rounded={8}
+            size="lg"
+            mx="auto"
+            colorScheme="purple"
+            onClick={() => {
+              apiCall2();
+            }}
+          >
+            Passo 2{" "}
+          </Button>
+
+          {showAlert ? (
+            <Alert status="info">
+              <AlertIcon />
+              Aguarde enquanto os dados são salvos...
+            </Alert>
+          ) : null}
+          {isSave ? (
+            <Alert status="success">
+              <AlertIcon />
+              Analise Salva no banco com Sucesso!
+              {message}
+            </Alert>
+          ) : null}
+
           <br />
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
-       
         </div>
 
         <br />
@@ -189,31 +180,54 @@ return (
             className={styles.grid}
             style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
           >
-            <Table variant='striped' colorScheme='purple' size='sm' maxW='600px'>
-  <TableCaption>Estoque</TableCaption>
-  <Thead>
-    <Tr>
-      <Th>Warehouse</Th>
-      <Th>Product ID</Th>
-      <Th>Stock Balance</Th>
-      <Th>Availability</Th>
-    </Tr>
-  </Thead>
-  <Tbody>
-    {stock.map((stockView) => (
-      <Tr key={stockView.ProductID}>
-        <Td>{stockView.WarehouseName}</Td>
-        <Td>{stockView.ProductID}</Td>
-        <Td>{stockView.StockBalance}</Td>
-        <Td>{stockView.availability === "I" ? "Habilitado" : "Desabilitado"}</Td>
-      </Tr>
-    ))}
-  </Tbody>
-</Table>
+            <Table
+              variant="striped"
+              colorScheme="purple"
+              size="sm"
+              maxW="600px"
+            >
+              <TableCaption>Skus do OMS na Base dados</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>ClientId OMS</Th>
+                  <Th>SKU</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {skus.map((skusView) => (
+                  <Tr key={skusView.skuOms}>
+                    <Td>{stockUserOms}</Td>
+                    <Td>{skusView.skuOms}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+            <Table
+              variant="striped"
+              colorScheme="purple"
+              size="sm"
+              maxW="600px"
+            >
+              <TableCaption>ProductId do SKU no Commerce</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>ProductID</Th>
+                  <Th>SKU</Th>
+                </Tr>
+              </Thead>
+
+              <Tbody>
+                {skusFromCommerce.map((skusFromCommerceMap) => (
+                  <Tr key={skusFromCommerceMap.SKU}>
+                    <Td>{skusFromCommerceMap.ProductID}</Td>
+                    <Td>{skusFromCommerceMap.SKU}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
           </div>
         </div>
       </ChakraProvider>
     </>
   );
 }
-
