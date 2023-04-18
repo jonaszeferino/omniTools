@@ -25,7 +25,7 @@ export default function Stocks() {
 
     reader.onload = () => {
       const fileContent = reader.result;
-      console.log(fileContent);
+      console.log('import:',fileContent);
       parse(fileContent, {delimiter:';', from_line: 2}, (err, data) => {
         if (err) {
           console.error(err);
@@ -43,7 +43,7 @@ export default function Stocks() {
   return (
     <>
       <ChakraProvider>
-        <Topbar title="Omni Tools" />
+        <Topbar title="Importação dos SKUs do Commerce para Depara" />
         <TopbarBelow />
            <div style={{ maxWidth: "800px", margin: "auto" }}>
             <br/>

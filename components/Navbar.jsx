@@ -122,6 +122,14 @@ export default function Navbar() {
       </Link>
     </div>
   </li>
+  <li>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <Image src="/iconizer-reorder-two-outline.svg" alt="Ícone de Reordenação" width={20} height={20}  />
+      <Link href="/commerceSkuMapping">
+        <a>Depara SKU Commerce</a>
+      </Link>
+    </div>
+  </li>
 </ul>
         )}
       </li>
