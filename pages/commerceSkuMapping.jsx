@@ -26,18 +26,20 @@ import { parse } from "csv-parse";
 export default function Stocks() {
   const [csvData, setCsvData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState(null)
+  const [isSave,setIsSave] = useState(false)
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
-    
+
     reader.onloadstart = () => {
       setIsLoading(true);
     };
     reader.onload = () => {
       const fileContent = reader.result;
       console.log("import:", fileContent);
-      parse(fileContent, { delimiter: ";", from_line: 2 }, (err, data) => {
+      parse(fileContent, { delimiter: ",", from_line: 2 }, (err, data) => {
         if (err) {
           console.error(err);
         } else {
@@ -51,23 +53,24 @@ export default function Stocks() {
     reader.readAsText(file, "UTF-8");
   };
 
+  const dataToSend = {
+    dataToSend: csvData.map((row, index) => {
+      return {
+        productId: row[0],
+        integrationId: row[1],
+        name: row[2],
+        sku: row[3],
+        ean: row[4],
+        clientId: row[5],
+      };
+    })
+  };
 
-  const dataToSend = csvData.map((row, index) => {
-    return {
-      productId: row[0],
-      integrationID: row[1],
-      skuName: row[2],
-      sku: row[3],
-      ean: row[4],
-      clientId: row[5]
-    };
-  });
-
-  // onde será inserido os dados da 
+  // onde será inserido os dados da
   const insertStockData = () => {
     setIsLoading(true);
     const url = "http://localhost:3000/api/v1/postSkusFromCommerce";
-    
+
     const options = {
       method: "POST",
       headers: {
@@ -75,6 +78,7 @@ export default function Stocks() {
       },
       body: JSON.stringify(dataToSend),
     };
+    console.log(JSON.stringify(dataToSend))
 
     fetch(url, options)
       .then((response) => {
@@ -123,6 +127,22 @@ export default function Stocks() {
           </InputGroup>
 
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
+
+          {csvData ? (
+            <Button
+              margin={2}
+              padding={5}
+              rounded={8}
+              size="lg"
+              mx="auto"
+              my={4}
+              ml={4}
+              colorScheme="purple"
+              onClick={() => insertStockData(dataToSend)}
+            >
+              Inserir Dados{" "}
+            </Button>
+          ) : null}
 
           <div>
             {csvData.length > 0 ? (
