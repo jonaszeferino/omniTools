@@ -3,13 +3,25 @@ import WalkthroughPopover from "./infos/infosStockCommerce";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
 import { useState } from "react";
-import { Button,FormLabel,Input,InputLeftAddon,ChakraProvider,
-  Progress,Select,Table,Thead,Tbody,Tr,Th,Td,TableCaption,Alert,AlertIcon,InputGroup, InputLeftElement,Heading,Icon 
+import {
+  Button,
+  Input,
+  ChakraProvider,
+  Progress,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  InputGroup,
+  InputLeftElement,
+  Heading,
+  Icon,
 } from "@chakra-ui/react";
-import { DownloadIcon } from '@chakra-ui/icons'
-import { parse } from 'csv-parse';
-
-
+import { DownloadIcon } from "@chakra-ui/icons";
+import { parse } from "csv-parse";
 
 export default function Stocks() {
   const [csvData, setCsvData] = useState([]);
@@ -18,15 +30,14 @@ export default function Stocks() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
-
+    
     reader.onloadstart = () => {
       setIsLoading(true);
     };
-
     reader.onload = () => {
       const fileContent = reader.result;
-      console.log('import:',fileContent);
-      parse(fileContent, {delimiter:';', from_line: 2}, (err, data) => {
+      console.log("import:", fileContent);
+      parse(fileContent, { delimiter: ";", from_line: 2 }, (err, data) => {
         if (err) {
           console.error(err);
         } else {
@@ -37,7 +48,49 @@ export default function Stocks() {
       });
     };
 
-    reader.readAsText(file, 'UTF-8');
+    reader.readAsText(file, "UTF-8");
+  };
+
+
+  const dataToSend = csvData.map((row, index) => {
+    return {
+      productId: row[0],
+      integrationID: row[1],
+      skuName: row[2],
+      sku: row[3],
+      ean: row[4],
+      clientId: row[5]
+    };
+  });
+
+  // onde será inserido os dados da 
+  const insertStockData = () => {
+    setIsLoading(true);
+    const url = "http://localhost:3000/api/v1/postSkusFromCommerce";
+    
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSend),
+    };
+
+    fetch(url, options)
+      .then((response) => {
+        if (response.ok) {
+          setMessage("Dados inseridos com sucesso!");
+          setIsLoading(false);
+          setIsSave(true);
+        } else {
+          setMessage("Erro ao inserir dados");
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        setMessage("Erro ao inserir dados: " + error);
+        console.log("ver1", error);
+      });
   };
 
   return (
@@ -45,28 +98,29 @@ export default function Stocks() {
       <ChakraProvider>
         <Topbar title="Importação dos SKUs do Commerce para Depara" />
         <TopbarBelow />
-           <div style={{ maxWidth: "800px", margin: "auto" }}>
-            <br/>
-            <br/>
-           <Heading as="h1" size="m" textAlign="center">
-               Insira o Arquivo CSV para fazer o depara dos SKUs Commerce / OMS
-            </Heading>
-            <br/>
-          {/* <InputGroup>
-            <InputLeftElement pointerEvents="none" />
-            <Input type="file" accept=".csv" onChange={handleFileChange} />
-          </InputGroup> */}
+        <div style={{ maxWidth: "800px", margin: "auto" }}>
+          <br />
+          <br />
+          <Heading as="h1" size="m" textAlign="center">
+            Insira o Arquivo CSV para fazer o depara dos SKUs Commerce / OMS
+          </Heading>
+          <br />
 
-<InputGroup>
-  <InputLeftElement pointerEvents="none" />
-  <label>
-    <Button as="span" colorScheme="purple">
-      <Icon as={DownloadIcon} mr="2" />
-      Selecionar arquivo
-    </Button>
-    <Input type="file" accept=".csv" onChange={handleFileChange} display="none" />
-  </label>
-</InputGroup>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none" />
+            <label>
+              <Button as="span" colorScheme="purple">
+                <Icon as={DownloadIcon} mr="2" />
+                Selecionar arquivo
+              </Button>
+              <Input
+                type="file"
+                accept=".csv"
+                onChange={handleFileChange}
+                display="none"
+              />
+            </label>
+          </InputGroup>
 
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
 
