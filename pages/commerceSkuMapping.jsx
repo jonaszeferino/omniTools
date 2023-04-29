@@ -1,5 +1,5 @@
 import styles from "../styles/Home.module.css";
-import WalkthroughPopover from "./infos/infosStockCommerce";
+import WalkthroughPopover from "./infos/infosSkusMapping";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
 import { useState } from "react";
@@ -19,15 +19,19 @@ import {
   InputLeftElement,
   Heading,
   Icon,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { DownloadIcon } from "@chakra-ui/icons";
 import { parse } from "csv-parse";
 
+
 export default function Stocks() {
   const [csvData, setCsvData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState(null)
-  const [isSave,setIsSave] = useState(false)
+  const [message, setMessage] = useState(null);
+  const [isSave, setIsSave] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -63,10 +67,10 @@ export default function Stocks() {
         ean: row[4],
         clientId: row[5],
       };
-    })
+    }),
   };
 
-  // onde será inserido os dados da
+  // onde será inserido os dados dos skus vindos do excell
   const insertStockData = () => {
     setIsLoading(true);
     const url = "http://localhost:3000/api/v1/postSkusFromCommerce";
@@ -78,7 +82,7 @@ export default function Stocks() {
       },
       body: JSON.stringify(dataToSend),
     };
-    console.log(JSON.stringify(dataToSend))
+    console.log(JSON.stringify(dataToSend));
 
     fetch(url, options)
       .then((response) => {
@@ -95,7 +99,29 @@ export default function Stocks() {
         setMessage("Erro ao inserir dados: " + error);
         console.log("ver1", error);
       });
+
+    const totalItems = dataToSend.dataToSend.length;
+    let itemsInserted = 0;
+    const interval = setInterval(() => {
+      itemsInserted++;
+      const progressValue = itemsInserted / totalItems;
+      setProgress(progressValue);
+
+      // Verifica se todos os itens foram inseridos
+      if (itemsInserted === totalItems) {
+        clearInterval(interval);
+        setProgress(1);
+      }
+    }, 500);
   };
+
+  // const Clean = () => {
+  //   setMessage(null);
+  //   setIsSave(false);
+  //   setCsvData([]);
+  //   setIsSave(false);
+  //   setShowAlert(false);
+  // }
 
   return (
     <>
@@ -109,7 +135,7 @@ export default function Stocks() {
             Insira o Arquivo CSV para fazer o depara dos SKUs Commerce / OMS
           </Heading>
           <br />
-
+          <WalkthroughPopover />
           <InputGroup>
             <InputLeftElement pointerEvents="none" />
             <label>
@@ -142,6 +168,22 @@ export default function Stocks() {
             >
               Inserir Dados{" "}
             </Button>
+          ) : null}
+          {progress > 0 && progress < 1 && (
+            <Progress size="xs" value={progress} />
+          )}
+          {isLoading ? (
+            <Alert status="info">
+              <AlertIcon />
+              Aguarde enquanto os dados são salvos...
+            </Alert>
+          ) : null}
+          {isSave ? (
+            <Alert status="success">
+              <AlertIcon />
+              Analise Salva no banco com Sucesso!
+              {message}
+            </Alert>
           ) : null}
 
           <div>

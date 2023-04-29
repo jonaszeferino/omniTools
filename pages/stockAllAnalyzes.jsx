@@ -85,7 +85,16 @@ export default function Stocks() {
       }
    };
 
-   const handleCommerceClick = async () => {
+   const handleCommerceClick1= async () => {
+      try {
+         const data = await apiCallCommerce();
+         setMessage(data.message);
+      } catch (error) {
+         console.error(error);
+         setError(error);
+      }
+   };
+   const handleCommerceClick2= async () => {
       try {
          const data = await apiCallCommerce();
          setMessage(data.message);
@@ -117,7 +126,10 @@ export default function Stocks() {
                   size="lg"
                   mx="auto"
                   colorScheme="purple"
-                  onClick={apiCall}
+                  onClick={() => {
+                     handleCommerceClick1();
+                     apiCall();
+                  }}
                >
                   OMS{" "}
                </Button>
@@ -128,7 +140,7 @@ export default function Stocks() {
                   mx="auto"
                   colorScheme="purple"
                   onClick={() => {
-                     handleCommerceClick();
+                     handleCommerceClick2();
                      apiCall();
                   }}
                >

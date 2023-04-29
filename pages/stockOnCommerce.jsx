@@ -81,14 +81,17 @@ export default function Stocks() {
       availability: item.availability,
       createdDate: dateNow,
       viewName: stockVerication,
-    })),
+})),
   }
 
   const insertStockData = () => {
     setIsLoading(true);
     setShowAlert(true);
-    const url = "http://localhost:3000/api/v1/postStockFromCommerce";
     //const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromCommerce"
+    //const url = "http://localhost:3000/api/v1/mongoDbCommerceStock";
+    const url = "http://localhost:3000/api/v1/postStockFromCommerce";
+    
+
     const options = {
       method: "POST",
       headers: {
@@ -133,9 +136,7 @@ return (
       <ChakraProvider>
       <Topbar title="Estoque por Canal - Linx Commerce" />
       <TopbarBelow />
-                  
-
-        <br />
+  <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel type="text">
             <InputGroup size="md" mb={5}>
@@ -161,7 +162,6 @@ return (
           <FormLabel type="text">
             <InputGroup size="md" mb={5}>
               <InputLeftAddon size="md">Disponibilidade</InputLeftAddon>
-
               <Select
                 size="md"
                 value={stockAvailability}

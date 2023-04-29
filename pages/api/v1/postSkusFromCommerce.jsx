@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     console.log(dataToSend);
     
     const query =
-      "INSERT INTO sku_commerce (productId, integrationId, name, sku, ean, clientId) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO sku_commerce (productId, integrationId, name, sku, ean, clientId) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE productId = VALUES(productId), integrationId = VALUES(integrationId),name = VALUES(name),ean = VALUES(ean);";
 
     for (const dataSend of dataToSend) {
       const values = [

@@ -1,11 +1,12 @@
 import  client  from "../../../mongoconnection"
 
 export default async function handler(req, res) {
-  const collection = client.db("omnitools").collection("commerceSkus");
+  const collection = client.db("omnitools").collection("commerceStock");
 
   switch (req.method) {
     case "POST":
-      const body = JSON.parse(req.body);
+      const body = (req.body);
+      //const body = JSON.parse(req.body);
       console.log(body)
       const inPutMongo = await collection.insertOne(body); // iserir azar
       res.json({
