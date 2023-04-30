@@ -32,6 +32,7 @@ export default function Stocks() {
   const [message, setMessage] = useState(null);
   const [isSave, setIsSave] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [csvImport, setCsvImport] = useState(false);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -39,14 +40,17 @@ export default function Stocks() {
 
     reader.onloadstart = () => {
       setIsLoading(true);
+      setCsvImport(true);
     };
     reader.onload = () => {
+      
       const fileContent = reader.result;
       console.log("import:", fileContent);
       parse(fileContent, { delimiter: ",", from_line: 2 }, (err, data) => {
         if (err) {
           console.error(err);
         } else {
+          
           setCsvData(data);
           console.log(data); // imprime os dados do CSV armazenados no estado csvData
         }
@@ -154,7 +158,7 @@ export default function Stocks() {
 
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
 
-          {csvData ? (
+          {csvImport ? (
             <Button
               margin={2}
               padding={5}
@@ -166,9 +170,10 @@ export default function Stocks() {
               colorScheme="purple"
               onClick={() => insertStockData(dataToSend)}
             >
-              Inserir Dados{" "}
+              Salvar Depara no BD{" "}
             </Button>
           ) : null}
+          
           {progress > 0 && progress < 1 && (
             <Progress size="xs" value={progress} />
           )}
@@ -181,7 +186,7 @@ export default function Stocks() {
           {isSave ? (
             <Alert status="success">
               <AlertIcon />
-              Analise Salva no banco com Sucesso!
+              Analise Salva no banco com Sucesso!{" "}
               {message}
             </Alert>
           ) : null}

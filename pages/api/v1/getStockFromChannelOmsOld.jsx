@@ -26,7 +26,7 @@ export default async (req, res) => {
 
   try {
     console.log("stockApi4", req.body);
-    const url = `https://production-inventory.omniplat.io/v1/clients/${newUser}/stocks?&channelId=${newChannel}&page=3&perpage=500`;
+    const url = `https://production-inventory.omniplat.io/v1/clients/${newUser}/stocks?&channelId=${newChannel}&page=1&perpage=500`;
     const response = await fetch(url, {
       headers: new Headers({
         Authorization: authorizationValue,

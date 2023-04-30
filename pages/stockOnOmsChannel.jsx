@@ -82,7 +82,7 @@ export default function Stocks() {
       locationId: item.locationId,
       stockType: item.stockType,
       totalQuantity: item.totalQuantity,
-      balance: item.balance,
+      balance: item.availableQuantity,
       updatedAt: item.updatedAt,
       enabled: item.enabled,
       viewId: "item.view_id",
@@ -91,6 +91,10 @@ export default function Stocks() {
       createdDate: dateNow,
     })),
   };
+
+  // no oms ai inves do stockbalance pegamos o availableQuantity pois é desse valor que o commerce pega as infos por canal
+
+  
   const insertStockData = () => {
     setIsLoading(true);
     const url = "http://localhost:3000/api/v1/postStockFromOms";

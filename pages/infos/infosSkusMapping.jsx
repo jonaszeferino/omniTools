@@ -20,7 +20,7 @@ export default function WalkthroughPopover() {
     "O arquivo pode ter até 50 MB de tamanho e pode ser baixado no Linx Commerce através do link https://loja.admin.core.dcg.com.br/#/Catalog/ProductImportAndExport/. Ao exportar, é necessário marcar a opção \"Exportar também as variações (SKUs)\".",
     "Os nomes das colunas no arquivo não precisam ser idênticos, mas precisam seguir a ordem das informações necessárias.",
     "Portanto, do arquivo exportado, é necessário apenas as seguintes colunas, nessa ordem: ProductID (SKU), Código de Integração do SKU, Nome do SKU, Código de Referência do SKU, EAN do SKU e, após excluir todas as outras colunas, deixar a última com o TenantId do Cliente (por exemplo: leposticheoms).",
-    "Você pode baixar um modelo de Excel com as colunas necessárias neste link: "
+    "Obs.: É encessário deixar apenas as colunas citadas. Você pode baixar um modelo do CSV com as colunas necessárias neste link: "
   ];
 
   const handleNextPage = () => {

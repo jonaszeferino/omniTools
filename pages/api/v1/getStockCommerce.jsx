@@ -28,7 +28,7 @@ export default async (req, res) => {
       body: JSON.stringify({
         Page: {
           PageIndex: 0,
-          PageSize: 200,
+          PageSize: 500,
         },
         // Where: `ProductID == ${newSku} && WarehouseId == ${newChannel}` por productid,
         // Where: `WarehouseId == ${newChannel} && availability == "${newAvailability}"`,
