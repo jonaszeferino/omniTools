@@ -3,252 +3,293 @@ import styles from "../styles/Home.module.css";
 import { format } from "date-fns-tz";
 import { useState } from "react";
 import {
-   Button,
-   Heading,
-   ChakraProvider,
-   Progress,
-   Table,
-   Thead,
-   Tbody,
-   Tr,
-   Th,
-   Td,
-   TableCaption,
-   Checkbox,
-   Flex,
-   Box,
+  Button,
+  Heading,
+  ChakraProvider,
+  Progress,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  Checkbox,
 } from "@chakra-ui/react";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
 
 export default function Stocks() {
-   let [analyzes, setAnalyzes] = useState([]);
-   let [isLoading, setIsLoading] = useState(false);
-   let [message, setMessage] = useState(false);
-   let [isError, setError] = useState(null);
-   let [selectedAnalyzes, setSelectedAnalyzes] = useState([]);
-   let [analyzesCommerce, setAnalyzesCommerce] = useState([]);
-   let [selectedRow, setSelectedRow] = useState(null);
-   let [selectedRowCoomerce, setSelectedRowCommerce] = useState(null);
+  let [analyzes, setAnalyzes] = useState([]);
+  let [isLoading, setIsLoading] = useState(false);
+  let [message, setMessage] = useState(false);
+  let [isError, setError] = useState(null);
+  let [selectedAnalyzes, setSelectedAnalyzes] = useState([]);
+  let [verifications, setVerifications] = useState([]);
+  let [analyzesCommerce, setAnalyzesCommerce] = useState([]);
+  let [analysisCommerce, setAnalysisCommerce] = useState(null);
+  let [analysisOms, setAnalysisOms] = useState(null);
+  let [selectedRowCoomerce, setSelectedRowCommerce] = useState(null);
 
-   const apiCall = async () => {
-      setIsLoading(true);
-      try {
-         const response = await fetch("/api/v1/getStockAnalyzesOms", {
-            method: "GET",
-            headers: {
-               "Content-Type": "application/json",
-            },
-         });
-         if (!response.ok) {
-            throw new Error("Erro ao buscar os dados.");
-         }
-         const data = await response.json();
-         setAnalyzes(data.results);
+  const apiCall = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/v1/getStockAnalyzesOms", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os dados.");
+      }
+      const data = await response.json();
+      setAnalyzes(data.results);
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      console.error(error);
+      setError(error);
+      setIsLoading(false);
+    }
+  };
+
+  const apiCallCommerce = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/v1/getStockAnalyzesCommerce", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os dados.");
+      }
+      const data = await response.json();
+      setAnalyzesCommerce(data.results);
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      console.error(error);
+      setError(error);
+      setIsLoading(false);
+    }
+  };
+
+  const dataToSend = {
+   omsAnalysis: analysisOms,
+   commerceAnalysis: analysisCommerce,
+ };
+
+  const apiCallVerification = () => {
+   setIsLoading(true);
+   const url = "http://localhost:3000/api/v1/getStockVerificationCommerceOms";
+   //const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromOms";
+   const options = {
+     method: "POST",
+     headers: {
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify(dataToSend),
+   };
+
+   fetch(url, options)
+     .then((response) => {
+       if (response.ok) {
          setIsLoading(false);
-         return data;
-      } catch (error) {
-         console.error(error);
-         setError(error);
+         setIsSave(true);
+       } else {
+         setMessage("Erro ao inserir dados");
          setIsLoading(false);
-      }
-   };
+       }
+     })
+     .catch((error) => {
+       setMessage("Erro ao inserir dados: " + error);
+       console.log("ver1", error);
+     });
+ };
+  
+ // verificação do checkbox
+  const handleCheckboxChangeOms = (event, analyzesStockView) => {
+    if (event.target.checked) {
+      setAnalysisOms(analyzesStockView.viewName);
+    } else {
+      setAnalysisOms(null);
+    }
+  };
+  const handleCheckboxChangeCommerce = (event, analyzesStockView) => {
+    if (event.target.checked) {
+      setAnalysisCommerce(analyzesStockView.viewNameCommerce);
+    } else {
+      setAnalysisCommerce(null);
+    }
+  };
 
-   const handleSelect = (event, analyze) => {
-      if (event.target.checked) {
-         setSelectedAnalyzes([...selectedAnalyzes, analyze]);
-      } else {
-         setSelectedAnalyzes(selectedAnalyzes.filter((a) => a !== analyze));
-      }
-   };
+  console.log("commerce", analysisCommerce);
+  console.log("oms", analysisOms);
 
-   const apiCallCommerce = async () => {
-      setIsLoading(true);
-      try {
-         const response = await fetch("/api/v1/getStockAnalyzesCommerce", {
-            method: "GET",
-            headers: {
-               "Content-Type": "application/json",
-            },
-         });
-         if (!response.ok) {
-            throw new Error("Erro ao buscar os dados.");
-         }
-         const data = await response.json();
-         setAnalyzesCommerce(data.results);
-         setIsLoading(false);
-         return data;
-      } catch (error) {
-         console.error(error);
-         setError(error);
-         setIsLoading(false);
-      }
-   };
+  return (
+    <>
+      <ChakraProvider>
+        <Topbar title="Analises " />
+        <TopbarBelow />
+        <Heading as="h1" size="m" textAlign="center">
+          ⚠️ 🚧 Em construção 🚧 ⚠️
+        </Heading>
+        <br />
+        <div
+          style={{
+            maxWidth: "800px",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
+          <Button
+            padding={5}
+            rounded={8}
+            size="lg"
+            mx="auto"
+            colorScheme="purple"
+            onClick={() => {
+              apiCall();
+            }}
+          >
+            OMS{" "}
+          </Button>
+          <Button
+            padding={5}
+            rounded={8}
+            size="lg"
+            mx="auto"
+            colorScheme="purple"
+            onClick={() => {
+              apiCallCommerce();
+            }}
+          >
+            Commerce{" "}
+          </Button>
 
-   const handleCommerceClick1= async () => {
-      try {
-         const data = await apiCallCommerce();
-         setMessage(data.message);
-      } catch (error) {
-         console.error(error);
-         setError(error);
-      }
-   };
-   const handleCommerceClick2= async () => {
-      try {
-         const data = await apiCallCommerce();
-         setMessage(data.message);
-      } catch (error) {
-         console.error(error);
-         setError(error);
-      }
-   };
+          <Button
+            padding={5}
+            rounded={8}
+            size="lg"
+            mx="auto"
+            colorScheme="purple"
+            onClick={() => {
+               apiCallVerification();
+            }}
+          >
+            Verificação{" "}
+          </Button>
 
-   return (
-      <>
-         <ChakraProvider>
-            <Topbar title="Analises " />
-            <TopbarBelow />
-            <Heading as="h1" size="m" textAlign="center">
-               ⚠️ 🚧 Em construção 🚧 ⚠️
-            </Heading>
-            <br />
-            <div
-               style={{
-                  maxWidth: "800px",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-               }}
+          <br />
+          {isLoading ? <Progress size="xs" isIndeterminate /> : null}
+        </div>
+
+        <br />
+        <br />
+
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              width: "50%",
+              marginLeft: "200px",
+              maxWidth: "880px",
+              marginRight: "10px",
+            }}
+          >
+            <Table
+              variant="striped"
+              colorScheme="purple"
+              size="sm"
+              maxW="400px"
             >
-               <Button
-                  padding={5}
-                  rounded={8}
-                  size="lg"
-                  mx="auto"
-                  colorScheme="purple"
-                  onClick={() => {
-                     handleCommerceClick1();
-                     apiCall();
-                  }}
-               >
-                  OMS{" "}
-               </Button>
-               <Button
-                  padding={5}
-                  rounded={8}
-                  size="lg"
-                  mx="auto"
-                  colorScheme="purple"
-                  onClick={() => {
-                     handleCommerceClick2();
-                     apiCall();
-                  }}
-               >
-                  Commerce{" "}
-               </Button>
-
-               <br />
-               {isLoading ? <Progress size="xs" isIndeterminate /> : null}
-            </div>
-
-            <br />
-            <br />
-
-            <div style={{ display: "flex" }}>
-               <div style={{ width: "50%", marginLeft: "200px", maxWidth:"880px", marginRight:"10px"}}>
-                
-                
-                  <Table
-                     variant="striped"
-                     colorScheme="purple"
-                     size="sm"
-                     maxW="400px"
-                  >
-                     <TableCaption>
-                        Resultado Das Últimas 30 Analises de Estoque No OMS
-                     </TableCaption>
-                     <Thead>
-                        <Tr>
-                           <Th>Selecione</Th>
-                           <Th>Plataforma</Th>
-                           <Th>Nome do teste</Th>
-                           <Th>Cliente</Th>
-                           <Th>Data</Th>
-                        </Tr>
-                     </Thead>
-                     <Tbody>
-                        {analyzes.map((analyzesStockView, index) => (
-                           <Tr
-                              key={analyzesStockView.clientIdOms}
-                              onClick={() => setSelectedRow(index)}
-                              backgroundColor={
-                                 selectedRow === index ? "gray.100" : ""
-                              }
-                           >
-                              <Td>
-                                 <Checkbox isChecked={selectedRow === index} />
-                              </Td>
-                              <Td>OMS</Td>
-                              <Td>{analyzesStockView.viewName}</Td>
-                              <Td>{analyzesStockView.clientIdOms}</Td>
-                              <Td>
-                                 {format(
-                                    new Date(analyzesStockView.createdDate),
-                                    "dd/MM/yyyy HH:mm"
-                                 )}
-                              </Td>
-                           </Tr>
-                        ))}
-                     </Tbody>
-                  </Table>
-               </div>
-               <div style={{ width: "60%", marginLeft: "10px"  }}>
-                  <Table
-                     variant="striped"
-                     colorScheme="purple"
-                     size="sm"
-                     maxW="400px"
-                  >
-                     <TableCaption>
-                     Resultado Das Últimas 30 Analises de Estoque No Commerce
-                     </TableCaption>
-                     <Thead>
-                        <Tr>
-                           <Th>Selecione</Th>
-                           <Th>Plataforma</Th>
-                           <Th>Nome do teste</Th>
-                           <Th>Cliente</Th>
-                           <Th>Data</Th>
-                        </Tr>
-                     </Thead>
-                     <Tbody>
-                        {analyzesCommerce.map((analyzesCommerceView, index) => (
-                           <Tr
-                              key={analyzesCommerceView.clientIdCommerce}
-                              onClick={() => setSelectedRowCommerce(index)}
-                              backgroundColor={
-                                 selectedRow === index ? "gray.100" : ""
-                              }
-                           >
-                              <Td>
-                                 <Checkbox isChecked={selectedRow === index} />
-                              </Td>
-                              <Td>Commerce</Td>
-                              <Td>{analyzesCommerceView.viewName}</Td>
-                              <Td>{analyzesCommerceView.clientIdCommerce}</Td>
-                              <Td>
-                                 {format(
-                                    new Date(analyzesCommerceView.createdDate),
-                                    "dd/MM/yyyy HH:mm"
-                                 )}
-                              </Td>
-                           </Tr>
-                        ))}
-                     </Tbody>
-                  </Table>
-               </div>
-            </div>
-         </ChakraProvider>
-      </>
-   );
+              <TableCaption>
+                Resultado Das Últimas 30 Analises de Estoque No OMS
+              </TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Selecione</Th>
+                  <Th>Plataforma</Th>
+                  <Th>Nome do teste</Th>
+                  <Th>Cliente</Th>
+                  <Th>Data</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {analyzes.map((analyzesStockView) => (
+                  <Tr key={analyzesStockView.clientIdOms}>
+                    <Td>
+                      <Checkbox
+                        onChange={(event) =>
+                          handleCheckboxChangeOms(event, {
+                            viewName: analyzesStockView.viewName,
+                          })
+                        }
+                      />
+                    </Td>
+                    <Td>OMS</Td>
+                    <Td>{analyzesStockView.viewName}</Td>
+                    <Td>{analyzesStockView.clientIdOms}</Td>
+                    <Td>
+                      {format(
+                        new Date(analyzesStockView.createdDate),
+                        "dd/MM/yyyy HH:mm"
+                      )}
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </div>
+          <div style={{ width: "60%", marginLeft: "10px" }}>
+            <Table
+              variant="striped"
+              colorScheme="purple"
+              size="sm"
+              maxW="400px"
+            >
+              <TableCaption>
+                Resultado Das Últimas 30 Analises de Estoque No Commerce
+              </TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Selecione</Th>
+                  <Th>Plataforma</Th>
+                  <Th>Nome do teste</Th>
+                  <Th>Cliente</Th>
+                  <Th>Data</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {analyzesCommerce.map((analyzesCommerceView) => (
+                  <Tr key={analyzesCommerceView.clientIdCommerce}>
+                    <Td>
+                      <Checkbox
+                        onChange={(event) =>
+                          handleCheckboxChangeCommerce(event, {
+                            viewNameCommerce: analyzesCommerceView.viewName,
+                          })
+                        }
+                      />
+                    </Td>
+                    <Td>Commerce</Td>
+                    <Td>{analyzesCommerceView.viewName}</Td>
+                    <Td>{analyzesCommerceView.clientIdCommerce}</Td>
+                    <Td>
+                      {format(
+                        new Date(analyzesCommerceView.createdDate),
+                        "dd/MM/yyyy HH:mm"
+                      )}
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </div>
+        </div>
+      </ChakraProvider>
+    </>
+  );
 }

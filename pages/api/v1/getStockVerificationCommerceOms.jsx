@@ -5,8 +5,10 @@ export default async function handler(req, res) {
   
   const { omsAnalysis, commerceAnalysis } = req.body;
 
-  // let omsAnalysis = 'analise_20_04_lepostiche';
-  // let commerceAnalysis = 'teste_20_04_23';
+  console.log(req.body)
+  console.log(omsAnalysis)
+  console.log(commerceAnalysis)
+  
 
   try {
     const query = `SELECT distinct 
@@ -20,10 +22,10 @@ export default async function handler(req, res) {
     JOIN (
        SELECT skuId, SUM(balance) AS balance, viewName
        FROM stock_channel_oms
-       WHERE viewName = 'stock_oms_30_04_23'
+       WHERE viewName = '${omsAnalysis}'
        GROUP BY skuId, viewName) 
     oms ON oms.skuId = sc.sku
-    WHERE scc.viewName = 'stock_commerce_30_04_23'`
+    WHERE scc.viewName = '${commerceAnalysis}'`
 
     console.log('aqui', query)
     const values = [];
