@@ -27,8 +27,8 @@ export default function Stocks() {
   let [selectedAnalyzes, setSelectedAnalyzes] = useState([]);
   let [verifications, setVerifications] = useState([]);
   let [analyzesCommerce, setAnalyzesCommerce] = useState([]);
-  let [analysisCommerce, setAnalysisCommerce] = useState(null);
-  let [analysisOms, setAnalysisOms] = useState(null);
+  let [analysisCommerce, setAnalysisCommerce] = useState("");
+  let [analysisOms, setAnalysisOms] = useState("");
   let [selectedRowCoomerce, setSelectedRowCommerce] = useState(null);
 
   const apiCall = async () => {
@@ -77,40 +77,31 @@ export default function Stocks() {
     }
   };
 
-  const dataToSend = {
-   omsAnalysis: analysisOms,
-   commerceAnalysis: analysisCommerce,
- };
+  const apiCallVerification = async () => {
+    setIsLoading(true);
 
-  const apiCallVerification = () => {
-   setIsLoading(true);
-   const url = "http://localhost:3000/api/v1/getStockVerificationCommerceOms";
-   //const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromOms";
-   const options = {
-     method: "POST",
-     headers: {
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify(dataToSend),
-   };
+    try {
+      const response = await fetch("/api/v1/getStockVerificationCommerceOms", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          omsAnalysis: analysisOms,
+          commerceAnalysis: analysisCommerce,
+        }),
+      });
 
-   fetch(url, options)
-     .then((response) => {
-       if (response.ok) {
-         setIsLoading(false);
-         setIsSave(true);
-       } else {
-         setMessage("Erro ao inserir dados");
-         setIsLoading(false);
-       }
-     })
-     .catch((error) => {
-       setMessage("Erro ao inserir dados: " + error);
-       console.log("ver1", error);
-     });
- };
-  
- // verificação do checkbox
+      const data = await response.json();
+      setVerifications(data.results);
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // verificação do checkbox
   const handleCheckboxChangeOms = (event, analyzesStockView) => {
     if (event.target.checked) {
       setAnalysisOms(analyzesStockView.viewName);
@@ -155,7 +146,7 @@ export default function Stocks() {
               apiCall();
             }}
           >
-            OMS{" "}
+            OMS 1{" "}
           </Button>
           <Button
             padding={5}
@@ -167,7 +158,7 @@ export default function Stocks() {
               apiCallCommerce();
             }}
           >
-            Commerce{" "}
+            Commerce 2{" "}
           </Button>
 
           <Button
@@ -177,10 +168,10 @@ export default function Stocks() {
             mx="auto"
             colorScheme="purple"
             onClick={() => {
-               apiCallVerification();
+              apiCallVerification();
             }}
           >
-            Verificação{" "}
+            Verificação 3{" "}
           </Button>
 
           <br />
@@ -290,6 +281,53 @@ export default function Stocks() {
           </div>
         </div>
       </ChakraProvider>
+      <div>
+        <div
+          style={{ width: "100%", marginLeft: "680px", marginRight: "auto" }}
+        >
+          <ChakraProvider>
+            <Table
+              variant="striped"
+              colorScheme="purple"
+              size="sm"
+              maxW="400px"
+            >
+              <TableCaption>Resultado Da verificação</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>Status</Th>
+                  <Th>SKU</Th>
+                  <Th>Estoque Commerce</Th>
+
+                  <Th>Estoque OMS</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {verifications.map((verificationsViewer) => (
+                  <Tr key={verificationsViewer.sku}>
+                    <Td>
+                      {parseInt(verificationsViewer.BalanceCommerce) ===
+                      parseInt(verificationsViewer.balanceOMS) ? (
+                        <span style={{ fontWeight: "bold", color: "blue" }}>
+                          OK
+                        </span>
+                      ) : (
+                        <span style={{ fontWeight: "bold", color: "red" }}>
+                          Erro
+                        </span>
+                      )}
+                    </Td>
+
+                    <Td>{verificationsViewer.sku}</Td>
+                    <Td>{verificationsViewer.BalanceCommerce}</Td>
+                    <Td>{verificationsViewer.balanceOMS}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </ChakraProvider>
+        </div>
+      </div>
     </>
   );
 }
