@@ -19,7 +19,7 @@ export default function Topbar({ title, subTitle }) {
         </li>
       </ul>
       <div >
-        <h1 styles={{ fontWeight: 'bold', fontSize: '3rem' }}><strong>{title}</strong></h1>
+        <h1 styles={{ fontWeight: 'bold', fontSize: '2rem' }}><strong>{title}</strong></h1>
         <h2>{subTitle}</h2>
       </div>
       <ChakraProvider>

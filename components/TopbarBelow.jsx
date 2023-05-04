@@ -8,7 +8,7 @@ export default function TopbarBelow({ subTitle }) {
     
 <>
     <ChakraProvider>
-    <Box ml="196px" borderWidth="2px" borderColor="black">
+    <Box ml="196px" borderWidth="1px" borderColor="grey">
       <Divider orientation='horizontal' />
          </Box>
     </ChakraProvider>

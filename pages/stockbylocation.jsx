@@ -16,7 +16,6 @@ import { CSVLink } from "react-csv";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
 
-
 export default function Stocks() {
   let [stock, setStock] = useState([]);
   let [stockUser, setStockUser] = useState("lepostiche");
@@ -24,6 +23,8 @@ export default function Stocks() {
   let [stockLocation, setStockLocation] = useState(190410);
   let [isLoading, setIsLoading] = useState(false);
   let [isError, setError] = useState(null);
+  let [locations, setLocations] = useState([]);
+  let [channels, setChannels] = useState([]);
 
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
@@ -44,17 +45,61 @@ export default function Stocks() {
           user: stockUser,
         }),
       });
-
       const data = await response.json();
       setStock(data);
-
       setIsLoading(false);
-      // console.log("client", data);
       return data;
     } catch (error) {
       console.error(error);
     }
   };
+
+  const apiCallChannels = async () => {
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch("/api/v1/getOmsChannels", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: stockUser
+        }),
+      });
+      const data = await response.json();
+      setChannels(data);
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  console.log(channels)
+
+  const apiCallLocations = async () => {
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch("/api/v1/getOmsLocations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: stockUser
+        }),
+      });
+      const data = await response.json();
+      setLocations(data);
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  console.log(locations)
 
   const csvData = stock.map((stockCsv) => [
     stockCsv.clientId,
@@ -67,16 +112,6 @@ export default function Stocks() {
     stockCsv.availableQuantity,
     format(new Date(), "dd/MM/yyyy HH:mm:ss"),
   ]);
-
-  // console.log("aqui", stock);
-  // console.log(
-  //   "aqui",
-  //   JSON.stringify({
-  //     location: stockLocation,
-  //     channel: stockChannel,
-  //     user: stockUser,
-  //   })
-  // );
 
   return (
     <>
@@ -92,6 +127,7 @@ export default function Stocks() {
                 size="md"
                 value={stockUser}
                 onChange={(event) => setStockUser(event.target.value)}
+                onBlur={apiCallChannels}
               ></Input>
             </InputGroup>
           </FormLabel>
@@ -102,6 +138,7 @@ export default function Stocks() {
                 size="md"
                 value={stockChannel}
                 onChange={(event) => setStockChannel(event.target.value)}
+                onBlur={apiCallLocations}
               ></Input>
             </InputGroup>
           </FormLabel>

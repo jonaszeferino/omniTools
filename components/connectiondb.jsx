@@ -30,7 +30,7 @@ export async function connectionRdsMySql() {
 // Nome de usuário: adminomni
 // Email: jonas.zeferino@linx.com.br
 
-//antigo limtado a 5mb 
+//antigo limitado a 5mb 
 //dataBase location - limite 5mb
 //https://www.freemysqlhosting.net/account/ 
 
