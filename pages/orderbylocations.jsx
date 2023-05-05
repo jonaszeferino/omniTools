@@ -124,6 +124,23 @@ export default function orders() {
             onChange={(event) => setOrderUser(event.target.value)}
           ></input>
         </label>
+        <FormLabel type="text">
+            <InputGroup size="md" mb={5}>
+              <InputLeftAddon size="md">Location</InputLeftAddon>
+              <Select
+                size="md"
+                value={stockLocation}
+                onChange={(event) => setOrderLocationId(event.target.value)}
+              >
+                {locations.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.id}{" - "}{item.name}
+                    
+                  </option>
+                ))}
+              </Select>
+            </InputGroup>
+          </FormLabel>
         <label type="text">
           LocationID:
           <input

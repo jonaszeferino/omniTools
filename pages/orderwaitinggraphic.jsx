@@ -26,7 +26,7 @@ import {
   StatHelpText,
   StatLabel,
   StatArrow,
-  Table, Thead, Tbody, Tr, Th, Td, TableCaption , Badge, Stack
+  Table, Thead, Tbody, Tr, Th, Td, TableCaption , Badge, Stack, Select
 } from "@chakra-ui/react";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
@@ -42,6 +42,7 @@ export default function orders() {
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
+  let [locations,setLocations] = useState([])
 
   const apiCall = (event) => {
     setIsLoading(true);
@@ -103,15 +104,12 @@ export default function orders() {
       )
       .catch((error) => setError(true));
   };
-  console.log("ordeStock:" + orderStock);
-  console.log("ordeStockData:" + orderStock.data);
-
+  
   const csvData = orderStock.map((orders) => [
     orders.clientId,
     orders.orderId,
     orders.locationId,
     orders.channelId,
-
     orders.createdAt
       ? format(new Date(orders.createdAt), "dd/MM/yyyy HH:mm:ss")
       : "",
@@ -130,7 +128,7 @@ export default function orders() {
   };
 
   useEffect(() => {
-    console.log("isLoading alterado:", isLoading);
+   
   }, [isLoading]);
 
   // graphics
@@ -160,7 +158,6 @@ export default function orders() {
 
     return [
       createdAt,
-
       isGreaterThan5Days,
       isGreaterThan10Days,
       isGreaterThan20Days,
@@ -205,6 +202,28 @@ export default function orders() {
   let orderPercentOk = (totalOk * 100) / totalOrders;
   let orderPercentAlert = (totalAlert * 100) / totalOrders;
 
+  const apiCallLocations = async () => {
+    setIsLoading(true);
+     try {
+      const response = await fetch("/api/v1/getOmsLocations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: orderUser,
+        }),
+      });
+      const data = await response.json();
+      setLocations(data);
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  console.log(locations)
+
   return (
     <>
       <ChakraProvider>
@@ -220,15 +239,25 @@ export default function orders() {
                 id="clientId"
                 value={orderUser}
                 onChange={(event) => setOrderUser(event.target.value)}
+                onBlur={apiCallLocations}
               ></Input>
-              <InputLeftAddon size="md">LocationID:</InputLeftAddon>{" "}
-              <Input
+                           
+             <InputLeftAddon size="md">Location</InputLeftAddon>
+             <Select
                 size="md"
                 value={orderLocation}
                 onChange={(event) => setOrderLocationId(event.target.value)}
-              ></Input>
+              >
+                {locations.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.id}{" - "}{item.name}
+                    
+                  </option>
+                ))}
+              </Select>
             </InputGroup>
-          </FormLabel>
+            </FormLabel>
+    
         </div>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <Button

@@ -99,6 +99,7 @@ export default function Stocks() {
       });
       const data = await response.json();
       setLocations(data);
+      locations.sort((a, b) => a.id - b.id);
       setIsLoading(false);
       return data;
     } catch (error) {
@@ -119,6 +120,8 @@ export default function Stocks() {
     stockCsv.availableQuantity,
     format(new Date(), "dd/MM/yyyy HH:mm:ss"),
   ]);
+
+  
 
   return (
     <>
@@ -166,6 +169,7 @@ export default function Stocks() {
                 {locations.map((item, index) => (
                   <option key={index} value={item.id}>
                     {item.id}{" - "}{item.name}
+                    
                   </option>
                 ))}
               </Select>
