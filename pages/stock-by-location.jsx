@@ -41,7 +41,7 @@ export default function Stocks() {
     setIsLoading(true);
     setDateFile(dateFile);
     try {
-      const response = await fetch("/api/v1/stock", {
+      const response = await fetch("/api/v1/getStockFromLocationOms", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

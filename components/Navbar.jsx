@@ -80,7 +80,7 @@ export default function Navbar() {
                   width={20}
                   height={20}
                 />
-                <Link href="/stockOnCommerce">
+                <Link href="/stock-on-commerce">
                   <a>Estoque Canal</a>
                 </Link>
               </div>
@@ -118,7 +118,7 @@ export default function Navbar() {
                     width={20}
                     height={20}
                   />
-                  <Link href="/orderwaitinggraphic">
+                  <Link href="/order-waiting">
                     <a>Pedidos Pendentes</a>
                   </Link>
                 </div>
@@ -144,7 +144,7 @@ export default function Navbar() {
                     width={20}
                     height={20}
                   />
-                  <Link href="/stockOnOmsChannel">
+                  <Link href="/stock-on-oms-channel">
                     <a>Estoque por Canal</a>
                   </Link>
                 </div>
@@ -157,7 +157,7 @@ export default function Navbar() {
                     width={20}
                     height={20}
                   />
-                  <Link href="/stockbylocation">
+                  <Link href="/stock-by-location">
                     <a>Estoque por Filial</a>
                   </Link>
                 </div>
@@ -197,7 +197,7 @@ export default function Navbar() {
                     width={20}
                     height={20}
                   />
-                  <Link href="/stockAllAnalyzes">
+                  <Link href="/stock-all-analyzes">
                     <a>Análises</a>
                   </Link>
                 </div>
@@ -210,8 +210,8 @@ export default function Navbar() {
                     width={20}
                     height={20}
                   />
-                  <Link href="/quotation">
-                    <a>Cotação</a>
+                  <Link href="/commerce-sku-mapping">
+                    <a>Depara SKUs</a>
                   </Link>
                 </div>
               </li>
@@ -223,20 +223,7 @@ export default function Navbar() {
                     width={20}
                     height={20}
                   />
-                  <Link href="/commerceSkuMapping">
-                    <a>Depara SKU Commerce</a>
-                  </Link>
-                </div>
-              </li>
-              <li>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <Image
-                    src="/iconizer-reorder-two-outline.svg"
-                    alt="Ícone de Reordenação"
-                    width={20}
-                    height={20}
-                  />
-                  <Link href="/skusMapped">
+                  <Link href="/skus-mapped">
                     <a>SKUs Mapeados</a>
                   </Link>
                 </div>
