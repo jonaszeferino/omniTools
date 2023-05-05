@@ -93,13 +93,12 @@ export default function Stocks() {
     })),
   };
 
-  // no oms ai inves do stockbalance pegamos o availableQuantity pois é desse valor que o commerce pega as infos por canal
-
+  // no oms inves do stockbalance pegamos o availableQuantity pois é desse valor que o commerce pega as infos por canal
   
   const insertStockData = () => {
     setIsLoading(true);
-    const url = "http://localhost:3000/api/v1/postStockFromOms";
-    //const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromOms";
+    //const url = "http://localhost:3000/api/v1/postStockFromOms";
+    const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromOms";
     const options = {
       method: "POST",
       headers: {

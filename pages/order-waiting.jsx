@@ -51,9 +51,7 @@ export default function orders() {
     ); /*coloquei isso pq tava ficando sujeira quando mudava o lojista*/
     console.log(isLoading, "Verificar0 " + new Date());
     const url = `https://production-order.omniplat.io/v1/clients/${orderUser}/fulfillments/locations/${orderLocation}/status/WAITING?pageSize=400`;
-
-    const urlString = `https://production-order.omniplat.io/v1/clients/${orderUser}/locations`;
-
+    
     let authorizationValue;
 
     switch (orderUser) {

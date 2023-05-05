@@ -77,7 +77,8 @@ export default function Stocks() {
   // onde será inserido os dados dos skus vindos do excell
   const insertStockData = () => {
     setIsLoading(true);
-    const url = "http://localhost:3000/api/v1/postSkusFromCommerce";
+    //const url = "http://localhost:3000/api/v1/postSkusFromCommerce";
+    const url = "https://omni-tools-chakra.vercel.app/api/v1/postSkusFromCommerce";
 
     const options = {
       method: "POST",

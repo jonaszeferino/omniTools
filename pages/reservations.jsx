@@ -36,7 +36,7 @@ export default function Reservations() {
   const [clickedOrderId, setClickedOrderId] = useState(null);
 
   const apiCall = (event) => {
-    const url = `https://hub.omniplat.io/v1/clients/${reservationUser}/reservations/unfinished?pageSize=100`;
+    const url = `https://hub.omniplat.io/v1/clients/${reservationUser}/reservations/unfinished?pageSize=300`;
     let authorizationValue;
     setIsLoading(true);
 
