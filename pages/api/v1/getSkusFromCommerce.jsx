@@ -1,4 +1,5 @@
-export default async (req, res) => {
+
+  export default async function Call(req, res) {
  const { skus, userCommerce } = req.body;
  let newUser = userCommerce;
  let arraySku = skus

@@ -1,4 +1,4 @@
-export default async (req, res) => {
+export default async function Call(req, res) {
   let authorizationValue;
 
   const { user } = req.body;

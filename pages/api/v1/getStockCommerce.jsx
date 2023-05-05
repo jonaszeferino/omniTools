@@ -1,4 +1,4 @@
-export default async (req, res) => {
+export default async function Call(req, res) {
    const { channel, user, availability } = req.body;
   // const newChannel = "site";
   // const newUser = "leposticheoms";
