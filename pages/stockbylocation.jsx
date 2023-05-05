@@ -10,7 +10,14 @@ import {
   InputLeftAddon,
   ChakraProvider,
   Progress,
-  Table, Thead, Tbody, Tr, Th, Td, TableCaption 
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  Select,
 } from "@chakra-ui/react";
 import { CSVLink } from "react-csv";
 import Topbar from "../components/Topbar";
@@ -56,7 +63,7 @@ export default function Stocks() {
 
   const apiCallChannels = async () => {
     setIsLoading(true);
-    
+
     try {
       const response = await fetch("/api/v1/getOmsChannels", {
         method: "POST",
@@ -64,7 +71,7 @@ export default function Stocks() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user: stockUser
+          user: stockUser,
         }),
       });
       const data = await response.json();
@@ -75,11 +82,11 @@ export default function Stocks() {
       console.error(error);
     }
   };
-  console.log(channels)
+  console.log(channels);
 
   const apiCallLocations = async () => {
     setIsLoading(true);
-    
+
     try {
       const response = await fetch("/api/v1/getOmsLocations", {
         method: "POST",
@@ -87,7 +94,7 @@ export default function Stocks() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user: stockUser
+          user: stockUser,
         }),
       });
       const data = await response.json();
@@ -99,7 +106,7 @@ export default function Stocks() {
     }
   };
 
-  console.log(locations)
+  console.log(locations);
 
   const csvData = stock.map((stockCsv) => [
     stockCsv.clientId,
@@ -116,8 +123,8 @@ export default function Stocks() {
   return (
     <>
       <ChakraProvider>
-      <Topbar title="Estoque por Filial OMS " />
-      <TopbarBelow />
+        <Topbar title="Estoque por Filial OMS " />
+        <TopbarBelow />
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel type="text">
@@ -134,22 +141,34 @@ export default function Stocks() {
           <FormLabel type="text">
             <InputGroup size="md" mb={5}>
               <InputLeftAddon size="md">Canal</InputLeftAddon>
-              <Input
+              <Select
                 size="md"
                 value={stockChannel}
                 onChange={(event) => setStockChannel(event.target.value)}
                 onBlur={apiCallLocations}
-              ></Input>
+              >
+                {channels.map((item, index) => (
+                  <option key={index} value={item.channelId}>
+                    {item.channelId}
+                  </option>
+                ))}
+              </Select>
             </InputGroup>
           </FormLabel>
           <FormLabel type="text">
             <InputGroup size="md" mb={5}>
               <InputLeftAddon size="md">Location</InputLeftAddon>
-              <Input
+              <Select
                 size="md"
                 value={stockLocation}
                 onChange={(event) => setStockLocation(event.target.value)}
-              ></Input>
+              >
+                {locations.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.id}{" - "}{item.name}
+                  </option>
+                ))}
+              </Select>
             </InputGroup>
           </FormLabel>
         </div>
@@ -215,31 +234,36 @@ export default function Stocks() {
             className={styles.grid}
             style={{ width: "100%", marginLeft: "auto", marginRight: "auto" }}
           >
-<Table variant='striped' colorScheme='purple' size='sm' maxW='400px'>
-  <TableCaption>Resultados de estoque</TableCaption>
-  <Thead>
-    <Tr>
-      <Th>SkuId</Th>
-      <Th>Balanço</Th>
-      <Th>Qtd Total</Th>
-      <Th>Reservados</Th>
-      <Th>Disponíveis</Th>
-      <Th>Filial</Th>
-    </Tr>
-  </Thead>
-  <Tbody>
-    {stock.map((stockView) => (
-      <Tr key={stockView.id}>
-        <Td>{stockView.skuId}</Td>
-        <Td>{stockView.balance}</Td>
-        <Td>{stockView.totalQuantity}</Td>
-        <Td>{stockView.reservedQuantity}</Td>
-        <Td>{stockView.availableQuantity}</Td>
-        <Td>{stockView.locationId}</Td>
-      </Tr>
-    ))}
-  </Tbody>
-</Table>
+            <Table
+              variant="striped"
+              colorScheme="purple"
+              size="sm"
+              maxW="400px"
+            >
+              <TableCaption>Resultados de estoque</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>SkuId</Th>
+                  <Th>Balanço</Th>
+                  <Th>Qtd Total</Th>
+                  <Th>Reservados</Th>
+                  <Th>Disponíveis</Th>
+                  <Th>Filial</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {stock.map((stockView) => (
+                  <Tr key={stockView.id}>
+                    <Td>{stockView.skuId}</Td>
+                    <Td>{stockView.balance}</Td>
+                    <Td>{stockView.totalQuantity}</Td>
+                    <Td>{stockView.reservedQuantity}</Td>
+                    <Td>{stockView.availableQuantity}</Td>
+                    <Td>{stockView.locationId}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
           </div>
         </div>
       </ChakraProvider>
