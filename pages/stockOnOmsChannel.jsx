@@ -19,7 +19,7 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
+  TableCaption,Select
 } from "@chakra-ui/react";
 import { CSVLink } from "react-csv";
 import Topbar from "../components/Topbar";
@@ -41,7 +41,8 @@ export default function Stocks() {
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
-
+  let [channels, setChannels] = useState([])
+ 
   const apiCall = async () => {
     setIsLoading(true);
     setDateFile(dateFile);
@@ -137,6 +138,28 @@ export default function Stocks() {
     setIsSave(false);
   };
 
+  const apiCallChannels = async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/v1/getOmsChannels", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: stockUser,
+        }),
+      });
+      const data = await response.json();
+      setChannels(data);
+      setIsLoading(false);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <ChakraProvider>
@@ -153,19 +176,31 @@ export default function Stocks() {
                 id="test1"
                 value={stockUser}
                 onChange={(event) => setStockUser(event.target.value)}
+                onBlur={apiCallChannels}
               ></Input>
             </InputGroup>
           </FormLabel>
+
           <FormLabel type="text">
             <InputGroup size="md" mb={5}>
               <InputLeftAddon size="md">Canal</InputLeftAddon>
-              <Input
+              <Select
                 size="md"
                 value={stockChannel}
                 onChange={(event) => setStockChannel(event.target.value)}
-              ></Input>
+                
+              >
+                {channels.map((item, index) => (
+                  <option key={index} value={item.channelId}>
+                    {item.channelId}
+                  </option>
+                ))}
+              </Select>
             </InputGroup>
           </FormLabel>
+        
+       
+
 
           <WalkthroughPopover />
         </div>
