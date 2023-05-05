@@ -131,7 +131,7 @@ export default function Navbar() {
                     width={20}
                     height={20}
                   />
-                  <Link href="/reservations">
+                  <Link href="/pending-reservations">
                     <a>Reservas Pendentes</a>
                   </Link>
                 </div>
@@ -258,7 +258,7 @@ export default function Navbar() {
                 width={20}
                 height={20}
               />
-              <Link href="/quotation">
+              <Link href="/oms-quotation">
                 <a>Cotação OMS</a>
               </Link>
             </div>
