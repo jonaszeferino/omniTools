@@ -15,17 +15,23 @@ import {
   Button,
   FormLabel,
   Input,
-  
   InputGroup,
   InputLeftAddon,
   ChakraProvider,
   Progress,
-  
-  Table, Thead, Tbody, Tr, Th, Td, TableCaption , Badge, Stack, Select
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  Badge,
+  Stack,
+  Select,
 } from "@chakra-ui/react";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
-
 
 export default function orders() {
   let [orderUser, setOrderUser] = useState();
@@ -35,12 +41,11 @@ export default function orders() {
   let [dateFile, setDateFile] = useState(
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
-  let [locations,setLocations] = useState([])
-
+  let [locations, setLocations] = useState([]);
 
   const apiCall = async () => {
     setIsLoading(true);
-     try {
+    try {
       const response = await fetch("/api/v1/getOmsLocations", {
         method: "POST",
         headers: {
@@ -58,13 +63,37 @@ export default function orders() {
       console.error(error);
     }
   };
-  console.log(locations)
+
+  const csvData = locations.map((locationsCSV) => [
+    orderUser,
+    locationsCSV.id,
+    locationsCSV.name,
+    locationsCSV.canPickupInStore ? "Sim" : "Não",
+    locationsCSV.canReceiveFromStore ? "Sim" : "Não",
+    locationsCSV.canShipToStore ? "Sim" : "Não",
+    locationsCSV.canShipToCustomer ? "Sim" : "Não",
+    locationsCSV.canShipToLocker ? "Sim" : "Não",
+    locationsCSV.canReserveInStore ? "Sim" : "Não",
+    locationsCSV.enabled ? "Sim" : "Não",
+    locationsCSV.channels[0] ? "Sim" : "Não",
+    (locationsCSV.canPickupInStore ||
+      locationsCSV.canReceiveFromStore ||
+      locationsCSV.canShipToStore ||
+      locationsCSV.canShipToCustomer ||
+      locationsCSV.canShipToLocker ||
+      locationsCSV.canReserveInStore) &&
+      locationsCSV.enabled &&
+      locationsCSV.channels.length > 0 &&
+      locationsCSV.channels[0]
+      ? "SIM"
+      : "NÃO"
+  ]);
 
   return (
     <>
       <ChakraProvider>
-      <Topbar title="Totais de Filiais" />
-      <TopbarBelow />
+        <Topbar title="Totais de Filiais" />
+        <TopbarBelow />
         <br />
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <FormLabel htmlFor="clientId">
@@ -75,28 +104,60 @@ export default function orders() {
                 id="clientId"
                 value={orderUser}
                 onChange={(event) => setOrderUser(event.target.value)}
-                ></Input>
+              ></Input>
             </InputGroup>
-            </FormLabel>
+          </FormLabel>
 
-            <Button
+          <Button
             padding={5}
             rounded={8}
             size="lg"
             mx="auto"
             colorScheme="purple"
-            onClick={() =>{apiCall()}}
+            onClick={() => {
+              apiCall();
+            }}
           >
             Verificar{" "}
           </Button>
-    
+
+          <>
+            <CSVLink
+              data={csvData}
+              headers={[
+                "clientId",
+                "Id",
+                "nome",
+                "pickup",
+                "recebe de loja",
+                "envia para loja",
+                "envia para cliente",
+                "envia para locker",
+                "reserva",
+                "ativa",
+                "possui canais vinculados",
+                "possui algum fluxo ativo",
+              ]}
+              separator={";"}
+              filename={`filiais_${orderUser}_${dateFile}`}
+            >
+              <Button
+                padding={5}
+                rounded={8}
+                size="lg"
+                mx="auto"
+                colorScheme="purple"
+                my={4}
+                ml={4}
+              >
+                Exportar para CSV
+              </Button>
+            </CSVLink>
+          </>
         </div>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-        <div style={{ maxWidth: "600px", margin: "0 auto" }}>
- 
-          </div>
+          <div style={{ maxWidth: "600px", margin: "0 auto" }}></div>
 
-       
           <br />
           {isLoading ? <Progress size="xs" isIndeterminate /> : null}
         </div>
@@ -130,61 +191,127 @@ export default function orders() {
 
       <div style={{ maxWidth: "800px", margin: "0 auto" }}>
         <ChakraProvider>
-      <Table variant='striped' colorScheme='purple' size='sm' maxW='700px'>
-  <TableCaption>Locations</TableCaption>
-  <Thead>
-    <Tr>
-      <Th>Filial</Th>
-      <Th>ID</Th>
-      <Th>Pickup</Th>
-      <Th>ShipTo(Recebe)</Th>
-      <Th>ShipTo(Envia)</Th>
-      <Th>Envia</Th>
-      <Th>Envia Locker</Th>
-      <Th>Reserva</Th>
-      <Th>Ativa</Th>
-      <Th>Possui Canal</Th>
-      
-    </Tr>
-  </Thead>
-  <Tbody>
-  {locations.map((locationView) => (
-      <Tr key={locationView.id}>
-        <Td>{locationView.id}</Td>
-        <Td>{locationView.name}</Td>
-        <Td style={{color: locationView.canPickupInStore ? 'green' : 'red', fontWeight: 'bold'}}>
-          {locationView.canPickupInStore ? 'V' : 'X'}
-        </Td>
-        <Td style={{color: locationView.canReceiveFromStore ? 'green' : 'red', fontWeight: 'bold'}}>
-          {locationView.canReceiveFromStore ? 'V' : 'X'}
-        </Td>
-        <Td style={{color: locationView.canShipToStore ? 'green' : 'red', fontWeight: 'bold'}}>
-          {locationView.canShipToStore ? 'V' : 'X'}
-        </Td>
-        <Td style={{color: locationView.canShipToCustomer ? 'green' : 'red', fontWeight: 'bold'}}>
-          {locationView.canShipToCustomer ? 'V' : 'X'}
-        </Td>
-        <Td style={{color: locationView.canShipToLocker ? 'green' : 'red', fontWeight: 'bold'}}>
-          {locationView.canShipToCustomer ? 'V' : 'X'}
-        </Td>
-        <Td style={{color: locationView.canShipToLocker ? 'green' : 'red', fontWeight: 'bold'}}>
-          {locationView.canReserveInStore ? 'V' : 'X'}
-        </Td>
-        <Td style={{color: locationView.enabled ? 'green' : 'red', fontWeight: 'bold'}}>
-          {locationView.enabled ? 'V' : 'X'}
-        </Td>
-        <Td style={{color: locationView.channels[0] ? 'green' : 'red', fontWeight: 'bold'}}>
-          {locationView.channels[0] ? 'V' : 'X'}
-        </Td>
-      </Tr>
-    ))}
-</Tbody>
-
-</Table>
-</ChakraProvider>
-</div>
-   
+          <Table variant="striped" colorScheme="purple" size="sm" maxW="700px">
+            <TableCaption>Locations</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Id</Th>
+                <Th>Filial</Th>
+                <Th>Pickup</Th>
+                <Th>ShipTo(Recebe)</Th>
+                <Th>ShipTo(Envia)</Th>
+                <Th>Envia</Th>
+                <Th>Envia Locker</Th>
+                <Th>Reserva</Th>
+                <Th>Ativa</Th>
+                <Th>Possui Canal</Th>
+                <Th>Possui Algum Fluxo Ativo</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {locations.map((locationView) => (
+                <Tr key={locationView.id}>
+                  <Td>{locationView.id}</Td>
+                  <Td>{locationView.name}</Td>
+                  <Td
+                    style={{
+                      color: locationView.canPickupInStore ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {locationView.canPickupInStore ? "V" : "X"}
+                  </Td>
+                  <Td
+                    style={{
+                      color: locationView.canReceiveFromStore ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {locationView.canReceiveFromStore ? "V" : "X"}
+                  </Td>
+                  <Td
+                    style={{
+                      color: locationView.canShipToStore ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {locationView.canShipToStore ? "V" : "X"}
+                  </Td>
+                  <Td
+                    style={{
+                      color: locationView.canShipToCustomer ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {locationView.canShipToCustomer ? "V" : "X"}
+                  </Td>
+                  <Td
+                    style={{
+                      color: locationView.canShipToLocker ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {locationView.canShipToLocker ? "V" : "X"}
+                  </Td>
+                  <Td
+                    style={{
+                      color: locationView.canReserveInStore ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {locationView.canReserveInStore ? "V" : "X"}
+                  </Td>
+                  <Td
+                    style={{
+                      color: locationView.enabled ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {locationView.enabled ? "V" : "X"}
+                  </Td>
+                  <Td
+                    style={{
+                      color: locationView.channels[0] ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {locationView.channels[0] ? "V" : "X"}
+                  </Td>
+                  <Td
+                    style={{
+                      color:
+                        (locationView.canPickupInStore ||
+                          locationView.canReceiveFromStore ||
+                          locationView.canShipToStore ||
+                          locationView.canShipToCustomer ||
+                          locationView.canShipToLocker ||
+                          locationView.canReserveInStore) &&
+                        locationView.enabled &&
+                        locationView.channels.length > 0 &&
+                        locationView.channels[0]
+                          ? "green"
+                          : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {(locationView.canPickupInStore ||
+                      locationView.canReceiveFromStore ||
+                      locationView.canShipToStore ||
+                      locationView.canShipToCustomer ||
+                      locationView.canShipToLocker ||
+                      locationView.canReserveInStore) &&
+                    locationView.enabled &&
+                    locationView.channels.length > 0 &&
+                    locationView.channels[0]
+                      ? "SIM"
+                      : "NÃO"}
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </ChakraProvider>
+      </div>
     </>
   );
 }
-
