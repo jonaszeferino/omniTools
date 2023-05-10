@@ -17,6 +17,9 @@ export default async function Call(req, res) {
     case "vago":
       authorizationValue = process.env.NEXT_PUBLIC_LEBES;
       break;
+    case "centauro":
+        authorizationValue = process.env.NEXT_PUBLIC_CENTAURO;
+        break;
     default:
       authorizationValue = process.env.NEXT_PUBLIC_LEBES;
   }

@@ -67,8 +67,8 @@ export default function orders() {
         authorizationValue = process.env.NEXT_PUBLIC_VIA;
 
         break;
-      case "vago":
-        authorizationValue = process.env.NEXT_PUBLIC_LEBES;
+      case "centauro":
+        authorizationValue = process.env.NEXT_PUBLIC_CENTAURO;
 
         break;
       default:
