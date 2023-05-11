@@ -1,5 +1,5 @@
 export default async function Call(req, res) {
-   const { channel, user, availability } = req.body;
+   const { channel, user, availability, page } = req.body;
   // const newChannel = "site";
   // const newUser = "leposticheoms";
   // const newAvailability = "I";
@@ -7,6 +7,7 @@ export default async function Call(req, res) {
   let newUser = user;
   let newChannel = channel;
   let newAvailability = availability;
+  let newPage = page;
 
   try {
     console.log("stockApi1", req.body);
@@ -30,7 +31,7 @@ export default async function Call(req, res) {
       }),
       body: JSON.stringify({
         Page: {
-          PageIndex: 0,
+          PageIndex: newPage,
           PageSize: 500
         },
         // Where: `ProductID == ${newSku} && WarehouseId == ${newChannel}` por productid,

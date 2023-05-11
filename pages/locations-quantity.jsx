@@ -25,6 +25,7 @@ import {
   Tr,
   Th,
   Td,
+  Text,
   TableCaption,
   Badge,
   Stack,
@@ -42,6 +43,8 @@ export default function orders() {
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
   let [locations, setLocations] = useState([]);
+  const [totalYes, setTotalYes] = useState(0);
+  const [totalNo, setTotalNo] = useState(0);
 
   const apiCall = async () => {
     setIsLoading(true);
@@ -89,6 +92,55 @@ export default function orders() {
       : "NÃO"
   ]);
 
+  const totals = locations.map((totalsView) => [
+    
+    (totalsView.canPickupInStore ||
+      totalsView.canReceiveFromStore ||
+      totalsView.canShipToStore ||
+      totalsView.canShipToCustomer ||
+      totalsView.canShipToLocker ||
+      totalsView.canReserveInStore) &&
+      totalsView.enabled &&
+      totalsView.channels.length > 0 &&
+      totalsView.channels[0]
+      ? "SIM"
+      : "NÃO"
+  ]);
+
+  useEffect(() => {
+    const totals = locations.reduce(
+      (accumulator, totalsView) => {
+        const isActiveFlow =
+          totalsView.canPickupInStore ||
+          totalsView.canReceiveFromStore ||
+          totalsView.canShipToStore ||
+          totalsView.canShipToCustomer ||
+          totalsView.canShipToLocker ||
+          totalsView.canReserveInStore;
+  
+        const isEnabledAndChannel =
+          totalsView.enabled &&
+          totalsView.channels.length > 0 &&
+          totalsView.channels[0];
+  
+        if (isActiveFlow && isEnabledAndChannel) {
+          accumulator.sim += 1;
+        } else {
+          accumulator.nao += 1;
+        }
+  
+        return accumulator;
+      },
+      { sim: 0, nao: 0 }
+    );
+  
+    setTotalYes(totals.sim);
+    setTotalNo(totals.nao);
+  }, [locations]);
+
+  console.log(totalYes)
+  console.log(totalNo)
+ 
   return (
     <>
       <ChakraProvider>
@@ -107,7 +159,6 @@ export default function orders() {
               ></Input>
             </InputGroup>
           </FormLabel>
-
           <Button
             padding={5}
             rounded={8}
@@ -120,8 +171,7 @@ export default function orders() {
           >
             Verificar{" "}
           </Button>
-
-          <>
+<>
             <CSVLink
               data={csvData}
               headers={[
@@ -156,6 +206,10 @@ export default function orders() {
           </>
         </div>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+        <ChakraProvider>
+        <Text>Algum Fluxo Ativo + Canal Ativo: {totalYes}</Text> 
+        <Text>Nenhum Fluxo Ativo ou Canal Inativo: {totalNo}</Text>
+        </ChakraProvider>
           <div style={{ maxWidth: "600px", margin: "0 auto" }}></div>
 
           <br />
@@ -198,14 +252,14 @@ export default function orders() {
                 <Th>Id</Th>
                 <Th>Filial</Th>
                 <Th>Pickup</Th>
-                <Th>ShipTo(Recebe)</Th>
-                <Th>ShipTo(Envia)</Th>
-                <Th>Envia</Th>
+                <Th>ShipTo (Recebe)</Th>
+                <Th>ShipTo (Envia)</Th>
+                <Th>Envia P/Cliente</Th>
                 <Th>Envia Locker</Th>
                 <Th>Reserva</Th>
                 <Th>Ativa</Th>
-                <Th>Possui Canal</Th>
-                <Th>Possui Algum Fluxo Ativo</Th>
+                <Th>Possui Vinculo a Canal</Th>
+                <Th>Fluxo Ativo + Canal Ativo</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -237,7 +291,9 @@ export default function orders() {
                   >
                     {locationView.canShipToStore ? "V" : "X"}
                   </Td>
-                  <Td
+               
+               
+                 <Td
                     style={{
                       color: locationView.canShipToCustomer ? "green" : "red",
                       fontWeight: "bold",
@@ -245,6 +301,8 @@ export default function orders() {
                   >
                     {locationView.canShipToCustomer ? "V" : "X"}
                   </Td>
+               
+               
                   <Td
                     style={{
                       color: locationView.canShipToLocker ? "green" : "red",
@@ -286,25 +344,25 @@ export default function orders() {
                           locationView.canShipToCustomer ||
                           locationView.canShipToLocker ||
                           locationView.canReserveInStore) &&
-                        locationView.enabled &&
-                        locationView.channels.length > 0 &&
-                        locationView.channels[0]
+                          locationView.enabled &&
+                          locationView.channels.length > 0 &&
+                          locationView.channels[0]
                           ? "green"
                           : "red",
-                      fontWeight: "bold",
+                          fontWeight: "bold",
                     }}
                   >
-                    {(locationView.canPickupInStore ||
-                      locationView.canReceiveFromStore ||
-                      locationView.canShipToStore ||
-                      locationView.canShipToCustomer ||
-                      locationView.canShipToLocker ||
-                      locationView.canReserveInStore) &&
-                    locationView.enabled &&
-                    locationView.channels.length > 0 &&
-                    locationView.channels[0]
-                      ? "SIM"
-                      : "NÃO"}
+                       {(locationView.canPickupInStore ||
+                         locationView.canReceiveFromStore ||
+                         locationView.canShipToStore ||
+                         locationView.canShipToCustomer ||
+                         locationView.canShipToLocker ||
+                         locationView.canReserveInStore) &&
+                         locationView.enabled &&
+                         locationView.channels.length > 0 &&
+                         locationView.channels[0]
+                         ? "SIM"
+                         : "NÃO"}
                   </Td>
                 </Tr>
               ))}
