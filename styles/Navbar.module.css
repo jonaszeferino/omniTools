@@ -34,8 +34,8 @@
   list-style-type: none !important;
 }
 
-.login input[type="text"],
-.login input[type="password"] {
+.login input[type='text'],
+.login input[type='password'] {
   margin-right: 2px;
   padding: 2px;
   border-radius: 2px;
@@ -63,7 +63,7 @@
 
 .sidebar {
   position: fixed;
-  background-color: #411e5a;
+  background-color: #421d59;
   color: rgb(147, 147, 147);
   margin-left: 0%;
   left: 0;
