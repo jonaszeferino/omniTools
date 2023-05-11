@@ -207,8 +207,8 @@ export default function orders() {
         </div>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
         <ChakraProvider>
-        <Text>Algum Fluxo Ativo + Canal Ativo: {totalYes}</Text> 
-        <Text>Nenhum Fluxo Ativo ou Canal Inativo: {totalNo}</Text>
+        <Text style={{fontWeight: "bold"}}>Algum Fluxo Ativo + Canal Ativo: {totalYes}</Text> 
+        <Text style={{fontWeight: "bold"}}>Nenhum Fluxo Ativo ou Canal Inativo: {totalNo}</Text>
         </ChakraProvider>
           <div style={{ maxWidth: "600px", margin: "0 auto" }}></div>
 
