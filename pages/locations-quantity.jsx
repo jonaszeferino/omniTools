@@ -4,7 +4,6 @@
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from "victory";
 import { useState, useEffect } from "react";
 import React from "react";
-import styles from "../styles/Home.module.css";
 import { format, differenceInDays } from "date-fns";
 import { CSVLink } from "react-csv";
 import {
@@ -43,6 +42,7 @@ export default function orders() {
     format(new Date(), "dd_MM_yyyy_HH_mm_ss")
   );
   let [locations, setLocations] = useState([]);
+  const [message, setMessage] = useState("");
   const [totalYes, setTotalYes] = useState(0);
   const [totalNo, setTotalNo] = useState(0);
 
@@ -126,7 +126,6 @@ export default function orders() {
           totalsView.canShipToCustomer ||
           totalsView.canShipToLocker ||
           totalsView.canReserveInStore;
-  
         const isEnabledAndChannel =
           totalsView.enabled &&
           totalsView.channels.length > 0 &&
@@ -137,7 +136,6 @@ export default function orders() {
         } else {
           accumulator.nao += 1;
         }
-  
         return accumulator;
       },
       { sim: 0, nao: 0 }
@@ -147,11 +145,74 @@ export default function orders() {
     setTotalNo(totals.nao);
   }, [locations]);
 
+  const dataToSend = {
+    stockData: locations.map((item) => {
+      const isAnyFlowActive =
+        item.canPickupInStore ||
+        item.canReceiveFromStore ||
+        item.canReserveInStore ||
+        item.canShipToCustomer ||
+        item.canShipToStore ||
+        item.canShipToLocker;
+      const isEnabledAndChannel =
+        item.enabled &&
+        item.channels.length > 0 &&
+        item.channels[0];
+  
+      return {
+        alias: item.alias || null,
+        enabled: item.enabled || null,
+        clientId: item.clientId || null,
+        canPickupInStore: item.canPickupInStore || null,
+        canReceiveFromStore: item.canReceiveFromStore || null,
+        canReserveInStore: item.canReserveInStore || null,
+        canShipToCustomer: item.canShipToCustomer || null,
+        canShipToStore: item.canShipToStore || null,
+        canShipToLocker: item.canShipToLocker || null,
+        createdAt: item.createdAt || null,
+        description: item.description || null,
+        channelsActive: isEnabledAndChannel ? true : false,
+        anyFlowActive: isEnabledAndChannel && isAnyFlowActive ? true : false,
+      };
+    }),
+  
   
 
-  console.log(totalYes)
-  console.log(totalNo)
+
+}
+
+  const insertStockData = () => {
+    setIsLoading(true);
+    // setShowAlert(true);
+    const url = "http://localhost:3000/api/v1/mongoDbPostOmsLocations";
+    
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSend),
+    };
+      
+    fetch(url, options)
+      .then((response) => {
+        if (response.ok) {
+          setMessage("Dados inseridos com sucesso!");
+          setIsLoading(false);
+          setIsSave(true);
+          // setShowAlert(false);
+        } else {
+          setMessage("Erro ao inserir dados");
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        setMessage("Erro ao inserir dados: " + error);
+        console.log("ver1",error)
+      });
+  };
  
+  
   return (
     <>
       <ChakraProvider>
@@ -181,6 +242,18 @@ export default function orders() {
             }}
           >
             Verificar{" "}
+          </Button>
+          <Button
+            padding={5}
+            rounded={8}
+            size="lg"
+            mx="auto"
+            colorScheme="purple"
+            onClick={() => {
+              insertStockData();
+            }}
+          >
+            Inserir Analise{" "}
           </Button>
 <>
             <CSVLink

@@ -20,6 +20,9 @@ export default async function Call(req, res) {
     case "centauro":
         authorizationValue = process.env.NEXT_PUBLIC_CENTAURO;
         break;
+    case "boticario":
+        authorizationValue = process.env.NEXT_PUBLIC_BOTICARIO;
+        break;    
     default:
       authorizationValue = process.env.NEXT_PUBLIC_LEBES;
   }
