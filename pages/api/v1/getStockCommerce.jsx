@@ -19,9 +19,6 @@ export default async function Call(req, res) {
       whereClause = `WarehouseId == ${newChannel}`;
     }
     const url = `https://${newUser}.layer.core.dcg.com.br/v1/Inventory/API.svc/web/SearchInventorySKU`;
-
-    
-
     const response = await fetch(url, {
       headers: new Headers({
         Authorization: process.env.NEXT_PUBLIC_COMMERCE,
@@ -32,27 +29,20 @@ export default async function Call(req, res) {
       body: JSON.stringify({
         Page: {
           PageIndex: newPage,
-          PageSize: 500
+          PageSize: 200
         },
-        // Where: `ProductID == ${newSku} && WarehouseId == ${newChannel}` por productid,
-        // Where: `WarehouseId == ${newChannel} && availability == "${newAvailability}"`,
-        // Where: whereTeste,
         Where: whereClause,
-        
       }),
       method: "POST",
-
     });
     console.log(JSON.stringify({
       Page: {
         PageIndex: 0,
-        PageSize: 500
+        PageSize: 200
       },
       Where: whereClause,
     }));
-
-    
-
+  
     const result = await response.json();
     res.status(200).json(result);
     console.log("stockApi2", result);

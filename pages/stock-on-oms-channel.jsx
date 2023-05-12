@@ -29,6 +29,7 @@ export default function Stocks() {
   let [stock, setStock] = useState([]);
   let [stockUser, setStockUser] = useState("lepostiche");
   let [stockChannel, setStockChannel] = useState("site");
+  let [stockPage, setStockPage] = useState("1");
   let [stockVerication, setStockVerification] = useState(
     "Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados"
   );
@@ -55,6 +56,7 @@ export default function Stocks() {
         body: JSON.stringify({
           channel: stockChannel,
           user: stockUser,
+          page: stockPage
         }),
       });
       const data = await response.json();
@@ -98,7 +100,8 @@ export default function Stocks() {
   const insertStockData = () => {
     setIsLoading(true);
     //const url = "http://localhost:3000/api/v1/postStockFromOms";
-    const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromOms";
+    const url = "http://localhost:3000/api/v1/mongoDbPostOmsStock";
+    //const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromOms";
     const options = {
       method: "POST",
       headers: {
@@ -195,6 +198,18 @@ export default function Stocks() {
                   </option>
                 ))}
               </Select>
+            </InputGroup>
+          </FormLabel>
+
+          <FormLabel type="text">
+            <InputGroup size="md" mb={5}>
+              <InputLeftAddon size="md">Page</InputLeftAddon>
+              <Input
+                size="md"
+                id="test1"
+                value={stockPage}
+                onChange={(event) => setStockPage(event.target.value)}
+                ></Input>
             </InputGroup>
           </FormLabel>
         

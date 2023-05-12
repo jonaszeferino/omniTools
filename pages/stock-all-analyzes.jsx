@@ -34,7 +34,7 @@ export default function Stocks() {
   const apiCall = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/v1/getStockAnalyzesOms", {
+      const response = await fetch("/api/v1/mongoGetStockAnalyzesOms", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export default function Stocks() {
   const apiCallCommerce = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/v1/getStockAnalyzesCommerce", {
+      const response = await fetch("/api/v1/mongoGetStockAnalyzesCommerce", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -76,6 +76,7 @@ export default function Stocks() {
       setIsLoading(false);
     }
   };
+  console.log(analysisCommerce)
 
   const apiCallVerification = async () => {
     setIsLoading(true);

@@ -1,10 +1,11 @@
 export default async function Call(req, res) {
   let authorizationValue;
 
-  const { channel, user } = req.body;
+  const { channel, user, page } = req.body;
   
+  const newPage = page;
   const newChannel = channel;
-  const newUser =  user //'lepostiche';
+  const newUser =  user; //'lepostiche';
   //const newPassword; = process.env.NEXT_PUBLIC_LEPOSTICHE;
 
   switch (newUser) {
@@ -27,7 +28,7 @@ export default async function Call(req, res) {
 
   try {
     console.log("stockApi4", req.body);
-    const url = `https://production-inventory.omniplat.io/v1/clients/${newUser}/stocks?&channelId=${newChannel}&page=3&perpage=500`;
+    const url = `https://production-inventory.omniplat.io/v1/clients/${newUser}/stocks?&channelId=${newChannel}&page=${newPage}&perpage=500`;
     const response = await fetch(url, {
       headers: new Headers({
         Authorization: authorizationValue,
@@ -36,6 +37,7 @@ export default async function Call(req, res) {
     });
     const result = await response.json();
     res.status(200).json(result);
+    console.log(result)
     
   } catch (error) {
     

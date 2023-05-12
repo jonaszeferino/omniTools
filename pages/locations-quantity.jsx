@@ -46,6 +46,15 @@ export default function orders() {
   const [totalYes, setTotalYes] = useState(0);
   const [totalNo, setTotalNo] = useState(0);
 
+  const [totalCanPickupInStore, setCanPickupInStore] =useState(0)
+  const [totalCanReceiveFromStore, setCanReceiveFromStore] =useState(0)
+  const [totalCanShipToStore, setCanShipToStore] =useState(0)
+  const [totalCanShipToCustomer, setCanShipToCustomer] =useState(0)
+  const [totalCanShipToLocker, setCanShipToLocker] =useState(0)
+  const [totalCanReserveInStore, setCanReserveInStore] =useState(0)
+  const [totalsEnabled, setTotalsEnabled] =useState(0)
+  
+
   const apiCall = async () => {
     setIsLoading(true);
     try {
@@ -138,6 +147,8 @@ export default function orders() {
     setTotalNo(totals.nao);
   }, [locations]);
 
+  
+
   console.log(totalYes)
   console.log(totalNo)
  
@@ -207,8 +218,12 @@ export default function orders() {
         </div>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
         <ChakraProvider>
-        <Text style={{fontWeight: "bold"}}>Algum Fluxo Ativo + Canal Ativo: {totalYes}</Text> 
-        <Text style={{fontWeight: "bold"}}>Nenhum Fluxo Ativo ou Canal Inativo: {totalNo}</Text>
+        <Text style={{fontWeight: "bold"}}>
+  Location Com Algum Fluxo Ativo + Canal Ativo: <span style={{color: "blue"}}>{totalYes}</span>
+</Text>
+<Text style={{fontWeight: "bold"}}>
+Location Com <span style={{color: "red"}}>Nenhum</span> Fluxo Ativo ou Canal Inativo: <span style={{color: "red"}}>{totalNo}</span>
+</Text>
         </ChakraProvider>
           <div style={{ maxWidth: "600px", margin: "0 auto" }}></div>
 
@@ -373,3 +388,4 @@ export default function orders() {
     </>
   );
 }
+

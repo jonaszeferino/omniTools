@@ -3,24 +3,17 @@ import { format, differenceInDays } from "date-fns";
 import WalkthroughPopover from "./infos/infosStockCommerce";
 import Topbar from "../components/Topbar";
 import TopbarBelow from "../components/TopbarBelow";
-
 import { useState } from "react";
 import {
-  Button,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  ChakraProvider,
-  Progress,
-  Select,
-  Table, Thead, Tbody, Tr, Th, Td, TableCaption, Alert, AlertIcon 
+  Button,FormLabel,Input,InputGroup,InputLeftAddon,ChakraProvider,Progress,
+  Select, Table, Thead, Tbody, Tr, Th, Td, TableCaption, Alert, AlertIcon , Text
 } from "@chakra-ui/react";
 import { CSVLink } from "react-csv";
 
 export default function Stocks() {
   let [stock, setStock] = useState([]);
   let [stockUser, setStockUser] = useState("leposticheoms");
+  let [stockPage, setStockPage] = useState("1");
   let [stockAvailability, setStockAvailability] = useState();
   let [stockChannel, setStockChannel] = useState("2");
   let [isLoading, setIsLoading] = useState(false);
@@ -33,6 +26,8 @@ export default function Stocks() {
   let [stockVerication, setStockVerification] = useState("Coloque_um_nome_sem_espacos_dps_clique_em_inserir_dados");
   let [isSave, setIsSave] = useState(false);
   let [showAlert, setShowAlert] = useState(false);
+  let [totalPages, setTotalPages] = useState(0);
+  let [actualPages, setActualPages] = useState(0);
 
 
   const apiCall = async () => {
@@ -48,10 +43,13 @@ export default function Stocks() {
           channel: stockChannel,
           user: stockUser,
           availability: stockAvailability,
+          page: stockPage
         }),
       });
       const data = await response.json();
       setStock(data.Result);
+      setTotalPages(data.Page.PageCount);
+      setActualPages(data.Page.Index);
       setIsLoading(false);
       return data;
     } catch (error) {
@@ -87,11 +85,9 @@ export default function Stocks() {
   const insertStockData = () => {
     setIsLoading(true);
     setShowAlert(true);
-    const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromCommerce"
-    //const url = "http://localhost:3000/api/v1/mongoDbCommerceStock";
+    //const url = "https://omni-tools-chakra.vercel.app/api/v1/postStockFromCommerce"
+    const url = "http://localhost:3000/api/v1/mongoDbPostCommerceStock";
     //const url = "http://localhost:3000/api/v1/postStockFromCommerce";
-    
-
     const options = {
       method: "POST",
       headers: {
@@ -110,7 +106,6 @@ export default function Stocks() {
         } else {
           setMessage("Erro ao inserir dados");
           setIsLoading(false);
-
         }
       })
       .catch((error) => {
@@ -130,7 +125,9 @@ export default function Stocks() {
     setIsSave(false);
     setShowAlert(false);
   }
-  
+
+  console.log(totalPages)
+  console.log(actualPages)
 return (
     <>
       <ChakraProvider>
@@ -171,6 +168,17 @@ return (
                 <option value="I">Habilitado</option>
                 <option value="O">Desabilitado</option>
               </Select>
+            </InputGroup>
+          </FormLabel>
+          <FormLabel type="text">
+            <InputGroup size="md" mb={5}>
+              <InputLeftAddon size="md">Page</InputLeftAddon>
+              <Input
+                size="md"
+                id="test1"
+                value={stockPage}
+                onChange={(event) => setStockPage(event.target.value)}
+              ></Input>
             </InputGroup>
           </FormLabel>
           <WalkthroughPopover />
@@ -234,7 +242,8 @@ return (
              </>
           ) : null}
          
-         
+         <Text>Total de Páginas: {totalPages}</Text>
+                  
      {showAlert ?<Alert status='info'>
     <AlertIcon />
     Aguarde enquanto os dados são salvos...
