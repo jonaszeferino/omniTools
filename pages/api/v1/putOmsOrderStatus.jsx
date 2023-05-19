@@ -113,7 +113,8 @@ export default async function Call(req, res) {
 
     if (response.status === 204) {
       "Sucessfull"
-      res.status(204).end();
+      //res.status(204).end();
+      res.status(200).json({ message: 'Status changed successfully' });
     } else {
       const result = await response.json();
       res.status(200).json(result);
