@@ -7,6 +7,8 @@ export default async function Call(req, res) {
   const newChannel = channel;
   const newStatus = status;
   const newOrderId = orderId;
+  const date = new Date();
+  const formattedDate = date.toISOString();
 
   switch (newUser) {
     case 'lepostiche':
@@ -94,7 +96,10 @@ export default async function Call(req, res) {
         orderId: newOrderId,
         channelId: newChannel,
         clientId: newUser,
+        processedAt: formattedDate,
         status: newStatus,
+
+       
       }),
       method: 'PUT',
     });
@@ -108,11 +113,11 @@ export default async function Call(req, res) {
         channelId: newChannel,
         clientId: newUser,
         status: newStatus,
+        processedAt:  formattedDate
       }),
     );
 
     if (response.status === 204) {
-      "Sucessfull"
       //res.status(204).end();
       res.status(200).json({ message: 'Status changed successfully' });
     } else {
